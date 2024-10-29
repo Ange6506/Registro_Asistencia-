@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         'Purple': '#8b5cf6',
-        'violet': '#4f46e5',
+        'violet': '#3a2e60',
+        'blue': '#426bb2',
       }
     },
   },
