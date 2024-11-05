@@ -3,6 +3,9 @@ import Logo from "../assets/Img/Logo.png";
 
 const Navbar = () => {
 
+  // Toggle mobile menu
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+
   return (
     <div className="p-4">
        <nav className="bg-white rounded-2xl shadow-lg transition-transform transform mx-auto max-w-10xl border border-gray-200 fixed top-5 left-5 right-5 z-50">
@@ -20,6 +23,8 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
+
+            {/* User Icon and Notification Button */}
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <button
                 type="button"
@@ -41,6 +46,7 @@ const Navbar = () => {
                   />
                 </svg>
               </button>
+              {/* User Icon */}
               <div className="relative ml-3">
                 <div>
                   <button
