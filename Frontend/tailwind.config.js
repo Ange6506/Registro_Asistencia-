@@ -14,6 +14,8 @@ export default {
         'blue-gray': {
           900: '#1f2937',
         },
+        primaryLight: '#A2CFFE',  
+        secondaryLight: '#5A8DFF',
       }
     },
   },
