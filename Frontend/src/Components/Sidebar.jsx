@@ -72,7 +72,7 @@ const Sidebar = () => {
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          <small className="text-center text-xs font-medium">Estiantes</small>
+          <small className="text-center text-xs font-medium">Estudiantes</small>
         </a>
 
         <hr className="dark:border-gray-700/60" />
