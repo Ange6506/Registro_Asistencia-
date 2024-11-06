@@ -1,18 +1,21 @@
 import React from "react";
-import Logo from "../assets/Img/Logo.png";
+import Logo from "../../../assets/Img/Logo.png";
 
 const Navbar = () => {
   // Toggle mobile menu
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   return (
-    <nav className="p-4 bg-white border-b">
+    <nav className="p-4 bg-white border-b border-gray-300">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-center gap-x-2 sm:items-stretch sm:justify-start">
+            {/* Logo */}
             <div className="flex flex-shrink-0 items-center">
               <img src={Logo} alt="Logo" />
             </div>
+
+            {/* Title */}
             <div className="flex items-center justify-center">
               <div className="flex flex-col">
                 <p className="text-md font-medium font-serif text-violet">
@@ -25,7 +28,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* User Icon and Notification Button */}
+          {/* Notification Button */}
           <div className="flex items-center">
             <button
               type="button"
@@ -47,36 +50,8 @@ const Navbar = () => {
                 />
               </svg>
 
-              <span class="absolute bottom-6 right-0.5 w-1.5 h-1.5 rounded-full bg-red-500 ring-1 ring-white"></span>
+              <span className="absolute bottom-6 right-0.5 w-1.5 h-1.5 rounded-full bg-Purple ring-1 ring-white"></span>
             </button>
-            {/* User Icon */}
-            {/* <div className="relative ml-3">
-              <div>
-                <button
-                  type="button"
-                  className="relative flex rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  id="user-menu-button"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
