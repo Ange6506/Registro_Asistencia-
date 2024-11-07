@@ -7,17 +7,20 @@ import Sidebar from "../Components/Sidebar";
 const ListPage = () => {
   return (
     <>
-      <div className="bg-gray-50 flex-col min-h-screen">
-      <Navbar />
-      <div className="flex flex-1"> 
-        <div className="w-36"> 
-          <Sidebar />
-        </div>
-        <div className="flex-1 flex justify-center mr-8"> 
-          <Listado/>
-        </div>
+   <div className="bg-gray-50 flex flex-col min-h-screen w-full">
+  <Navbar />
+  <div className="flex flex-1 pt-24">
+    <div className="w-36"> 
+      <Sidebar />
+    </div>
+    <div className="flex w-auto "> 
+      <div className="w-full "> 
+        <Listado />
       </div>
     </div>
+  </div>
+</div>
+
     </>
   );
 };

@@ -2,9 +2,9 @@ import React from "react";
 
 const Register = () => {
   return (
-    <form className="bg-white p-8 rounded-lg shadow-lg max-w-full w-full">
-      <div className="space-y-12">
-        <div className="border-b border-gray-900/10 pb-12">
+    <form className="bg-white p-8 rounded-lg shadow-lg w-full mx-auto ">
+      <div className="space-y-11">
+        <div className="border-b border-gray-900/10 pb-11">
           <h2 className="text-base font-semibold text-gray-900">Registro de Estudiantes</h2>
           <p className="mt-1 text-sm text-gray-600">Asegúrate de que la información sea precisa</p>
 
