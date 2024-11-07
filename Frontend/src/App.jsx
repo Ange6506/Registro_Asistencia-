@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Login from "./Components/Login";
-import RegisterPage from "./Pages/RegisterPage";
-import Navbar from "./Components/Dashboard/DashboardComponents/Navbar";
-import { LoginPage } from "./Pages/LoginPage";
-import ListPage from "./Pages/ListPage";
-import Home from "./Components/Home";
-import { HomePage } from "./Pages/HomePage";
+import Login from './Components/Login';
+import RegisterPage from './Pages/RegisterPage';
+import Navbar from './Components/Navbar';
+import { LoginPage } from './Pages/LoginPage';
+import ListPage from './Pages/ListPage';
+import  Home from './Components/Home';
+import UserPage from './Pages/UserPage';
 
 export default function App() {
   return (
@@ -17,8 +17,9 @@ export default function App() {
         <Route path="/ListPage" element={<ListPage />} />
         <Route path="/RegisterPage" element={<RegisterPage />} />
         <Route path="/Home" element={<Home />} />
-        <Route path="/HomePage" element={<HomePage />} />
-      </Routes>
-    </Router>
+        <Route path="/UserPage" element={<UserPage/>} />
+
+    </Routes>
+</Router>
   );
 }
