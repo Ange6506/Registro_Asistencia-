@@ -5,7 +5,7 @@ export const ListaAlumnos = () => {
   className="container p-4 mx-auto flex flex-col"
   style={{ minHeight: "87vh" }}
 >
-  <div className="p-8 rounded-lg shadow-lg w-full mx-auto ">
+  <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white ">
     <div>
       <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
         <div className="flex flex-col justify-center items-start">
