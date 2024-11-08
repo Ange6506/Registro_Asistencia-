@@ -70,7 +70,7 @@ export const ListaAlumnos = () => {
               </div>
             </div>
 
-            <div className="w-80">
+            <div className="w-full md:w-80">
               <div className="flex items-center">
                 <span className="absolute">
                   <svg
@@ -92,7 +92,7 @@ export const ListaAlumnos = () => {
                 <input
                   type="text"
                   placeholder="Busqueda por Nombre"
-                  className="w-full py-2.5 text-gray-700 placeholder-gray-400/70 bg-white border border-blue rounded-lg pl-11 pr-5  focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                  className="w-full py-2.5 md:py-1 text-gray-700 placeholder-gray-400/70 bg-white border border-blue rounded-lg pl-11 pr-5  focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
@@ -103,7 +103,7 @@ export const ListaAlumnos = () => {
           <div className="flex flex-col justify-between flex-1">
             <div className="flex flex-col mt-6">
               <div className="-mx-4 -my-2 overflow-x-auto ">
-                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div className="inline-block min-w-full py-2 align-middle md:px-5 lg:px-4">
                   <div className="overflow-hidden border border-blue dark:border-blue md:rounded-lg bg-blue">
                     <table className="min-w-full divide-y divide-blue dark:divide-blue">
                       <thead className="bg-DarkSlate dark:bg-gray-800">
@@ -131,7 +131,7 @@ export const ListaAlumnos = () => {
 
                           <th
                             scope="col"
-                            className="px-4 py-3 text-sm font-normal text-left rtl:text-right text-white"
+                            className="px-4 py-3.5 md:px-6 md:py-4 text-sm font-normal text-left rtl:text-right text-white"
                           >
                             <div className="flex justify-center items-center gap-x-2">
                               <button>
@@ -142,7 +142,7 @@ export const ListaAlumnos = () => {
 
                           <th
                             scope="col"
-                            className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white "
+                            className="px-4 py-3.5 md:px-6 md:py-4  text-sm font-normal text-left rtl:text-right text-white "
                           >
                             <div className="flex justify-center items-center gap-x-2">
                               <button>
@@ -198,42 +198,42 @@ export const ListaAlumnos = () => {
                         {filteredStudents.length > 0 ? (
                           filteredStudents.map((student, index) => (
                             <tr key={index}>
-                              <td className="px-12 py-4 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                              <td className="px-4 py-4  text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 <div className="flex flex-col justify-center items-center gap-x-2">
                                   <span>{student.name}</span>
                                 </div>
                               </td>
-                              <td className="px-12 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.cedula}</span>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4  text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.entrada}</span>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4  text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.salida}</span>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4  text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.programa}</span>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4  text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.fechaInicio}</span>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.fechaFinal}</span>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 ">
                                     <button>
