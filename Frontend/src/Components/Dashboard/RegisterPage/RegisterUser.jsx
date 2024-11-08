@@ -41,10 +41,9 @@ export const RegisterUser = () => {
     }));
   };
 
-  // Función para manejar el envío del formulario con validaciones
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Evitar el comportamiento predeterminado de envío de formulario
-    const newAlerts = {}; // Objeto para almacenar las alertas por campo
+  // Función de validación de campos
+  const validateForm = () => {
+    const newAlerts = {};
 
     // Validaciones de campos requeridos
     if (!formData.nombres) {
@@ -97,45 +96,86 @@ export const RegisterUser = () => {
       }
     }
 
+    return newAlerts;
+  };
+
+  // Función para manejar el envío del formulario con validaciones
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validar los campos
+    const newAlerts = validateForm();
+
     // Si hay alertas, no se envía el formulario
     if (Object.keys(newAlerts).length > 0) {
       setFieldAlerts(newAlerts);
       return;
     }
 
-    // Aquí se puede hacer lo que sea necesario con los datos, como enviarlos a una API
-    console.log("Datos del formulario:", formData);
+    // Formateamos los datos para enviarlos al servidor
+    const formDataToSend = {
+      nombres_completo: formData.nombres + " " + formData.primerApellido + " " + formData.segundoApellido,
+      primer_apellido: formData.primerApellido,
+      segundo_apellido: formData.segundoApellido,
+      tipo_documento: formData.tipoDocumento,
+      num_documento: formData.numeroDocumento,
+      fecha_inicial: formData.fechaInicio,
+      fecha_final: formData.fechaFin,
+      id_programa: getProgramaId(formData.programa),  // Enviamos el id_programa aquí
+    };
 
-    // Simular que los datos se han guardado (puedes guardarlos en localStorage si lo deseas)
-    localStorage.setItem('userRegistration', JSON.stringify(formData));
+    // Hacer la petición al servidor
+    try {
+      const response = await fetch('/api/registerEstudiante', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataToSend),
+      });
 
-    // Limpiar el formulario después de enviar
-    setFormData({
-      nombres: "",
-      primerApellido: "",
-      segundoApellido: "",
-      tipoDocumento: "",
-      numeroDocumento: "",
-      programa: "",
-      fechaInicio: "",
-      fechaFin: "",
-      huella: "",
-    });
+      const data = await response.json();
 
-    // Limpiar las alertas
-    setFieldAlerts({
-      nombres: "",
-      primerApellido: "",
-      segundoApellido: "",
-      tipoDocumento: "",
-      numeroDocumento: "",
-      fechaInicio: "",
-      fechaFin: "",
-      huella: "",
-    });
+      if (response.ok) {
+        alert("¡Registro exitoso!");
+        // Limpiar el formulario
+        setFormData({
+          nombres: "",
+          primerApellido: "",
+          segundoApellido: "",
+          tipoDocumento: "",
+          numeroDocumento: "",
+          programa: "",
+          fechaInicio: "",
+          fechaFin: "",
+          huella: "",
+        });
+        setFieldAlerts({});
+      } else {
+        alert(data.message || "Error al registrar estudiante.");
+      }
+    } catch (error) {
+      console.error('Error al registrar:', error);
+      alert("Error en el servidor");
+    }
+  };
 
-    // Mostrar mensaje de éxito
-    alert("¡Registro exitoso!");
+  // Función para obtener el ID del programa según el programa seleccionado
+  const getProgramaId = (programa) => {
+    switch (programa) {
+      case 'enfermeria':
+        return 1;
+      case 'psicologia':
+        return 2;
+      case 'medicina':
+        return 3;
+      case 'medicinaInternos':
+        return 4;
+      case 'medicinaResidentes':
+        return 5;
+      default:
+        return null; // Si no se selecciona un programa válido
+    }
   };
 
   // Función para manejar el registro de huella digital (simulado)
