@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Navbar from "./DashboardComponents/Navbar";
 import { Sidebar } from "./DashboardComponents/Sidebar";
-import { Principal } from "./Principal/Principal";
 import { RegisterUser } from "./RegisterPage/RegisterUser";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
 
 export const Dashboard = () => {
-  const [contenido, setContenido] = useState("Principal");
+  const [contenido, setContenido] = useState("Registro");
   console.log(contenido);
   return (
     <>
@@ -22,7 +21,6 @@ export const Dashboard = () => {
           </div>
           <div className="bg-gray-200 w-5/6">
             <div className="p-8">
-              {contenido === "Principal" && <Principal />}
               {contenido === "Registro" && <RegisterUser />}
               {contenido === "Lista_Alumnos" && <ListaAlumnos />}
 

@@ -1,180 +1,374 @@
-import React from "react";
+import React, { useState } from "react";
 
 export const RegisterUser = () => {
-  return <form className="bg-white p-8 rounded-lg shadow-lg w-full mx-auto ">
-  <div className="space-y-11">
-    <div className="border-b border-gray-900/10 pb-11">
-      <h2 className="text-base font-semibold text-gray-900">Registro de Estudiantes</h2>
-      <p className="mt-1 text-sm text-gray-600">Asegúrate de que la información sea precisa</p>
+  // Estado para los campos del formulario
+  const [formData, setFormData] = useState({
+    nombres: "",               // Nombres
+    primerApellido: "",         // Primer apellido
+    segundoApellido: "",        // Segundo apellido
+    tipoDocumento: "",          // Tipo de documento
+    numeroDocumento: "",        // Número de documento
+    programa: "",               // Programa
+    fechaInicio: "",            // Fecha de inicio
+    fechaFin: "",               // Fecha final
+    huella: "",                 // Huella digital
+  });
 
-      {/* Grid para los campos */}
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-        {/* Campo de Nombres */}
-        <div className="sm:col-span-1">
-          <label htmlFor="first-name" className="block text-sm font-medium text-gray-900">Nombres</label>
-          <div className="mt-2">
-            <input
-              type="text"
-              name="first-name"
-              id="first-name"
-              autoComplete="first-name"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-              placeholder="Nombres completos"
-            />
-          </div>
-        </div>
+  // Estado para las alertas, cada campo tendrá su propia alerta
+  const [fieldAlerts, setFieldAlerts] = useState({
+    nombres: "",
+    primerApellido: "",
+    segundoApellido: "",
+    tipoDocumento: "",
+    numeroDocumento: "",
+    fechaInicio: "",
+    fechaFin: "",
+    huella: "",
+  });
 
-        {/* Primer Apellido */}
-        <div className="sm:col-span-1">
-          <label htmlFor="first-last-name" className="block text-sm font-medium text-gray-900">Primer Apellido</label>
-          <div className="mt-2">
-            <input
-              type="text"
-              name="first-last-name"
-              id="first-last-name"
-              autoComplete="family-name"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-              placeholder="Primer apellido"
-            />
-          </div>
-        </div>
+  // Función para actualizar los valores del formulario
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
 
-        {/* Segundo Apellido */}
-        <div className="sm:col-span-1">
-          <label htmlFor="second-last-name" className="block text-sm font-medium text-gray-900">Segundo Apellido</label>
-          <div className="mt-2">
-            <input
-              type="text"
-              name="second-last-name"
-              id="second-last-name"
-              autoComplete="family-name"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-              placeholder="Segundo apellido"
-            />
-          </div>
-        </div>
+    // Limpiar la alerta correspondiente cuando el usuario empieza a corregir el campo
+    setFieldAlerts((prevState) => ({
+      ...prevState,
+      [name]: "",
+    }));
+  };
 
-        {/* Tipo de documento */}
-        <div className="sm:col-span-1">
-          <label htmlFor="document-type" className="block text-sm font-medium text-gray-900">Tipo de documento</label>
-          <div className="mt-2">
-            <select
-              id="document-type"
-              name="document-type"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-            >
-              <option value="" disabled selected>Seleccione tipo de documento</option>
-              <option value="licencia_conducir">Cédula de ciudadanía</option>
-              <option value="dni">DNI</option>
-              <option value="passport">Pasaporte</option>
-              <option value="carnet_extranjeria">Carné de extranjería</option>
-              <option value="licencia_conducir">Licencia de conducir</option>
-            </select>
-          </div>
-        </div>
+  // Función para manejar el envío del formulario con validaciones
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Evitar el comportamiento predeterminado de envío de formulario
+    const newAlerts = {}; // Objeto para almacenar las alertas por campo
 
-        {/* Número de documento */}
-        <div className="sm:col-span-1">
-          <label htmlFor="document-number" className="block text-sm font-medium text-gray-900">Número de documento</label>
-          <div className="mt-2">
-            <input
-              type="text"
-              name="document-number"
-              id="document-number"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-              placeholder="Número de documento"
-            />
-          </div>
-        </div>
+    // Validaciones de campos requeridos
+    if (!formData.nombres) {
+      newAlerts.nombres = "El campo 'Nombres' es obligatorio.";
+    }
+    if (!formData.primerApellido) {
+      newAlerts.primerApellido = "El campo 'Primer Apellido' es obligatorio.";
+    }
+    if (!formData.segundoApellido) {
+      newAlerts.segundoApellido = "El campo 'Segundo Apellido' es obligatorio.";
+    }
+    if (!formData.tipoDocumento) {
+      newAlerts.tipoDocumento = "El campo 'Tipo de Documento' es obligatorio.";
+    }
+    if (!formData.numeroDocumento) {
+      newAlerts.numeroDocumento = "El campo 'Número de Documento' es obligatorio.";
+    }
 
-        {/* Programa */}
-        <div className="sm:col-span-1">
-          <label htmlFor="program" className="block text-sm font-medium text-gray-900">Programa</label>
-          <div className="mt-2">
-            <select
-              id="program"
-              name="program"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-            >
-              <option value="" disabled selected>Seleccione un programa</option>
-              <option value="enfermeria">Enfermería</option>
-              <option value="psicologia">Psicología</option>
-              <option value="medicina">Medicina</option>
-              <option value="medicina_internos">Medicina - Internos</option>
-              <option value="medicina_residentes">Medicina - Residentes</option>
-            </select>
-          </div>
-        </div>
+    // Validación de que nombres y apellidos no contengan números o símbolos
+    const nombreApellidoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; // Permite letras (mayúsculas y minúsculas) y espacios
+    if (formData.nombres && !nombreApellidoRegex.test(formData.nombres)) {
+      newAlerts.nombres = "El campo 'Nombres' no puede contener números ni símbolos.";
+    }
+    if (formData.primerApellido && !nombreApellidoRegex.test(formData.primerApellido)) {
+      newAlerts.primerApellido = "El campo 'Primer Apellido' no puede contener números ni símbolos.";
+    }
+    if (formData.segundoApellido && !nombreApellidoRegex.test(formData.segundoApellido)) {
+      newAlerts.segundoApellido = "El campo 'Segundo Apellido' no puede contener números ni símbolos.";
+    }
 
-        {/* Fecha de Inicio */}
-        <div className="sm:col-span-1">
-          <label htmlFor="start-date" className="block text-sm font-medium text-gray-900">Fecha de Inicio</label>
-          <div className="mt-2">
-            <input
-              type="date"
-              name="start-date"
-              id="start-date"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-            />
-          </div>
-        </div>
+    // Validación de que el número de documento contenga solo números
+    const numeroDocumentoRegex = /^\d+$/; // Solo dígitos
+    if (formData.numeroDocumento && !numeroDocumentoRegex.test(formData.numeroDocumento)) {
+      newAlerts.numeroDocumento = "El campo 'Número de Documento' solo puede contener números.";
+    }
 
-        {/* Fecha Final */}
-        <div className="sm:col-span-1">
-          <label htmlFor="end-date" className="block text-sm font-medium text-gray-900">Fecha Final</label>
-          <div className="mt-2">
-            <input
-              type="date"
-              name="end-date"
-              id="end-date"
-              className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-            />
-          </div>
-        </div>
+    // Validación de fechas si se proporcionan ambas
+    if (formData.fechaInicio && formData.fechaFin) {
+      const fechaInicio = new Date(formData.fechaInicio);
+      const fechaFin = new Date(formData.fechaFin);
 
-        {/* Campo de huella digital */}
-        <div className="col-span-full">
-          <label htmlFor="fingerprint" className="block text-sm font-medium text-gray-900">Registro de Huella Digital</label>
-          <div className="mt-4 flex flex-col items-center">
-            {/* Área de huella */}
-            <div
-              className="w-full bg-gray-100 border-2 border-gray-300 rounded-md p-4 flex flex-col items-center justify-center text-gray-600"
-              id="fingerprint-area"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                className="h-12 w-12 text-indigo-600 mb-3"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
+      // Verificar que la fecha de inicio no sea posterior a la fecha de fin
+      if (fechaInicio > fechaFin) {
+        newAlerts.fechaInicio = "La fecha de inicio no puede ser posterior a la fecha de fin.";
+      }
+
+      // Verificar que la fecha de fin no sea anterior a la fecha de inicio
+      if (fechaFin < fechaInicio) {
+        newAlerts.fechaFin = "La fecha de fin no puede ser anterior a la fecha de inicio.";
+      }
+    }
+
+    // Si hay alertas, no se envía el formulario
+    if (Object.keys(newAlerts).length > 0) {
+      setFieldAlerts(newAlerts);
+      return;
+    }
+
+    // Aquí se puede hacer lo que sea necesario con los datos, como enviarlos a una API
+    console.log("Datos del formulario:", formData);
+
+    // Simular que los datos se han guardado (puedes guardarlos en localStorage si lo deseas)
+    localStorage.setItem('userRegistration', JSON.stringify(formData));
+
+    // Limpiar el formulario después de enviar
+    setFormData({
+      nombres: "",
+      primerApellido: "",
+      segundoApellido: "",
+      tipoDocumento: "",
+      numeroDocumento: "",
+      programa: "",
+      fechaInicio: "",
+      fechaFin: "",
+      huella: "",
+    });
+
+    // Limpiar las alertas
+    setFieldAlerts({
+      nombres: "",
+      primerApellido: "",
+      segundoApellido: "",
+      tipoDocumento: "",
+      numeroDocumento: "",
+      fechaInicio: "",
+      fechaFin: "",
+      huella: "",
+    });
+
+    // Mostrar mensaje de éxito
+    alert("¡Registro exitoso!");
+  };
+
+  // Función para manejar el registro de huella digital (simulado)
+  const registerFingerprint = () => {
+    alert("Huella registrada exitosamente.");
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-full mx-auto">
+      <div className="space-y-11">
+        <div className="border-b border-gray-900/10 pb-11">
+          <h2 className="text-base font-semibold text-gray-900">Registro de Estudiantes</h2>
+          <p className="mt-1 text-sm text-gray-600">Asegúrate de que la información sea precisa</p>
+
+          {/* Grid para los campos */}
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+            {/* Campo de Nombres */}
+            <div className="sm:col-span-1">
+              <label htmlFor="nombres" className="block text-sm font-medium text-gray-900">Nombres</label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="nombres"
+                  id="nombres"
+                  autoComplete="nombres"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  placeholder="Nombres completos"
+                  value={formData.nombres}
+                  onChange={handleChange}
                 />
-              </svg>
-              <p className="text-sm text-gray-700 mb-2">Por favor coloca tu dedo en el escáner.</p>
-              <p className="text-xs text-gray-500">Esperando huella...</p>
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.nombres && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.nombres}</p>
+              )}
             </div>
 
-            {/* Botón para registrar huella */}
-            <button
-              type="button"
-              id="register-fingerprint"
-              className="mt-4 py-2 px-4 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              onClick={() => registerFingerprint()}
-            >
-              Registrar Huella
-            </button>
+            {/* Primer Apellido */}
+            <div className="sm:col-span-1">
+              <label htmlFor="primerApellido" className="block text-sm font-medium text-gray-900">Primer Apellido</label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="primerApellido"
+                  id="primerApellido"
+                  autoComplete="primerApellido"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  placeholder="Primer apellido"
+                  value={formData.primerApellido}
+                  onChange={handleChange}
+                />
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.primerApellido && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.primerApellido}</p>
+              )}
+            </div>
 
-            <p className="mt-2 text-xs text-gray-500">Presiona el botón para registrar tu huella.</p>
+            {/* Segundo Apellido */}
+            <div className="sm:col-span-1">
+              <label htmlFor="segundoApellido" className="block text-sm font-medium text-gray-900">Segundo Apellido</label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="segundoApellido"
+                  id="segundoApellido"
+                  autoComplete="segundoApellido"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  placeholder="Segundo apellido"
+                  value={formData.segundoApellido}
+                  onChange={handleChange}
+                />
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.segundoApellido && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.segundoApellido}</p>
+              )}
+            </div>
+
+            {/* Tipo de documento */}
+            <div className="sm:col-span-1">
+              <label htmlFor="tipoDocumento" className="block text-sm font-medium text-gray-900">Tipo de Documento</label>
+              <div className="mt-2">
+                <select
+                  id="tipoDocumento"
+                  name="tipoDocumento"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  value={formData.tipoDocumento}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>Seleccione tipo de documento</option>
+                  <option value="cedula">Cédula de ciudadanía</option>
+                  <option value="dni">DNI</option>
+                  <option value="pasaporte">Pasaporte</option>
+                  <option value="carnetExtranjeria">Carné de extranjería</option>
+                  <option value="licenciaConducir">Licencia de conducir</option>
+                </select>
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.tipoDocumento && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.tipoDocumento}</p>
+              )}
+            </div>
+
+            {/* Número de documento */}
+            <div className="sm:col-span-1">
+              <label htmlFor="numeroDocumento" className="block text-sm font-medium text-gray-900">Número de Documento</label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="numeroDocumento"
+                  id="numeroDocumento"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  placeholder="Número de documento"
+                  value={formData.numeroDocumento}
+                  onChange={handleChange}
+                />
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.numeroDocumento && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.numeroDocumento}</p>
+              )}
+            </div>
+
+            {/* Programa */}
+            <div className="sm:col-span-1">
+              <label htmlFor="programa" className="block text-sm font-medium text-gray-900">Programa</label>
+              <div className="mt-2">
+                <select
+                  id="programa"
+                  name="programa"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  value={formData.programa}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>Seleccione un programa</option>
+                  <option value="enfermeria">Enfermería</option>
+                  <option value="psicologia">Psicología</option>
+                  <option value="medicina">Medicina</option>
+                  <option value="medicinaInternos">Medicina - Internos</option>
+                  <option value="medicinaResidentes">Medicina - Residentes</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Fecha de Inicio */}
+            <div className="sm:col-span-1">
+              <label htmlFor="fechaInicio" className="block text-sm font-medium text-gray-900">Fecha de Inicio</label>
+              <div className="mt-2">
+                <input
+                  type="date"
+                  name="fechaInicio"
+                  id="fechaInicio"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  value={formData.fechaInicio}
+                  onChange={handleChange}
+                />
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.fechaInicio && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.fechaInicio}</p>
+              )}
+            </div>
+
+            {/* Fecha Final */}
+            <div className="sm:col-span-1">
+              <label htmlFor="fechaFin" className="block text-sm font-medium text-gray-900">Fecha Final</label>
+              <div className="mt-2">
+                <input
+                  type="date"
+                  name="fechaFin"
+                  id="fechaFin"
+                  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                  value={formData.fechaFin}
+                  onChange={handleChange}
+                />
+              </div>
+              {/* Alerta debajo del campo */}
+              {fieldAlerts.fechaFin && (
+                <p className="text-sm text-red-500 mt-1">{fieldAlerts.fechaFin}</p>
+              )}
+            </div>
+
+            {/* Campo de huella digital */}
+            <div className="col-span-full">
+              <label htmlFor="huella" className="block text-sm font-medium text-gray-900">Registro de Huella Digital</label>
+              <div className="mt-4 flex flex-col items-center">
+                <div
+                  className="w-full bg-gray-100 border-2 border-gray-300 rounded-md p-4 flex flex-col items-center justify-center text-gray-600"
+                  id="huella-area"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    className="h-12 w-12 text-indigo-600 mb-3"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <p className="text-sm text-gray-700 mb-2">Por favor coloca tu dedo en el escáner.</p>
+                  <p className="text-xs text-gray-500">Esperando huella...</p>
+                </div>
+
+                {/* Botón para registrar huella */}
+                <button
+                  type="button"
+                  id="registrar-huella"
+                  className="mt-4 py-2 px-4 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  onClick={registerFingerprint}
+                >
+                  Registrar Huella
+                </button>
+
+                <p className="mt-2 text-xs text-gray-500">Presiona el botón para registrar tu huella.</p>
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Botón de enviar */}
+        <button
+          type="submit"
+          className="mt-8 w-full py-2 px-4 text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+        >
+          Registrar Estudiante
+        </button>
       </div>
-    </div>
-  </div>
-</form>;
+    </form>
+  );
 };
