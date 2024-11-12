@@ -36,20 +36,22 @@ const Navbar = () => {
             >
               <span className="sr-only">View notifications</span>
               <svg
-                className="size-5"
-                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
-                strokeWidth={1.5}
+                fill="none"
                 stroke="currentColor"
-                aria-hidden="true"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-bell-ring"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                />
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                <path d="M4 2C2.8 3.7 2 5.7 2 8" />
+                <path d="M22 8c0-2.3-.8-4.3-2-6" />
               </svg>
-
               <span className="absolute bottom-6 right-0.5 w-1.5 h-1.5 rounded-full bg-Purple ring-1 ring-white"></span>
             </button>
           </div>

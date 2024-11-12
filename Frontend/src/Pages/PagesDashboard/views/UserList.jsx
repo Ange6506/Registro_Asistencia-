@@ -1,5 +1,5 @@
 import React from "react";
 
-export const ListaAlumnos = () => {
+export const UserList = () => {
   return <div>Lista de todos los alumnos</div>;
 };
