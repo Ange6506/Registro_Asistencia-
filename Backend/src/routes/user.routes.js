@@ -5,6 +5,6 @@ const addUsers = require("../controllers/users/addUser");
 const addEstudiante = require("../controllers/users/addEstudiante");
 
 router.post("/add_user", addUsers.addUser);
-router.post("/registerEstudiante", addEstudiante);
+router.post("/registerEstudiante", addEstudiante.addEstudiante);
 
 module.exports = router;
