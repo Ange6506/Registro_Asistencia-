@@ -14,7 +14,6 @@ export const Sidebar = ({ contenido, setContenido }) => {
   return (
     <>
       <ul className="flex flex-col gap-y-2">
-
         <li>
           <button
             className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
@@ -60,6 +59,31 @@ export const Sidebar = ({ contenido, setContenido }) => {
             </svg>
 
             <span className="mx-4 text-md font-medium">Lista de Alumnos</span>
+          </button>
+        </li>
+
+        {/* Añadir la opción para "Huellero" */}
+        <li>
+          <button
+            className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+            onClick={() => changeContent("Huellero")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 2.25v19.5m0 0l5.25-5.25M12 21.75l-5.25-5.25"
+              />
+            </svg>
+
+            <span className="mx-4 text-md font-medium">Huellero</span>
           </button>
         </li>
       </ul>

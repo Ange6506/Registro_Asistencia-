@@ -3,10 +3,12 @@ import Navbar from "./DashboardComponents/Navbar";
 import { Sidebar } from "./DashboardComponents/Sidebar";
 import { RegisterUser } from "./RegisterPage/RegisterUser";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
+import { Huellero} from "./Simulador_huellero/huellero";
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("Registro");
   console.log(contenido);
+
   return (
     <>
       <div className="min-h-screen flex flex-col">
@@ -23,7 +25,8 @@ export const Dashboard = () => {
             <div className="p-8">
               {contenido === "Registro" && <RegisterUser />}
               {contenido === "Lista_Alumnos" && <ListaAlumnos />}
-
+              {contenido === "Huellero" && <Huellero />} 
+              
               {/* Renderiza otros contenidos según sea necesario */}
             </div>
           </div>
