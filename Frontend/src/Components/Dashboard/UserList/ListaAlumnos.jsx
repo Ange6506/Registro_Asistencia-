@@ -1,38 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { InfoAlumnos } from "./InfoAlumnos";
-
-const studentsData = [
-  {
-    name: "Luna Bedoya Cuenca",
-    cedula: "1113979779",
-    entrada: "07:00 a.m 05-11-2024",
-    salida: "0:00 p.m 05-11-2024",
-    programa: "Sistemas",
-    fechaInicio: "24-10-2024",
-    fechaFinal: "22-02-2025",
-  },
-  {
-    name: "Carlos Pérez",
-    cedula: "1122334455",
-    entrada: "08:00 a.m 05-11-2024",
-    salida: "06:00 p.m 05-11-2024",
-    programa: "Ingeniería",
-    fechaInicio: "01-01-2024",
-    fechaFinal: "31-12-2024",
-  },
-  // Agrega más estudiantes aquí
-];
 
 export const ListaAlumnos = () => {
   const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
   const [selectedStudent, setSelectedStudent] = useState(null); // Estado para almacenar el estudiante seleccionado
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredStudents, setFilteredStudents] = useState(studentsData);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
+  const [filteredStudents, setFilteredStudents] = useState([]); // Lista de estudiantes filtrados
+  const [studentsData, setStudentsData] = useState([]); // Lista de todos los estudiantes
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/get_estudiante");
+        const data = await response.json();
+        setStudentsData(data);
+        setFilteredStudents(data);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      }
+    };
+  
+    fetchStudents();
+  }, []); // Solo se ejecuta una vez al montar el componente
+  
 
   // Función para abrir el modal y seleccionar el estudiante
   const handleShowModal = (student) => {
-    setSelectedStudent(student); // Establecer el estudiante seleccionado
-    setShowModal(true); // Mostrar el modal
+    setSelectedStudent(student);
+    setShowModal(true);
   };
 
   // Función para cerrar el modal
@@ -40,31 +35,31 @@ export const ListaAlumnos = () => {
     setShowModal(false);
   };
 
+  // Manejar cambio de búsqueda
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
 
-    // Filtrar los estudiantes según el nombre o el número de cédula
+    // Filtrar los estudiantes por nombre o número de cédula
     const filtered = studentsData.filter(
       (student) =>
-        student.name.toLowerCase().includes(value.toLowerCase()) ||
-        student.cedula.includes(value)
+        student.nombre_completo.toLowerCase().includes(value.toLowerCase()) ||
+        student.num_documento.includes(value)
     );
+    
+    
 
-    setFilteredStudents(filtered); // Actualizar la lista de estudiantes filtrados
+    setFilteredStudents(filtered); // Actualizar la lista filtrada
   };
 
   return (
-    <section
-      className="container p-4 mx-auto flex flex-col"
-      style={{ minHeight: "87vh" }}
-    >
+    <section className="container p-4 mx-auto flex flex-col" style={{ minHeight: "87vh" }}>
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
         <div>
           <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
             <div className="flex flex-col justify-center items-start">
               <div className="flex flex-row items-center gap-x-3">
-                <h2 className=" font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
+                <h2 className="font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
                   Estudiantes Registrados
                 </h2>
               </div>
@@ -79,7 +74,7 @@ export const ListaAlumnos = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-6 h-6 mx-3 text-blue "
+                    className="w-6 h-6 mx-3 text-blue"
                   >
                     <path
                       strokeLinecap="round"
@@ -102,90 +97,49 @@ export const ListaAlumnos = () => {
 
           <div className="flex flex-col justify-between flex-1">
             <div className="flex flex-col mt-6">
-              <div className="-mx-4 -my-2 overflow-x-auto ">
+              <div className="-mx-4 -my-2 overflow-x-auto">
                 <div className="inline-block min-w-full py-2 align-middle md:px-5 lg:px-4">
                   <div className="overflow-hidden border border-blue dark:border-blue md:rounded-lg bg-blue">
                     <table className="min-w-full divide-y divide-blue dark:divide-blue">
                       <thead className="bg-DarkSlate dark:bg-gray-800">
                         <tr>
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white "
-                          >
-                            <div className="flex justify-center items-center gap-x-3 ">
+                          <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                            <div className="flex justify-center items-center gap-x-3">
                               <button>
                                 <span>Nombre Completo</span>
                               </button>
                             </div>
                           </th>
-                          <th
-                            scope="col"
-                            className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white"
-                          >
+                          <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                             <div className="flex justify-center items-center gap-x-3">
                               <button>
                                 <span> Nº Cédula</span>
                               </button>
                             </div>
                           </th>
-
-                          <th
-                            scope="col"
-                            className="px-4 py-3.5 md:px-6 md:py-4 text-sm font-normal text-left rtl:text-right text-white"
-                          >
-                            <div className="flex justify-center items-center gap-x-2">
-                              <button>
-                                <span>Fecha y Hora Entrada</span>
-                              </button>
-                            </div>
-                          </th>
-
-                          <th
-                            scope="col"
-                            className="px-4 py-3.5 md:px-6 md:py-4  text-sm font-normal text-left rtl:text-right text-white "
-                          >
-                            <div className="flex justify-center items-center gap-x-2">
-                              <button>
-                                <span> Fecha y Hora Salida</span>
-                              </button>
-                            </div>
-                          </th>
-
-                          <th
-                            scope="col"
-                            className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white"
-                          >
+                          
+                          <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                             <div className="flex justify-center items-center gap-x-2">
                               <button>
                                 <span>Programas</span>
                               </button>
                             </div>
                           </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white"
-                          >
+                          <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                             <div className="flex justify-center items-center gap-x-2">
                               <button>
                                 <span>Fecha Inicio</span>
                               </button>
                             </div>
                           </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white"
-                          >
+                          <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                             <div className="flex justify-center items-center gap-x-2">
                               <button>
                                 <span>Fecha Final</span>
                               </button>
                             </div>
                           </th>
-
-                          <th
-                            scope="col"
-                            className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white"
-                          >
+                          <th scope="col" className="px-4 py-4 text-sm font-normal text-left rtl:text-right text-white">
                             <div className="flex justify-center items-center gap-x-2">
                               <button>
                                 <span>Acción</span>
@@ -195,47 +149,39 @@ export const ListaAlumnos = () => {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
-                        {filteredStudents.length > 0 ? (
+                        
+                       {filteredStudents.length > 0 ? (
                           filteredStudents.map((student, index) => (
                             <tr key={index}>
-                              <td className="px-4 py-4  text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 <div className="flex flex-col justify-center items-center gap-x-2">
-                                  <span>{student.name}</span>
+                                  <span>{student.nombre_completo}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{student.cedula}</span>
+                                  <span>{student.num_documento}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-4  text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{student.entrada}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4  text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
-                                <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{student.salida}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4  text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                             
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.programa}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-4  text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{student.fechaInicio}</span>
+                                  <span>{new Date(student.fecha_inicial).toLocaleDateString("es-ES")}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{student.fechaFinal}</span>
+                                  <span>{new Date(student.fecha_final).toLocaleDateString("es-ES")}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2 ">
+                                  <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2">
                                     <button>
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -275,10 +221,7 @@ export const ListaAlumnos = () => {
                           ))
                         ) : (
                           <tr>
-                            <td
-                              colSpan="8"
-                              className="text-center py-4 text-sm text-gray-500"
-                            >
+                            <td colSpan="8" className="text-center py-4 text-sm text-gray-500">
                               No se encontraron resultados
                             </td>
                           </tr>

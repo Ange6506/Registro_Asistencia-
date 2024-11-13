@@ -2,32 +2,28 @@ import React, { useState, useEffect } from 'react';
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    lastName: '',
-    secondLastName: '',
-    documentType: '',
-    documentNumber: '',
-    program: '',
-    startDate: '',
-    endDate: '',
-    entryTime: '',
-    exitTime: ''
+    nombre_completo: '',
+    primer_apellido : '',
+    segundo_apellido: '',
+    tipo_documento: '',
+    num_documento: '',
+    programa: '',
+    fecha_inicial: '',
+    fecha_final: ''
   });
 
   // Cuando se recibe el estudiante, actualizamos el estado del formulario
   useEffect(() => {
     if (student) {
       setFormData({
-        name: student.name,
-        lastName: student.lastName || '',
-        secondLastName: student.secondLastName || '',
-        documentType: student.documentType || '',
-        documentNumber: student.documentNumber || '',
-        program: student.program || '',
-        startDate: student.startDate || '',
-        endDate: student.endDate || '',
-        entryTime: student.entryTime || '',
-        exitTime: student.exitTime || ''
+        name: student.nombre_completo || '',
+        lastName: student.primer_apellido || '',
+        secondLastName: student.segundo_apellido || '',
+        documentType:  student.tipo_documento || '',
+        documentNumber: student.num_documento || '',
+        program: student.programa || '',
+        startDate: student.fecha_inicial || '',
+        endDate: student.fecha_final || ''
       });
     }
   }, [student]); // Esto se ejecuta cada vez que `student` cambia
@@ -275,45 +271,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   </div>
                 </div>
 
-                {/* Hora Entrada */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="entryTime"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Hora Entrada
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="time"
-                      name="entryTime"
-                      id="entryTime"
-                      value={formData.entryTime}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Hora Salida */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="exitTime"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Hora Salida
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="time"
-                      name="exitTime"
-                      id="exitTime"
-                      value={formData.exitTime}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                    />
-                  </div>
-                </div>
+               
               </div>
             </div>
             <div className="flex justify-center items-center">
