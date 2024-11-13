@@ -478,3 +478,4 @@ export const RegisterUser = () => {
     </form>
   );
 };
+    
