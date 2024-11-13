@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 export const RegisterUser = () => {
-  // Estado para los campos del formulario
   const [formData, setFormData] = useState({
     nombre: "", // Nombres
     primerApellido: "", // Primer apellido
@@ -13,7 +12,6 @@ export const RegisterUser = () => {
     fechaFin: "", // Fecha final
     huella: "", // Huella digital
   });
-  
 
   // Estado para las alertas, cada campo tendrá su propia alerta
   const [fieldAlerts, setFieldAlerts] = useState({
@@ -26,6 +24,9 @@ export const RegisterUser = () => {
     fechaFin: "",
     huella: "",
   });
+
+  // Estado para manejar el estado de envío
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   // Función para actualizar los valores del formulario
   const handleChange = (e) => {
@@ -60,39 +61,25 @@ export const RegisterUser = () => {
       newAlerts.tipoDocumento = "El campo 'Tipo de Documento' es obligatorio.";
     }
     if (!formData.numeroDocumento) {
-      newAlerts.numeroDocumento =
-        "El campo 'Número de Documento' es obligatorio.";
+      newAlerts.numeroDocumento = "El campo 'Número de Documento' es obligatorio.";
     }
 
     // Validación de que nombres y apellidos no contengan números o símbolos
     const nombreApellidoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; // Permite letras (mayúsculas y minúsculas) y espacios
-    if (formData.nombre && !nombreApellidoRegex.test(formData.nombres)) {
-      newAlerts.nombres =
-        "El campo 'Nombres' no puede contener números ni símbolos.";
+    if (formData.nombre && !nombreApellidoRegex.test(formData.nombre)) {
+      newAlerts.nombres = "El campo 'Nombres' no puede contener números ni símbolos.";
     }
-    if (
-      formData.primerApellido &&
-      !nombreApellidoRegex.test(formData.primerApellido)
-    ) {
-      newAlerts.primerApellido =
-        "El campo 'Primer Apellido' no puede contener números ni símbolos.";
+    if (formData.primerApellido && !nombreApellidoRegex.test(formData.primerApellido)) {
+      newAlerts.primerApellido = "El campo 'Primer Apellido' no puede contener números ni símbolos.";
     }
-    if (
-      formData.segundoApellido &&
-      !nombreApellidoRegex.test(formData.segundoApellido)
-    ) {
-      newAlerts.segundoApellido =
-        "El campo 'Segundo Apellido' no puede contener números ni símbolos.";
+    if (formData.segundoApellido && !nombreApellidoRegex.test(formData.segundoApellido)) {
+      newAlerts.segundoApellido = "El campo 'Segundo Apellido' no puede contener números ni símbolos.";
     }
 
     // Validación de que el número de documento contenga solo números
     const numeroDocumentoRegex = /^\d+$/; // Solo dígitos
-    if (
-      formData.numeroDocumento &&
-      !numeroDocumentoRegex.test(formData.numeroDocumento)
-    ) {
-      newAlerts.numeroDocumento =
-        "El campo 'Número de Documento' solo puede contener números.";
+    if (formData.numeroDocumento && !numeroDocumentoRegex.test(formData.numeroDocumento)) {
+      newAlerts.numeroDocumento = "El campo 'Número de Documento' solo puede contener números.";
     }
 
     // Validación de fechas si se proporcionan ambas
@@ -102,14 +89,12 @@ export const RegisterUser = () => {
 
       // Verificar que la fecha de inicio no sea posterior a la fecha de fin
       if (fechaInicio > fechaFin) {
-        newAlerts.fechaInicio =
-          "La fecha de inicio no puede ser posterior a la fecha de fin.";
+        newAlerts.fechaInicio = "La fecha de inicio no puede ser posterior a la fecha de fin.";
       }
 
       // Verificar que la fecha de fin no sea anterior a la fecha de inicio
       if (fechaFin < fechaInicio) {
-        newAlerts.fechaFin =
-          "La fecha de fin no puede ser anterior a la fecha de inicio.";
+        newAlerts.fechaFin = "La fecha de fin no puede ser anterior a la fecha de inicio.";
       }
     }
 
@@ -129,6 +114,9 @@ export const RegisterUser = () => {
       return;
     }
 
+    // Prevenir múltiples envíos (deshabilitar el botón)
+    setIsSubmitting(true);
+
     // Formateamos los datos para enviarlos al servidor
     const formDataToSend = {
       nombre_completo: formData.nombre,
@@ -141,7 +129,6 @@ export const RegisterUser = () => {
       programa: formData.programa,
     };
 
-    // Hacer la petición al servidor
     try {
       const response = await fetch("http://localhost:5000/registerEstudiante", {
         method: "POST",
@@ -174,6 +161,9 @@ export const RegisterUser = () => {
     } catch (error) {
       console.error("Error al registrar:", error);
       alert("Error en el servidor");
+    } finally {
+      // Habilitar el botón después de enviar
+      setIsSubmitting(false);
     }
   };
 
@@ -482,8 +472,9 @@ export const RegisterUser = () => {
         <button
           type="submit"
           className="mt-8 w-full py-2 px-4 text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+          disabled={isSubmitting} // Deshabilitar el botón si se está enviando
         >
-          Registrar Estudiante
+          {isSubmitting ? "Registrando..." : "Registrar Estudiante"}
         </button>
       </div>
     </form>
