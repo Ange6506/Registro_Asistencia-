@@ -13,7 +13,6 @@ export const RegisterUser = () => {
     huella: "", // Huella digital
   });
 
-  // Estado para las alertas, cada campo tendrá su propia alerta
   const [fieldAlerts, setFieldAlerts] = useState({
     nombre: "",
     primerApellido: "",
@@ -25,8 +24,7 @@ export const RegisterUser = () => {
     huella: "",
   });
 
-  // Estado para manejar el estado de envío
-  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Función para actualizar los valores del formulario
   const handleChange = (e) => {
@@ -49,7 +47,7 @@ export const RegisterUser = () => {
 
     // Validaciones de campos requeridos
     if (!formData.nombre) {
-      newAlerts.nombres = "El campo 'Nombres' es obligatorio.";
+      newAlerts.nombre = "El campo 'Nombres' es obligatorio.";
     }
     if (!formData.primerApellido) {
       newAlerts.primerApellido = "El campo 'Primer Apellido' es obligatorio.";
@@ -67,7 +65,7 @@ export const RegisterUser = () => {
     // Validación de que nombres y apellidos no contengan números o símbolos
     const nombreApellidoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; // Permite letras (mayúsculas y minúsculas) y espacios
     if (formData.nombre && !nombreApellidoRegex.test(formData.nombre)) {
-      newAlerts.nombres = "El campo 'Nombres' no puede contener números ni símbolos.";
+      newAlerts.nombre = "El campo 'Nombres' no puede contener números ni símbolos.";
     }
     if (formData.primerApellido && !nombreApellidoRegex.test(formData.primerApellido)) {
       newAlerts.primerApellido = "El campo 'Primer Apellido' no puede contener números ni símbolos.";
@@ -126,7 +124,7 @@ export const RegisterUser = () => {
       num_documento: formData.numeroDocumento,
       fecha_inicial: formData.fechaInicio,
       fecha_final: formData.fechaFin,
-      programa: formData.programa,
+      programa: formData.programa || null, // El campo programa puede ser vacío
     };
 
     try {
@@ -209,9 +207,9 @@ export const RegisterUser = () => {
                 />
               </div>
               {/* Alerta debajo del campo */}
-              {fieldAlerts.nombres && (
+              {fieldAlerts.nombre && (
                 <p className="text-sm text-red-500 mt-1">
-                  {fieldAlerts.nombres}
+                  {fieldAlerts.nombre}
                 </p>
               )}
             </div>
