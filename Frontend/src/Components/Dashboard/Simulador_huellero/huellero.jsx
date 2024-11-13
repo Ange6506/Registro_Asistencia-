@@ -5,91 +5,52 @@ export const Huellero = () => {
   const [registroActivo, setRegistroActivo] = useState(null);
   const id_huella = 1; // ID del estudiante simulado
 
-  // Función para verificar si ya existe un registro activo
-  const verificarRegistroActivo = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/verificar_asistencia", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id_huella }), // Enviamos el ID del estudiante
-      });
-
-      const data = await response.json();
-
-      // Si hay un registro activo, lo almacenamos
-      if (response.ok && data) {
-        setRegistroActivo(data);
-      } else {
-        setRegistroActivo(null); // Si no hay un registro activo, seteamos null
-      }
-    } catch (error) {
-      console.error("Error al verificar el registro activo:", error);
-    }
-  };
-
-  // Efecto para verificar el estado de la asistencia cuando se monta el componente
-  useEffect(() => {
-    verificarRegistroActivo(); // Llamamos a la función para verificar el registro activo
-  }, []);
-
-  // Función para manejar el registro de asistencia (entrada o salida)
   const handleRegistroAsistencia = async () => {
     try {
       let response;
       if (registroActivo) {
-        // Si ya hay un registro activo (entrada), registramos la salida
+        // Si ya hay un registro activo, se registra la salida
         const nuevaAsistencia = {
           id_huella,
-          entrada: registroActivo.fecha_hora_entrada, // Conservamos la hora de entrada
-          salida: new Date().toISOString(), // Registramos la hora de salida en formato ISO
         };
 
-        // Enviar la solicitud POST para registrar la salida
         response = await fetch("http://localhost:5000/add_Asistencia", {
-          method: "POST", // Asegúrate de usar el método POST
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(nuevaAsistencia), // Convertimos los datos a JSON
+          body: JSON.stringify(nuevaAsistencia),
         });
 
-        // Procesamos la respuesta
         const data = await response.json();
 
         if (response.ok) {
-          // Actualizamos el estado con la nueva salida
           setAsistencia((prevAsistencia) => [
             ...prevAsistencia.filter((reg) => reg.id_asistencia !== data.id_asistencia),
-            data, // Añadimos la respuesta del backend con la salida
+            data,
           ]);
-          setRegistroActivo(null); // Reseteamos el estado de registro activo
+          setRegistroActivo(null);
         } else {
           console.error(data.message);
         }
       } else {
-        // Si no hay un registro activo, registramos la entrada
+        // Si no hay un registro activo, se registra la entrada
         const nuevoRegistro = {
-          id_huella, // Asociamos el ID del estudiante
-          entrada: new Date().toISOString(), // Registramos la hora de entrada en formato ISO
+          id_huella,
         };
 
-        // Enviar la solicitud POST para registrar la entrada
         response = await fetch("http://localhost:5000/add_Asistencia", {
-          method: "POST", // Asegúrate de usar el método POST
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(nuevoRegistro), // Convertimos los datos a JSON
+          body: JSON.stringify(nuevoRegistro),
         });
 
-        // Procesamos la respuesta
         const data = await response.json();
 
         if (response.ok) {
-          // Guardamos el registro de entrada
-          setRegistroActivo(data); // Guardamos el registro de entrada
+          setRegistroActivo(data);
           setAsistencia((prevAsistencia) => [...prevAsistencia, data]);
         } else {
           console.error(data.message);
@@ -101,12 +62,16 @@ export const Huellero = () => {
   };
 
   return (
-    <div className="huellero-container flex flex-col items-center justify-center space-y-6 p-8">
-      <h2 className="text-2xl font-semibold text-indigo-700">Registro de Asistencia</h2>
+<div className="huellero-container flex flex-col items-center justify-center space-y-6 p-8">
+  <h2 className="text-2xl font-semibold text-indigo-700">Registro de Asistencia</h2>
 
-      {/* Área del huellero */}
+  {/* Caja principal de asistencia */}
+  <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 space-y-6">
+
+    {/* Área de huella digital */}
+    <div className="flex flex-col items-center">
       <div
-        className="huellero-area w-64 h-64 bg-indigo-100 rounded-full flex items-center justify-center cursor-pointer border-4 border-indigo-600 shadow-xl transition-transform transform hover:scale-105"
+        className="huellero-area w-16 h-16 bg-indigo-100 border border-indigo-500 rounded-full flex items-center justify-center cursor-pointer transition-transform transform hover:scale-110"
         onClick={handleRegistroAsistencia}
       >
         <svg
@@ -114,7 +79,7 @@ export const Huellero = () => {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          className="h-16 w-16 text-indigo-600"
+          className="h-8 w-8 text-indigo-500"
         >
           <path
             strokeLinecap="round"
@@ -125,29 +90,43 @@ export const Huellero = () => {
         </svg>
       </div>
 
-      {/* Mensaje de instrucción */}
-      <p className="text-md text-gray-600">
+      <p className="text-sm text-gray-500 mt-3">
         {registroActivo ? "Haz clic nuevamente para registrar la salida." : "Haz clic en el huellero para registrar tu entrada."}
       </p>
+      <p className="text-xs text-gray-500 mt-1">
+        {registroActivo ? "Esperando registro de salida..." : "Esperando huella..."}
+      </p>
+    </div>
 
-      {/* Lista de asistencia */}
-      <div className="asistencia-list w-full max-w-md mt-6">
-        <h3 className="font-semibold text-gray-700">Registros de Asistencia:</h3>
-        <ul className="mt-4 space-y-2">
-          {asistencia.map((registro) => (
-            <li key={registro.id_asistencia} className="flex justify-between text-sm text-gray-600 border-b pb-2">
-              <span>
-                <strong>Entrada:</strong> {new Date(registro.fecha_hora_entrada).toLocaleString()}
-              </span>
-              {registro.fecha_hora_salida && (
-                <span>
-                  <strong>Salida:</strong> {new Date(registro.fecha_hora_salida).toLocaleString()}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
+    {/* Tabla de registros de asistencia */}
+    <div className="asistencia-list w-full">
+      <h3 className="font-semibold text-gray-700">Registros de Asistencia:</h3>
+      <div className="overflow-x-auto mt-4">
+        <table className="w-full text-sm text-gray-600 border-collapse">
+          <thead>
+            <tr className="bg-indigo-50 text-left">
+              <th className="py-2 px-3 text-indigo-600">Entrada</th>
+              <th className="py-2 px-3 text-indigo-600">Salida</th>
+            </tr>
+          </thead>
+          <tbody>
+            {asistencia.map((registro) => (
+              <tr key={registro.id_asistencia} className="border-b hover:bg-gray-50">
+                <td className="py-2 px-3">
+                  {new Date(registro.fecha_hora_entrada).toLocaleString()}
+                </td>
+                <td className="py-2 px-3">
+                  {registro.fecha_hora_salida ? new Date(registro.fecha_hora_salida).toLocaleString() : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
+</div>
+
+  
   );
 };
