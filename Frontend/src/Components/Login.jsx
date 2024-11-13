@@ -24,10 +24,18 @@ export const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Guardar el token en el localStorage o en el estado global
-        localStorage.setItem("authToken", data.token);
+        // Guardar el token en el localStorage
+        localStorage.setItem("authToken", data.token); // Guardar el token
 
-        window.location.href = "/home"; 
+        // Decodificar el token JWT para obtener el nombre de usuario (esto puede hacerse en el cliente)
+        const decoded = JSON.parse(atob(data.token.split('.')[1])); // Decodificar JWT para obtener el payload
+        const userName = decoded.username; // Extraer el nombre de usuario del token
+
+        // Guardar el nombre de usuario en el localStorage
+        localStorage.setItem("username", userName);
+
+        // Redirigir a la página de inicio o dashboard
+        window.location.href = "/home"; // Asegúrate de que esta ruta esté configurada correctamente
       } else {
         setError(data.message || "Credenciales incorrectas.");
       }

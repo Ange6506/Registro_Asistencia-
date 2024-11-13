@@ -26,9 +26,9 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Usuario o contraseña incorrectos." });
     }
 
-    // Si la autenticación es correcta, generar un token JWT
+    // Si la autenticación es correcta, generar un token JWT con solo el nombre de usuario
     const jwtSecret = process.env.JWT_SECRET || 'defaultSecretKey'; // Usar variable de entorno para la clave secreta
-    const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ username: user.username }, jwtSecret, { expiresIn: '1h' });
 
     return res.status(200).json({ message: "Autenticación exitosa", token });
 
