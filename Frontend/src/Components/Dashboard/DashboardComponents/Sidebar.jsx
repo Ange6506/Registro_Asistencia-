@@ -77,7 +77,7 @@ export const Sidebar = ({ contenido, setContenido }) => {
 
           <div className="px-2 border-x border-gray-300">
             <h1 className="text-base text-gray-700 capitalize">
-              Hola, <span className="text-Purple">{username}</span>
+              Hola, <span className="text-Violet">{username}</span>
             </h1>
           </div>
 
