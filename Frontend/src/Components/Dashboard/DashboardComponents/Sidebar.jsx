@@ -52,6 +52,16 @@ export const Sidebar = ({ contenido, setContenido }) => {
             <span className="mx-4 text-md font-medium">Huellero</span>
           </button>
         </li>
+
+        {/* Nuevo botón para Lista de Estudiantes */}
+        <li>
+          <button
+            className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+            onClick={() => setContenido("Lista_Estudiantes")}
+          >
+            <span className="mx-4 text-md font-medium">Lista de Estudiantes</span>
+          </button>
+        </li>
       </ul>
 
       <ul className="p-4">
