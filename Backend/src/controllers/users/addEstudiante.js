@@ -22,16 +22,17 @@ const addEstudiante = async (req, res) => {
     "Medicina": 3,
     "Medicina - Internos": 4,
     "Medicina - Residentes": 5,
+    "No Definido": 6, // Asignar id_programa 6 para "No Definido"
   };
-
-  // Verificamos si el programa proporcionado es válido
-  const id_programa = programaMap[programa];
-  if (!id_programa) {
+  
+  const id_programa = programa ? programaMap[programa] : null; // Asignar null si no hay programa
+  if (programa && !id_programa) {
     return res.status(400).json({ message: "Programa no válido." });
   }
+  
 
   try {
-    // Primero, verificamos si el número de documento ya está registrado
+    // Verificamos si el número de documento ya está registrado
     const checkDocumentQuery = "SELECT * FROM estudiantes WHERE num_documento = $1";
     const { rows } = await pool.query(checkDocumentQuery, [num_documento]);
 
@@ -39,46 +40,47 @@ const addEstudiante = async (req, res) => {
       return res.status(400).json({ message: "El número de documento ya está registrado." });
     }
 
-    // Definimos el ID manualmente como 2 (esto es lo que pediste)
+    // Definir los valores para las fechas (si son null, no se insertan en la base de datos)
+    const fecha_inicial_db = fecha_inicial || null;
+    const fecha_final_db = fecha_final || null;
     const id_huella = 1;
-    const id_rol = 2;
+    const id_rol = 3;
 
     // Construir la consulta SQL para insertar el estudiante
     const insertQuery = `
-      INSERT INTO estudiantes (
-        nombre_completo,
-        primer_apellido,
-        segundo_apellido,
-        tipo_documento,
-        num_documento,
-        fecha_inicial,
-        fecha_final,
-        id_programa,
-        id_huella,
-        id_rol
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-    `;
+  INSERT INTO estudiantes (
+    nombre_completo,
+    primer_apellido,
+    segundo_apellido,
+    tipo_documento,
+    num_documento,
+    fecha_inicial,
+    fecha_final,
+    id_programa,    -- Cambié "programa" por "id_programa"
+    id_huella,
+    id_rol
+  )
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+`;
 
-    const insertValues = [
-      nombre_completo,
-      primer_apellido,
-      segundo_apellido,
-      tipo_documento,
-      num_documento,
-      fecha_inicial,
-      fecha_final,
-      id_programa,
-      id_huella,
-      id_rol,
-    ];
+await pool.query(insertQuery, [
+  nombre_completo,
+  primer_apellido,
+  segundo_apellido,
+  tipo_documento,
+  num_documento,
+  fecha_inicial_db,
+  fecha_final_db,
+  id_programa,     // Aquí también estoy pasando el "id_programa"
+  id_huella,
+  id_rol,
+]);
 
-    // Ejecutamos la consulta para insertar el estudiante
-    await pool.query(insertQuery, insertValues);
 
-    return res.status(201).json({ message: "Estudiante registrado exitosamente." });
-  } catch (error) {
-    console.error("Error al registrar el estudiante:", error);
-    return res.status(500).json({ message: "Error en el servidor." });
+    return res.status(200).json({ message: "Estudiante registrado correctamente." });
+  } catch (err) {
+    console.error("Error al registrar estudiante:", err);
+    return res.status(500).json({ message: "Error al registrar estudiante" });
   }
 };
 

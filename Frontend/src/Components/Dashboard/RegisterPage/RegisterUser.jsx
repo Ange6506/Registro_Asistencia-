@@ -59,25 +59,39 @@ export const RegisterUser = () => {
       newAlerts.tipoDocumento = "El campo 'Tipo de Documento' es obligatorio.";
     }
     if (!formData.numeroDocumento) {
-      newAlerts.numeroDocumento = "El campo 'Número de Documento' es obligatorio.";
+      newAlerts.numeroDocumento =
+        "El campo 'Número de Documento' es obligatorio.";
     }
 
     // Validación de que nombres y apellidos no contengan números o símbolos
     const nombreApellidoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/; // Permite letras (mayúsculas y minúsculas) y espacios
     if (formData.nombre && !nombreApellidoRegex.test(formData.nombre)) {
-      newAlerts.nombre = "El campo 'Nombres' no puede contener números ni símbolos.";
+      newAlerts.nombre =
+        "El campo 'Nombres' no puede contener números ni símbolos.";
     }
-    if (formData.primerApellido && !nombreApellidoRegex.test(formData.primerApellido)) {
-      newAlerts.primerApellido = "El campo 'Primer Apellido' no puede contener números ni símbolos.";
+    if (
+      formData.primerApellido &&
+      !nombreApellidoRegex.test(formData.primerApellido)
+    ) {
+      newAlerts.primerApellido =
+        "El campo 'Primer Apellido' no puede contener números ni símbolos.";
     }
-    if (formData.segundoApellido && !nombreApellidoRegex.test(formData.segundoApellido)) {
-      newAlerts.segundoApellido = "El campo 'Segundo Apellido' no puede contener números ni símbolos.";
+    if (
+      formData.segundoApellido &&
+      !nombreApellidoRegex.test(formData.segundoApellido)
+    ) {
+      newAlerts.segundoApellido =
+        "El campo 'Segundo Apellido' no puede contener números ni símbolos.";
     }
 
     // Validación de que el número de documento contenga solo números
     const numeroDocumentoRegex = /^\d+$/; // Solo dígitos
-    if (formData.numeroDocumento && !numeroDocumentoRegex.test(formData.numeroDocumento)) {
-      newAlerts.numeroDocumento = "El campo 'Número de Documento' solo puede contener números.";
+    if (
+      formData.numeroDocumento &&
+      !numeroDocumentoRegex.test(formData.numeroDocumento)
+    ) {
+      newAlerts.numeroDocumento =
+        "El campo 'Número de Documento' solo puede contener números.";
     }
 
     // Validación de fechas si se proporcionan ambas
@@ -87,12 +101,14 @@ export const RegisterUser = () => {
 
       // Verificar que la fecha de inicio no sea posterior a la fecha de fin
       if (fechaInicio > fechaFin) {
-        newAlerts.fechaInicio = "La fecha de inicio no puede ser posterior a la fecha de fin.";
+        newAlerts.fechaInicio =
+          "La fecha de inicio no puede ser posterior a la fecha de fin.";
       }
 
       // Verificar que la fecha de fin no sea anterior a la fecha de inicio
       if (fechaFin < fechaInicio) {
-        newAlerts.fechaFin = "La fecha de fin no puede ser anterior a la fecha de inicio.";
+        newAlerts.fechaFin =
+          "La fecha de fin no puede ser anterior a la fecha de inicio.";
       }
     }
 
@@ -122,9 +138,9 @@ export const RegisterUser = () => {
       segundo_apellido: formData.segundoApellido,
       tipo_documento: formData.tipoDocumento,
       num_documento: formData.numeroDocumento,
-      fecha_inicial: formData.fechaInicio,
-      fecha_final: formData.fechaFin,
-      programa: formData.programa || null, // El campo programa puede ser vacío
+      fecha_inicial: formData.fechaInicio || null, // Fecha de inicio opcional
+      fecha_final: formData.fechaFin || null, // Fecha de fin opcional
+      programa: formData.programa || null, // Programa opcional
     };
 
     try {
@@ -165,9 +181,18 @@ export const RegisterUser = () => {
     }
   };
 
-  // Función para manejar el registro de huella digital (simulado)
+  // Función para registrar la huella digital
   const registerFingerprint = () => {
-    alert("Huella registrada exitosamente.");
+    // Esta función debe manejar el proceso de captura de huella digital.
+    // Aquí puedes incluir la lógica para interactuar con un SDK de huella digital,
+    // o simplemente simular un proceso con un mensaje de éxito si es un prototipo.
+
+    console.log("Huella registrada exitosamente");
+    // Suponiendo que se registre exitosamente, actualizar el estado de la huella.
+    setFormData((prevState) => ({
+      ...prevState,
+      huella: "Huella registrada",
+    }));
   };
 
   return (
@@ -359,6 +384,8 @@ export const RegisterUser = () => {
                   <option value="Medicina-Residentes">
                     Medicina - Residentes
                   </option>
+                  <option value="No Definido">No Definido</option>{" "}
+                  {/* Nueva opción */}
                 </select>
               </div>
             </div>
@@ -478,4 +505,3 @@ export const RegisterUser = () => {
     </form>
   );
 };
-    
