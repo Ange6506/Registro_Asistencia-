@@ -89,59 +89,65 @@ export const ListAsistencia = () => {
     // Obtén el contenido de la tabla
     const tableContent = document.getElementById("table-to-print").outerHTML;
 
-    // Abre una nueva ventana de impresión
-    const printWindow = window.open("width=900,height=650");
+    // Crea un iframe oculto para manejar la impresión
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.width = '0px';
+    iframe.style.height = '0px';
+    iframe.style.border = 'none';
+    document.body.appendChild(iframe);
 
-    // Escribe el contenido HTML que se imprimirá, incluyendo el CSS de Tailwind
-    
-    // Aquí se asume que el CSS de Tailwind está accesible en una ruta relativa.
-    // Asegúrate de que la ruta a tu archivo tailwind.css sea correcta.
-    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/path-to-your-tailwind.css">');  // Ajusta la ruta según tu configuración
+    // Obtén el documento dentro del iframe
+    const iframeDoc = iframe.contentWindow.document;
 
-    // Si necesitas agregar otros estilos CSS personalizados, puedes hacerlo aquí.
-    printWindow.document.write(`
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          background-color: white;
-        }
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        th, td {
-          padding: 8px;
-          text-align: left;
-          border: 1px solid #ddd;
-          font-size: 10px;
-        }
-        th {
-          background-color: #f4f4f4;
-        }
-        h1 {
-          font-size: 24px; /* Titulo más grande */
-          text-align: center; /* Centrado */
-          margin-bottom: 20px;
-        }
-      </style>
+    // Escribe el contenido HTML que se imprimirá
+    iframeDoc.open();
+    iframeDoc.write(`
+      <html>
+        <head>
+          <!-- Asegúrate de que la ruta a Tailwind CSS sea correcta -->
+          <link rel="stylesheet" type="text/css" href="/path-to-your-tailwind.css">  <!-- Ajusta la ruta según tu configuración -->
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background-color: white;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              padding: 8px;
+              text-align: left;
+              border: 1px solid #ddd;
+              font-size: 10px;
+            }
+            th {
+              background-color: #f4f4f4;
+            }
+            h1 {
+              font-size: 24px; /* Titulo más grande */
+              text-align: center; /* Centrado */
+              margin-bottom: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Lista de Asistencia</h1>
+          ${tableContent}
+        </body>
+      </html>
     `);
+    iframeDoc.close();
 
-    // Escribe el contenido de la tabla en el cuerpo de la ventana
-    printWindow.document.write("</head><body>");
-    
-    // Agrega el título antes de la tabla
-    printWindow.document.write("<h1>Lista de Asistencia</h1>");
+    // Llama al método print() en el iframe para imprimir su contenido
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
 
-    // Escribe el contenido de la tabla
-    printWindow.document.write(tableContent);
-    printWindow.document.write("</body></html>");
-
-    // Cierra el documento para que los cambios se apliquen
-    printWindow.document.close();
-
-    // Abre el diálogo de impresión
-    printWindow.print();
+    // Elimina el iframe después de la impresión
+    document.body.removeChild(iframe);
 };
+
 
   
   return (
