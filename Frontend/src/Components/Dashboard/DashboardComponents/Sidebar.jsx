@@ -53,13 +53,13 @@ export const Sidebar = ({ contenido, setContenido }) => {
           </button>
         </li>
 
-        {/* Nuevo botón para Lista de Estudiantes */}
+        {/* Nuevo botón para Lista de Asistencia */}
         <li>
           <button
             className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-            onClick={() => setContenido("Lista_Estudiantes")}
+            onClick={() => setContenido("Lista_Asistencia")}
           >
-            <span className="mx-4 text-md font-medium">Lista de Estudiantes</span>
+            <span className="mx-4 text-md font-medium">Lista de Asistencia</span>
           </button>
         </li>
       </ul>

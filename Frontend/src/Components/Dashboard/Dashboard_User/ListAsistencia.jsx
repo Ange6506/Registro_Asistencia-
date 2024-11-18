@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-export const ListEstudiante = () => {
+export const ListAsistencia = () => {
   const [studentsData, setStudentsData] = useState([]); // Estado para los datos de los estudiantes
   const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda por nombre o cédula
   const [filteredStudents, setFilteredStudents] = useState([]); // Lista filtrada de estudiantes
-  const [attendanceDate, setAttendanceDate] = useState(""); // Estado para la fecha de asistencia
+  const [selectedDate, setSelectedDate] = useState(""); // Estado para la fecha seleccionada
   const [selectedProgram, setSelectedProgram] = useState(""); // Estado para el programa seleccionado
-  const [dateRange, setDateRange] = useState(""); // Estado para el rango de fecha seleccionado
 
   // Fetch data when the component mounts
   useEffect(() => {
@@ -24,22 +23,22 @@ export const ListEstudiante = () => {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    filterStudents(value, attendanceDate, selectedProgram, dateRange);
+    filterStudents(value, selectedDate, selectedProgram);
   };
 
   const handleProgramChange = (event) => {
     const program = event.target.value;
     setSelectedProgram(program);
-    filterStudents(searchTerm, attendanceDate, program, dateRange);
+    filterStudents(searchTerm, selectedDate, program);
   };
 
-  const handleDateRangeChange = (event) => {
-    const range = event.target.value;
-    setDateRange(range);
-    filterStudents(searchTerm, attendanceDate, selectedProgram, range);
+  const handleDateChange = (event) => {
+    const date = event.target.value;
+    setSelectedDate(date); // Establecer la fecha seleccionada
+    filterStudents(searchTerm, date, selectedProgram); // Filtrar estudiantes según la nueva fecha seleccionada
   };
 
-  const filterStudents = (nameOrCedula, attendanceDate, program, range) => {
+  const filterStudents = (nameOrCedula, date, program) => {
     const filtered = studentsData.filter((student) => {
       // Filtro por nombre o cédula
       const nameMatch =
@@ -53,59 +52,22 @@ export const ListEstudiante = () => {
         ? student.programa.trim().toLowerCase() === program.trim().toLowerCase()
         : true;
 
-      console.log(
-        `Programa seleccionado: ${program}, Programa del estudiante: ${student.programa}, Coincide: ${programMatch}`
-      );
-
-      // Filtro por fecha de asistencia
-      const attendanceDateMatch = attendanceDate
-        ? new Date(student.fecha_hora_entrada).toLocaleDateString() ===
-          new Date(attendanceDate).toLocaleDateString()
+      // Filtro por fecha (si se seleccionó una fecha específica)
+      const attendanceDateMatch = date
+        ? formatDate(student.fecha_hora_entrada) === formatDate(date)
         : true;
 
-      // Filtro por rango de fecha (día, mes, semana, año)
-      const dateRangeMatch = filterByDateRange(
-        student.fecha_hora_entrada,
-        range
-      );
-
-      return nameMatch && programMatch && attendanceDateMatch && dateRangeMatch;
+      return nameMatch && programMatch && attendanceDateMatch;
     });
 
     setFilteredStudents(filtered);
   };
 
-  // Función para filtrar por rango de fecha (día, mes, semana, año)
-  const filterByDateRange = (dateString, range) => {
-    if (!dateString || !range) return true;
-
+  // Función para formatear la fecha a 'YYYY-MM-DD'
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
     const date = new Date(dateString);
-    const today = new Date();
-    let startDate, endDate;
-
-    switch (range) {
-      case "day":
-        startDate = new Date(today.setHours(0, 0, 0, 0)); // Inicio del día
-        endDate = new Date(today.setHours(23, 59, 59, 999)); // Fin del día
-        break;
-      case "month":
-        startDate = new Date(today.getFullYear(), today.getMonth(), 1); // Inicio del mes
-        endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Fin del mes
-        break;
-      case "week":
-        const weekStart = today.getDate() - today.getDay(); // Día de inicio de la semana (Domingo)
-        startDate = new Date(today.setDate(weekStart)); // Inicio de la semana
-        endDate = new Date(today.setDate(weekStart + 6)); // Fin de la semana (Sábado)
-        break;
-      case "year":
-        startDate = new Date(today.getFullYear(), 0, 1); // Inicio del año
-        endDate = new Date(today.getFullYear(), 11, 31); // Fin del año
-        break;
-      default:
-        return true;
-    }
-
-    return date >= startDate && date <= endDate;
+    return date.toISOString().split("T")[0]; // Devuelve la fecha en formato 'YYYY-MM-DD'
   };
 
   // Función para formatear la fecha y hora en el formato 'YYYY-MM-DD HH:MM'
@@ -122,6 +84,66 @@ export const ListEstudiante = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
+  // Función para imprimir solo la tabla
+  const printTable = () => {
+    // Obtén el contenido de la tabla
+    const tableContent = document.getElementById("table-to-print").outerHTML;
+
+    // Abre una nueva ventana de impresión
+    const printWindow = window.open("width=900,height=650");
+
+    // Escribe el contenido HTML que se imprimirá, incluyendo el CSS de Tailwind
+    
+    // Aquí se asume que el CSS de Tailwind está accesible en una ruta relativa.
+    // Asegúrate de que la ruta a tu archivo tailwind.css sea correcta.
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/path-to-your-tailwind.css">');  // Ajusta la ruta según tu configuración
+
+    // Si necesitas agregar otros estilos CSS personalizados, puedes hacerlo aquí.
+    printWindow.document.write(`
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: white;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border: 1px solid #ddd;
+          font-size: 10px;
+        }
+        th {
+          background-color: #f4f4f4;
+        }
+        h1 {
+          font-size: 24px; /* Titulo más grande */
+          text-align: center; /* Centrado */
+          margin-bottom: 20px;
+        }
+      </style>
+    `);
+
+    // Escribe el contenido de la tabla en el cuerpo de la ventana
+    printWindow.document.write("</head><body>");
+    
+    // Agrega el título antes de la tabla
+    printWindow.document.write("<h1>Lista de Asistencia</h1>");
+
+    // Escribe el contenido de la tabla
+    printWindow.document.write(tableContent);
+    printWindow.document.write("</body></html>");
+
+    // Cierra el documento para que los cambios se apliquen
+    printWindow.document.close();
+
+    // Abre el diálogo de impresión
+    printWindow.print();
+};
+
+  
   return (
     <section
       className="container p-4 mx-auto flex flex-col"
@@ -133,7 +155,7 @@ export const ListEstudiante = () => {
             <div className="flex flex-col justify-center items-start">
               <div className="flex flex-row items-center gap-x-3">
                 <h2 className="font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
-                  Estudiantes Registrados
+                  Lista de Asistencia
                 </h2>
               </div>
             </div>
@@ -156,7 +178,6 @@ export const ListEstudiante = () => {
                     />
                   </svg>
                 </span>
-
                 <input
                   type="text"
                   placeholder="Búsqueda por Nombre o Cédula"
@@ -188,20 +209,39 @@ export const ListEstudiante = () => {
               </select>
             </div>
 
-            {/* Filtro por rango temporal */}
+            {/* Filtro por fecha */}
             <div className="flex flex-col w-32 sm:w-auto">
-              <label className="text-sm text-gray-700">Rango de Fecha</label>
-              <select
-                value={dateRange}
-                onChange={handleDateRangeChange}
+              <label className="text-sm text-gray-700">
+                Fecha de Asistencia
+              </label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
                 className="w-full py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
+              />
+            </div>
+            <div className="flex w-full sm:w-auto  justify-end mt-6 ml-auto">
+              <button
+                onClick={printTable}
+                className="px-6 py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm flex items-center"
               >
-                <option value="">Seleccionar Rango</option>
-                <option value="day">Día</option>
-                <option value="week">Semana</option>
-                <option value="month">Mes</option>
-                <option value="year">Año</option>
-              </select>
+                Imprimir
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-5 h-5 ml-2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -210,7 +250,7 @@ export const ListEstudiante = () => {
               <div className="-mx-4 -my-2 overflow-x-auto">
                 <div className="inline-block min-w-full py-2 align-middle md:px-5 lg:px-4">
                   <div className="overflow-hidden border border-blue dark:border-blue md:rounded-lg bg-blue">
-                    <table className="min-w-full divide-y divide-blue dark:divide-blue">
+                    <table id="table-to-print" className="min-w-full divide-y divide-blue dark:divide-blue">
                       <thead className="bg-DarkSlate dark:bg-gray-800">
                         <tr>
                           <th className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
@@ -228,7 +268,6 @@ export const ListEstudiante = () => {
                           <th className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                             Programa
                           </th>
-                      
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
@@ -249,7 +288,6 @@ export const ListEstudiante = () => {
                                   ? formatDateTime(student.fecha_hora_salida)
                                   : "No se registró Salida"}
                               </td>
-
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {student.programa}
                               </td>

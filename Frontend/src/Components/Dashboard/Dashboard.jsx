@@ -4,7 +4,7 @@ import { Sidebar } from "./DashboardComponents/Sidebar";
 import { RegisterUser } from "./RegisterPage/RegisterUser";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
 import { Huellero} from "./Simulador_huellero/huellero";
-import { ListEstudiante} from "./Dashboard_User/ListEstudiante";
+import { ListAsistencia} from "./Dashboard_User/ListAsistencia";
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("Registro");
@@ -27,7 +27,7 @@ export const Dashboard = () => {
               {contenido === "Registro" && <RegisterUser />}
               {contenido === "Lista_Alumnos" && <ListaAlumnos />}
               {contenido === "Huellero" && <Huellero />} 
-              {contenido === "Lista_Estudiantes" && <ListEstudiante />} 
+              {contenido === "Lista_Asistencia" && <ListAsistencia />} 
 
               
               {/* Renderiza otros contenidos según sea necesario */}
