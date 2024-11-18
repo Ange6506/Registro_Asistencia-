@@ -23,7 +23,6 @@ export const ListaAlumnos = () => {
     fetchStudents();
   }, []); // Solo se ejecuta una vez al montar el componente
   
-
   // Función para abrir el modal y seleccionar el estudiante
   const handleShowModal = (student) => {
     setSelectedStudent(student);
@@ -47,9 +46,15 @@ export const ListaAlumnos = () => {
         student.num_documento.includes(value)
     );
     
-    
-
     setFilteredStudents(filtered); // Actualizar la lista filtrada
+  };
+
+  // Función para mostrar "Fecha no registrada" si la fecha está vacía o no es válida
+  const formatFecha = (fecha) => {
+    if (!fecha || fecha === "0000-00-00") {
+      return "Fecha no registrada";
+    }
+    return new Date(fecha).toLocaleDateString("es-ES");
   };
 
   return (
@@ -155,7 +160,7 @@ export const ListaAlumnos = () => {
                             <tr key={index}>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 <div className="flex flex-col justify-center items-center gap-x-2">
-                                <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
+                                  <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
@@ -171,12 +176,12 @@ export const ListaAlumnos = () => {
                               </td>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{new Date(student.fecha_inicial).toLocaleDateString("es-ES")}</span>
+                                  <span>{formatFecha(student.fecha_inicial)}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
-                                  <span>{new Date(student.fecha_final).toLocaleDateString("es-ES")}</span>
+                                  <span>{formatFecha(student.fecha_final)}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
