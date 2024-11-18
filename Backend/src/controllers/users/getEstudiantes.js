@@ -8,9 +8,13 @@ const getEstudiantes = async (req, res) => {
     // Ejecutar la consulta para obtener todos los estudiantes con los datos relacionados
     const result = await pool.query(`
       SELECT 
-        e.nombre_completo || ' ' || e.primer_apellido || ' ' || e.segundo_apellido AS nombre_completo, 
+      e.id_estudiante,
+        e.nombre_completo,
         e.num_documento,
+        e.primer_apellido,
+        e.segundo_apellido,
         p.programa,
+        e.tipo_documento,
         e.fecha_inicial,
         e.fecha_final
       FROM estudiantes AS e

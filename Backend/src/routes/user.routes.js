@@ -13,6 +13,7 @@ router.post("/registerEstudiante", addEstudiante.addEstudiante);
 router.post("/add_Asistencia", addAsistencia.addAsistencia);
 router.get("/get_estudiante", getEstudiantes.getEstudiantes);
 router.get("/getAsistencia", getAsistencia.getAsistencia);
+
 router.post("/login", loginUser.loginUser);
 
 module.exports = router;

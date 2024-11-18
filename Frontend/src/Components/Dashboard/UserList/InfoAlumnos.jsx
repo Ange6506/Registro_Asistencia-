@@ -1,47 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [formData, setFormData] = useState({
-    nombre_completo: '',
-    primer_apellido : '',
-    segundo_apellido: '',
-    tipo_documento: '',
-    num_documento: '',
-    programa: '',
-    fecha_inicial: '',
-    fecha_final: ''
+    nombre_completo: "",
+    primer_apellido: "",
+    segundo_apellido: "",
+    tipo_documento: "",
+    num_documento: "",
+    programa: "",
+    fecha_inicial: "",
+    fecha_final: "",
   });
 
-  // Cuando se recibe el estudiante, actualizamos el estado del formulario
+  // Actualizamos el estado de formData cuando cambia el estudiante
   useEffect(() => {
     if (student) {
       setFormData({
-        name: student.nombre_completo || '',
-        lastName: student.primer_apellido || '',
-        secondLastName: student.segundo_apellido || '',
-        documentType:  student.tipo_documento || '',
-        documentNumber: student.num_documento || '',
-        program: student.programa || '',
-        startDate: student.fecha_inicial || '',
-        endDate: student.fecha_final || ''
+        nombre_completo: student.nombre_completo || "",
+        primer_apellido: student.primer_apellido || "",
+        segundo_apellido: student.segundo_apellido || "",
+        tipo_documento: student.tipo_documento || "",
+        num_documento: student.num_documento || "",
+        programa: student.programa ? student.programa.trim() : "", // Usamos trim aquí
+        fecha_inicial: student.fecha_inicial ? student.fecha_inicial.split('T')[0] : "",
+        fecha_final: student.fecha_final ? student.fecha_final.split('T')[0] : "",
       });
     }
-  }, [student]); // Esto se ejecuta cada vez que `student` cambia
+  }, [student]); // Esto se ejecutará cada vez que cambie el estudiante seleccionado
 
   // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Si el campo es "programa", eliminamos los espacios adicionales
+    const cleanedValue = name === "programa" ? value.trim() : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: cleanedValue,
     }));
   };
 
   // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí podrías agregar la lógica para actualizar los datos del estudiante
-    console.log('Formulario enviado con los datos:', formData);
+    console.log("Formulario enviado con los datos:", formData);
   };
 
   if (!student) return null;
@@ -49,7 +52,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center ${showModal ? 'block' : 'hidden'}`}
+        className={`fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center ${
+          showModal ? "block" : "hidden"
+        }`}
       >
         <form
           onSubmit={handleSubmit}
@@ -83,7 +88,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="M6 18 18 6M6 6l12 12"
+                          d="M6 18L18 6M6 6l12 12"
                         />
                       </svg>
                     </div>
@@ -91,12 +96,12 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 </div>
               </div>
 
-              {/* Grid para los campos */}
+              {/* Campos del formulario */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
                 {/* Campo de Nombres */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="name"
+                    htmlFor="nombre_completo"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Nombres
@@ -104,9 +109,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      name="name"
-                      id="name"
-                      value={formData.name}
+                      name="nombre_completo"
+                      id="nombre_completo"
+                      value={formData.nombre_completo}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Nombres completos"
@@ -117,7 +122,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Primer Apellido */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="lastName"
+                    htmlFor="primer_apellido"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Primer Apellido
@@ -125,9 +130,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      name="lastName"
-                      id="lastName"
-                      value={formData.lastName}
+                      name="primer_apellido"
+                      id="primer_apellido"
+                      value={formData.primer_apellido}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Primer apellido"
@@ -138,7 +143,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Segundo Apellido */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="secondLastName"
+                    htmlFor="segundo_apellido"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Segundo Apellido
@@ -146,9 +151,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      name="secondLastName"
-                      id="secondLastName"
-                      value={formData.secondLastName}
+                      name="segundo_apellido"
+                      id="segundo_apellido"
+                      value={formData.segundo_apellido}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Segundo apellido"
@@ -159,16 +164,16 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Tipo de documento */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="documentType"
+                    htmlFor="tipo_documento"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Tipo de documento
                   </label>
                   <div className="mt-2">
                     <select
-                      id="documentType"
-                      name="documentType"
-                      value={formData.documentType}
+                      id="tipo_documento"
+                      name="tipo_documento"
+                      value={formData.tipo_documento}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     >
@@ -178,8 +183,12 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       <option value="cedula">Cédula de ciudadanía</option>
                       <option value="dni">DNI</option>
                       <option value="passport">Pasaporte</option>
-                      <option value="carnet_extranjeria">Carné de extranjería</option>
-                      <option value="licencia_conducir">Licencia de conducir</option>
+                      <option value="carnet_extranjeria">
+                        Carné de extranjería
+                      </option>
+                      <option value="licencia_conducir">
+                        Licencia de conducir
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -187,7 +196,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Número de documento */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="documentNumber"
+                    htmlFor="num_documento"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Número de documento
@@ -195,9 +204,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      name="documentNumber"
-                      id="documentNumber"
-                      value={formData.documentNumber}
+                      name="num_documento"
+                      id="num_documento"
+                      value={formData.num_documento}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Número de documento"
@@ -208,25 +217,29 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Programa */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="program"
+                    htmlFor="programa"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Programa
                   </label>
                   <div className="mt-2">
                     <select
-                      id="program"
-                      name="program"
-                      value={formData.program}
+                      id="programa"
+                      name="programa"
+                      value={formData.programa}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     >
-                      <option value="" disabled>
-                        Seleccione un programa
+                      <option value="Enfermería">Enfermería</option>
+                      <option value="Psicología">Psicología</option>
+                      <option value="Medicina">Medicina</option>
+                      <option value="Medicina-Internos">
+                        Medicina-Internos
                       </option>
-                      <option value="enfermeria">Enfermería</option>
-                      <option value="psicologia">Psicología</option>
-                      <option value="medicina">Medicina</option>
+                      <option value="Medicina-Residentes">
+                        Medicina-Residentes
+                      </option>
+                      <option value="No Definido">No Definido</option>
                     </select>
                   </div>
                 </div>
@@ -234,7 +247,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Fecha de Inicio */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="startDate"
+                    htmlFor="fecha_inicial"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Fecha de Inicio
@@ -242,9 +255,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="date"
-                      name="startDate"
-                      id="startDate"
-                      value={formData.startDate}
+                      name="fecha_inicial"
+                      id="fecha_inicial"
+                      value={formData.fecha_inicial}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     />
@@ -254,7 +267,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Fecha Final */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="endDate"
+                    htmlFor="fecha_final"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Fecha Final
@@ -262,18 +275,17 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="date"
-                      name="endDate"
-                      id="endDate"
-                      value={formData.endDate}
+                      name="fecha_final"
+                      id="fecha_final"
+                      value={formData.fecha_final}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     />
                   </div>
                 </div>
-
-               
               </div>
             </div>
+
             <div className="flex justify-center items-center">
               <button
                 type="submit"

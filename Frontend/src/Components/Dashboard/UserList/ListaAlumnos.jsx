@@ -155,7 +155,7 @@ export const ListaAlumnos = () => {
                             <tr key={index}>
                               <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 <div className="flex flex-col justify-center items-center gap-x-2">
-                                  <span>{student.nombre_completo}</span>
+                                <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
                                 </div>
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
