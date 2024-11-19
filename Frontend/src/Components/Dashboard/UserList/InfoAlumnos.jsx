@@ -311,6 +311,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
           </div>
         </form>
       </div>
+      
     </>
   );
 };

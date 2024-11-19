@@ -6,12 +6,15 @@ export const Sidebar = ({ contenido, setContenido }) => {
   const navigate = useNavigate(); // useNavigate para redirección
 
   useEffect(() => {
-    // Recuperar el nombre de usuario desde localStorage
+    // Recuperamos el nombre de usuario desde localStorage
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
-      setUsername(storedUsername); // Establecer el nombre del usuario
+      setUsername(storedUsername); // Establecer el nombre de usuario
+    } else {
+      // Si no hay nombre de usuario en localStorage, redirigimos al login
+      navigate("/");  // Asegúrate de tener configurada la ruta en React Router
     }
-  }, []);
+  }, [navigate]);
 
   // Función para cerrar sesión
   const handleLogout = () => {
@@ -20,48 +23,68 @@ export const Sidebar = ({ contenido, setContenido }) => {
     localStorage.removeItem("username");
 
     // Redirigir al usuario a la página de login
-    navigate("/");  // Asegúrate de tener configurada la ruta en React Router
+    navigate("/");  // Asegúrate de que esta ruta esté configurada correctamente
   };
 
   return (
     <>
       <ul className="flex flex-col gap-y-2">
-        <li>
-          <button
-            className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-            onClick={() => setContenido("Registro")}
-          >
-            <span className="mx-4 text-md font-medium">Registrar Alumno</span>
-          </button>
-        </li>
+        {/* Si el usuario es Administrador, mostramos estas opciones */}
+        {username === "Administrador" && (
+          <>
+            <li>
+              <button
+                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+                onClick={() => setContenido("Registro")}
+              >
+                <span className="mx-4 text-md font-medium">Registrar Alumno</span>
+              </button>
+            </li>
 
-        <li>
-          <button
-            className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-            onClick={() => setContenido("Lista_Alumnos")}
-          >
-            <span className="mx-4 text-md font-medium">Lista de Alumnos</span>
-          </button>
-        </li>
+            <li>
+              <button
+                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+                onClick={() => setContenido("Lista_Alumnos")}
+              >
+                <span className="mx-4 text-md font-medium">Lista de Alumnos</span>
+              </button>
+            </li>
 
-        <li>
-          <button
-            className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-            onClick={() => setContenido("Huellero")}
-          >
-            <span className="mx-4 text-md font-medium">Huellero</span>
-          </button>
-        </li>
+            <li>
+              <button
+                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+                onClick={() => setContenido("Huellero")}
+              >
+                <span className="mx-4 text-md font-medium">Huellero</span>
+              </button>
+            </li>
+          </>
+        )}
 
-        {/* Nuevo botón para Lista de Asistencia */}
-        <li>
-          <button
-            className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-            onClick={() => setContenido("Lista_Asistencia")}
-          >
-            <span className="mx-4 text-md font-medium">Lista de Asistencia</span>
-          </button>
-        </li>
+        {/* Si el usuario es Usuario, mostramos estas opciones */}
+        {username === "Usuario" && (
+          <>
+          <li>
+              <button
+                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+                onClick={() => setContenido("Lista_Asistencia")}
+              >
+                <span className="mx-4 text-md font-medium">Lista de Asistencia</span>
+              </button>
+            </li>
+            
+            <li>
+              <button
+                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+                onClick={() => setContenido("Lista_Alumnos")}
+              >
+                <span className="mx-4 text-md font-medium">Lista de Alumnos</span>
+              </button>
+            </li>
+
+            
+          </>
+        )}
       </ul>
 
       <ul className="p-4">
