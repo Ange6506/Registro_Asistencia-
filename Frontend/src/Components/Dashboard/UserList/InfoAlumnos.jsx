@@ -12,6 +12,8 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
     fecha_final: "",
   });
 
+  const [error, setError] = useState("");
+
   // Actualizamos el estado de formData cuando cambia el estudiante
   useEffect(() => {
     if (student) {
@@ -26,13 +28,11 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         fecha_final: student.fecha_final ? student.fecha_final.split('T')[0] : "",
       });
     }
-  }, [student]); // Esto se ejecutará cada vez que cambie el estudiante seleccionado
+  }, [student]);
 
   // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Si el campo es "programa", eliminamos los espacios adicionales
     const cleanedValue = name === "programa" ? value.trim() : value;
 
     setFormData((prev) => ({
@@ -44,11 +44,52 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Formulario enviado con los datos:", formData);
+
+    // Validación de los campos requeridos
+    if (!formData.nombre_completo || !formData.primer_apellido || !formData.segundo_apellido || !formData.tipo_documento || !formData.num_documento || !formData.fecha_inicial || !formData.fecha_final || !formData.programa) {
+      setError("Todos los campos deben estar llenos.");
+      return;
+    }
+
+    // Validación de fechas
+    const fechaInicial = new Date(formData.fecha_inicial);
+    const fechaFinal = new Date(formData.fecha_final);
+
+    if (isNaN(fechaInicial.getTime()) || isNaN(fechaFinal.getTime())) {
+      setError("Las fechas proporcionadas no son válidas.");
+      return;
+    }
+
+    // Asegurarnos de que el id del estudiante esté presente antes de enviar
+    if (!student.id_estudiante) {
+      setError("ID del estudiante no disponible");
+      return;
+    }
+
+    // Realizamos la solicitud PUT al backend
+    fetch(`http://localhost:5000/updateEstudiantes/${student.id_estudiante}`, {
+      method: "PUT",  // Enviamos los datos en una solicitud PUT
+      headers: {
+        "Content-Type": "application/json",  // Asegúrate de que el backend espera JSON
+      },
+      body: JSON.stringify(formData),  // Convierte el objeto formData en una cadena JSON
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al actualizar los datos.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Datos actualizados:", data);
+        onClose();  // Cerramos el modal al recibir respuesta exitosa
+      })
+      .catch((error) => {
+        setError(`Error al actualizar los datos: ${error.message}`);
+      });
   };
 
   if (!student) return null;
-
   return (
     <>
       <div

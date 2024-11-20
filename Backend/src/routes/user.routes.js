@@ -14,7 +14,7 @@ router.post("/registerEstudiante", addEstudiante.addEstudiante);
 router.post("/add_Asistencia", addAsistencia.addAsistencia);
 router.get("/get_estudiante", getEstudiantes.getEstudiantes);
 router.get("/getAsistencia", getAsistencia.getAsistencia);
-router.put("/updateEstudiantes", updateEstudiante.updateEstudiante);
+router.put("/updateEstudiantes/:id", updateEstudiante.updateEstudiante);
 router.post("/login", loginUser.loginUser);
 
 module.exports = router;
