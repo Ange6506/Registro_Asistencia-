@@ -202,7 +202,7 @@ export const ListAsistencia = () => {
               <select
                 value={selectedProgram}
                 onChange={handleProgramChange}
-                className="w-full py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
+                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
               >
                 <option value="">Seleccionar Programa</option>
                 <option value="Enfermería">Enfermería</option>
@@ -224,7 +224,7 @@ export const ListAsistencia = () => {
                 type="date"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className="w-full py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
+                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
               />
             </div>
             <div className="flex w-full sm:w-auto  justify-end mt-6 ml-auto">

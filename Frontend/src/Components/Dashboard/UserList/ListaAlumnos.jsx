@@ -158,33 +158,33 @@ export const ListaAlumnos = () => {
                        {filteredStudents.length > 0 ? (
                           filteredStudents.map((student, index) => (
                             <tr key={index}>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                              <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-300 whitespace-nowrap">
                                 <div className="flex flex-col justify-center items-center gap-x-2">
                                   <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.num_documento}</span>
                                 </div>
                               </td>
                              
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{student.programa}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{formatFecha(student.fecha_inicial)}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <span>{formatFecha(student.fecha_final)}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                              <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                                 <div className="w-full inline-flex justify-center items-center gap-x-3">
                                   <div className="flex justify-center items-center px-3 py-1 rounded-full gap-x-2">
                                     <button>
