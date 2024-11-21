@@ -25,8 +25,8 @@ const addEstudiante = async (req, res) => {
     "No Definido": 6, // Añadido valor para "No Definido"
   };
 
-  // Si no hay programa seleccionado, se asigna el ID 6 (No Definido)
-  const id_programa = programa ? programaMap[programa] : programaMap["No Definido"];
+  // Si el programa no está definido, asigna "No Definido" por defecto
+  const id_programa = programaMap[programa] || programaMap["No Definido"];
 
   // Verificar que el id_programa sea válido
   if (!id_programa) {
@@ -45,7 +45,7 @@ const addEstudiante = async (req, res) => {
     // Definir los valores para las fechas (si son null, no se insertan en la base de datos)
     const fecha_inicial_db = fecha_inicial || null;
     const fecha_final_db = fecha_final || null;
-    const id_huella = 1;  // ID de huella por defecto
+    const id_huella = 2;  // ID de huella por defecto
     const id_rol = 3;     // ID de rol por defecto (por ejemplo, estudiante)
 
     // Construir la consulta SQL para insertar el estudiante
@@ -83,6 +83,5 @@ const addEstudiante = async (req, res) => {
     return res.status(500).json({ message: "Error al registrar estudiante" });
   }
 };
-
 
 module.exports = { addEstudiante };

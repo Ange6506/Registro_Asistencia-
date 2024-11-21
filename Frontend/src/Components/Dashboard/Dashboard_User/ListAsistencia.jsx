@@ -84,7 +84,6 @@ export const ListAsistencia = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
-  // Función para imprimir solo la tabla
   const printTable = () => {
     // Obtén el contenido de la tabla
     const tableContent = document.getElementById("table-to-print").outerHTML;
@@ -92,23 +91,27 @@ export const ListAsistencia = () => {
     // Crea un iframe oculto para manejar la impresión
     const iframe = document.createElement('iframe');
     iframe.style.position = 'absolute';
-    iframe.style.width = '0px';
-    iframe.style.height = '0px';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
     iframe.style.border = 'none';
+    iframe.style.visibility = 'hidden'; // Asegura que el iframe sea invisible
     document.body.appendChild(iframe);
 
     // Obtén el documento dentro del iframe
     const iframeDoc = iframe.contentWindow.document;
 
-    // Escribe el contenido HTML que se imprimirá
-    iframeDoc.open();
+    // Elimina cualquier contenido predeterminado y asegura que el documento sea completamente limpio
+    iframeDoc.open();  // Abre un nuevo documento completamente vacío
     iframeDoc.write(`
       <html>
         <head>
-          <!-- Asegúrate de que la ruta a Tailwind CSS sea correcta -->
-          <link rel="stylesheet" type="text/css" href="/path-to-your-tailwind.css">  <!-- Ajusta la ruta según tu configuración -->
           <style>
-            body {
+            /* Eliminar cualquier margen, borde, o estilo predeterminado */
+            body, html {
+              margin: 0;
+              padding: 0;
+              height: 100%;
+              width: 100%;
               font-family: Arial, sans-serif;
               background-color: white;
             }
@@ -126,15 +129,22 @@ export const ListAsistencia = () => {
               background-color: #f4f4f4;
             }
             h1 {
-              font-size: 24px; /* Titulo más grande */
-              text-align: center; /* Centrado */
+              font-size: 24px;
+              text-align: center;
               margin-bottom: 20px;
+            }
+            .date {
+              text-align: right;
+              margin-top: 10px;
+              font-size: 12px;
+              color: #333;
             }
           </style>
         </head>
         <body>
           <h1>Lista de Asistencia</h1>
           ${tableContent}
+          <div class="date">Fecha: ${new Date().toLocaleString()}</div>
         </body>
       </html>
     `);
@@ -147,6 +157,7 @@ export const ListAsistencia = () => {
     // Elimina el iframe después de la impresión
     document.body.removeChild(iframe);
 };
+
 
 
   
