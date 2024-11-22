@@ -57,8 +57,8 @@ export const Login = () => {
       >
         <div className="relative z-10 sm:mx-auto sm:w-full sm:max-w-sm bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-200 p-6">
           <img alt="Your Company" src={Logo} className="mx-auto h-10 w-auto" />
-          <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
-            Iniciar Sesiòn
+          <h2 className="mt-10 text-center text-2xl font-medium	 tracking-tight text-gray-900">
+            Iniciar Sesión
           </h2>
 
           {/* Mostrar mensaje de error si hay alguno */}
@@ -120,7 +120,7 @@ export const Login = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             ¿No sabes tu usuario o contraseña?{" "}
-            <a href="#" className="font-semibold text-indigo-600 hover:text-blue">
+            <a href="#" className="font-semibold text-blue hover:text-blue">
               Pregunta al encargado
             </a>
           </p>
