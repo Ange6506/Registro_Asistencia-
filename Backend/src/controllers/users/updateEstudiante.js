@@ -5,12 +5,12 @@ const pool = new Pool(CONFIG_DB);
 
 // Mapeo de los programas a sus correspondientes ID numéricos
 const programaMap = {
-  "Enfermería": 1,
-  "Psicología": 2,
+ "Enfermería": 1,
+ "Psicología": 2,
   "Medicina": 3,
   "Medicina - Internos": 4,
   "Medicina - Residentes": 5,
-  "No Definido": 6, 
+  "No Definido": 6, // Añadido valor para "No Definido"
 };
 
 // Controlador para actualizar el estudiante
