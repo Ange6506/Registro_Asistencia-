@@ -101,7 +101,43 @@ export const ListaAlumnos = () => {
   return (
     <section className="container p-4 mx-auto flex flex-col" style={{ minHeight: "87vh" }}>
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
-        {/* ... */}
+      <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
+            <div className="flex flex-col justify-center items-start">
+              <div className="flex flex-row items-center gap-x-3">
+                <h2 className="font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
+                  Lista de Asistencia
+                </h2>
+              </div>
+            </div>
+
+            <div className="w-full md:w-80">
+              <div className="flex items-center">
+                <span className="absolute">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 mx-3 text-blue"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Búsqueda por Nombre o Cédula"
+                  className="w-full py-2.5 md:py-1 text-gray-700 placeholder-gray-400/70 bg-white border border-blue rounded-lg pl-11 pr-5 focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
+            </div>
+          </div>
         <div className="flex flex-col justify-between flex-1">
           <div className="flex flex-col mt-6">
             <div className="-mx-4 -my-2 overflow-x-auto">

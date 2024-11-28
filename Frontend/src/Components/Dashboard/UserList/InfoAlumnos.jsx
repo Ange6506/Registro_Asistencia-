@@ -13,6 +13,8 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   });
 
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false); // Estado para manejar la visibilidad del mensaje
 
   // Actualizamos el estado de formData cuando cambia el estudiante
   useEffect(() => {
@@ -24,8 +26,12 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         tipo_documento: student.tipo_documento || "",
         num_documento: student.num_documento || "",
         programa: student.programa ? student.programa.trim() : "", // Usamos trim aquí
-        fecha_inicial: student.fecha_inicial ? student.fecha_inicial.split('T')[0] : "",
-        fecha_final: student.fecha_final ? student.fecha_final.split('T')[0] : "",
+        fecha_inicial: student.fecha_inicial
+          ? student.fecha_inicial.split("T")[0]
+          : "",
+        fecha_final: student.fecha_final
+          ? student.fecha_final.split("T")[0]
+          : "",
       });
     }
   }, [student]);
@@ -46,7 +52,16 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
     e.preventDefault();
 
     // Validación de los campos requeridos
-    if (!formData.nombre_completo || !formData.primer_apellido || !formData.segundo_apellido || !formData.tipo_documento || !formData.num_documento || !formData.fecha_inicial || !formData.fecha_final || !formData.programa) {
+    if (
+      !formData.nombre_completo ||
+      !formData.primer_apellido ||
+      !formData.segundo_apellido ||
+      !formData.tipo_documento ||
+      !formData.num_documento ||
+      !formData.fecha_inicial ||
+      !formData.fecha_final ||
+      !formData.programa
+    ) {
       setError("Todos los campos deben estar llenos.");
       return;
     }
@@ -68,11 +83,11 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
     // Realizamos la solicitud PUT al backend
     fetch(`http://localhost:5000/updateEstudiantes/${student.id_estudiante}`, {
-      method: "PUT",  // Enviamos los datos en una solicitud PUT
+      method: "PUT", // Enviamos los datos en una solicitud PUT
       headers: {
-        "Content-Type": "application/json",  // Asegúrate de que el backend espera JSON
+        "Content-Type": "application/json", // Asegúrate de que el backend espera JSON
       },
-      body: JSON.stringify(formData),  // Convierte el objeto formData en una cadena JSON
+      body: JSON.stringify(formData), // Convierte el objeto formData en una cadena JSON
     })
       .then((response) => {
         if (!response.ok) {
@@ -82,16 +97,55 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       })
       .then((data) => {
         console.log("Datos actualizados:", data);
-        onClose();  // Cerramos el modal al recibir respuesta exitosa
+        setSuccessMessage("Actualización exitosa!"); // Establecemos el mensaje de éxito
+        setError(""); // Limpiamos el mensaje de error si existe
+        setIsSuccessVisible(true); // Mostramos el mensaje emergente
+        setTimeout(() => {
+          setIsSuccessVisible(false); // Cerramos el mensaje después de 4 segundos
+        }, 4000);
+        onClose(); // Cerramos el modal al recibir respuesta exitosa
       })
       .catch((error) => {
         setError(`Error al actualizar los datos: ${error.message}`);
+        setSuccessMessage(""); // Limpiamos el mensaje de éxito si ocurre un error
       });
   };
 
   if (!student) return null;
   return (
     <>
+      {isSuccessVisible && (
+        <div className="fixed top-4 right-4 bg-blue-500 dark:bg-blue-800 p-4 rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
+        role="alert">
+        
+        <p>{successMessage}</p>
+      
+        <button
+          type="button"
+          className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+          data-dismiss-target="#alert-border-1"
+          aria-label="Close"
+        >
+          <svg
+            className="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+        </button>
+      </div>
+      
+        
+      )}
       <div
         className={`fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center ${
           showModal ? "block" : "hidden"
@@ -352,7 +406,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
           </div>
         </form>
       </div>
-      
     </>
   );
 };
