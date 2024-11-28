@@ -181,19 +181,35 @@ export const RegisterUser = () => {
     }
   };
 
-  // Función para registrar la huella digital
-  const registerFingerprint = () => {
-    // Esta función debe manejar el proceso de captura de huella digital.
-    // Aquí puedes incluir la lógica para interactuar con un SDK de huella digital,
-    // o simplemente simular un proceso con un mensaje de éxito si es un prototipo.
 
-    console.log("Huella registrada exitosamente");
-    // Suponiendo que se registre exitosamente, actualizar el estado de la huella.
-    setFormData((prevState) => ({
-      ...prevState,
-      huella: "Huella registrada",
-    }));
-  };
+const registerFingerprint = () => {
+  // Assign a fixed UUID or get it dynamically from elsewhere
+  const huella_estudiante = "123e4567-e89b-12h3-a456-426655440001";  
+
+  // Send the fingerprint to the backend
+  fetch("http://localhost:5000/add_Huella", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      huella_estudiante: huella_estudiante, // Pass the correct huella_estudiante value
+      huella: huella_estudiante, // Assuming this is the same value
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.message === "Huella registrada exitosamente.") {
+        alert("Huella registrada correctamente.");
+      } else {
+        alert("Error al registrar huella.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Error al registrar huella.");
+    });
+};
 
   return (
     <form
