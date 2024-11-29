@@ -115,7 +115,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   return (
     <>
       {isSuccessVisible && (
-        <div className="fixed top-4 right-4 bg-blue-500 dark:bg-blue-800 p-4 rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
+        <div className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg shadow-blue rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
         role="alert">
         
         <p>{successMessage}</p>

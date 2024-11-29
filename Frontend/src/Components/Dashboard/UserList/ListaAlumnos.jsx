@@ -8,6 +8,7 @@ export const ListaAlumnos = () => {
   const [filteredStudents, setFilteredStudents] = useState([]); // Lista de estudiantes filtrados
   const [studentsData, setStudentsData] = useState([]); // Lista de todos los estudiantes
   const [showConfirmModal, setShowConfirmModal] = useState(false); // Estado para controlar la ventana de confirmación
+  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -274,6 +275,35 @@ export const ListaAlumnos = () => {
           </div>
         </div>
       </div>
+
+      {successMessage && (
+          <div className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg shadow-blue rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800" role="alert">
+            <p>{successMessage}</p>
+            <button
+              type="button"
+              className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+              data-dismiss-target="#alert-border-1"
+              aria-label="Close"
+              onClick={() => setSuccessMessage("")}
+            >
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
 
       {/* Modal de Confirmación */}
       {showConfirmModal && (
