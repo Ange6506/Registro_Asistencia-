@@ -141,8 +141,9 @@ export const RegisterUser = () => {
       fecha_inicial: formData.fechaInicio || null, // Fecha de inicio opcional
       fecha_final: formData.fechaFin || null, // Fecha de fin opcional
       programa: formData.programa || null, // Programa opcional
-    };
-
+      huella: formData.huella,
+      };
+      console.log("Datos a enviar al servidor:", formDataToSend);
     try {
       const response = await fetch("http://localhost:5000/registerEstudiante", {
         method: "POST",
@@ -182,35 +183,41 @@ export const RegisterUser = () => {
   };
 
 
-const registerFingerprint = () => {
-  // Assign a fixed UUID or get it dynamically from elsewhere
-  const huella_estudiante = "123e4567-e89b-12h3-a456-426655440001";  
-
-  // Send the fingerprint to the backend
-  fetch("http://localhost:5000/add_Huella", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      huella_estudiante: huella_estudiante, // Pass the correct huella_estudiante value
-      huella: huella_estudiante, // Assuming this is the same value
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.message === "Huella registrada exitosamente.") {
-        alert("Huella registrada correctamente.");
-      } else {
-        alert("Error al registrar huella.");
-      }
+  const registerFingerprint = () => {
+    // Verifica si ya existe un valor para la huella antes de enviarlo
+    const huella_estudiante = "123e4567-e89b-12h3-a456-426655440006";  // Aquí deberías obtener la huella del dispositivo
+  
+    if (!huella_estudiante) {
+      alert("Debe registrar una huella primero.");
+      return;
+    }
+  
+    fetch("http://localhost:5000/add_Huella", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ huella_estudiante }),
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Error al registrar huella.");
-    });
-};
-
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Huella registrada exitosamente.") {
+          alert("Huella registrada correctamente.");
+          // Asigna la huella al estado del formulario
+          setFormData((prevState) => ({
+            ...prevState,
+            huella: huella_estudiante,
+          }));
+        } else {
+          alert("Error al registrar huella.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Error al registrar huella.");
+      });
+  };
+  
   return (
     <form
       onSubmit={handleSubmit}
@@ -459,7 +466,7 @@ const registerFingerprint = () => {
             {/* Campo de huella digital */}
             <div className="col-span-full">
               <label
-                htmlFor="huella"
+              htmlFor="huella"
                 className="block text-sm font-medium text-gray-900"
               >
                 Registro de Huella Digital
@@ -467,7 +474,7 @@ const registerFingerprint = () => {
               <div className="mt-4 flex flex-col items-center">
                 <div
                   className="w-full bg-gray-100 border-2 border-gray-300 rounded-md p-4 flex flex-col items-center justify-center text-gray-600"
-                  id="huella-area"
+                  id="huella"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
