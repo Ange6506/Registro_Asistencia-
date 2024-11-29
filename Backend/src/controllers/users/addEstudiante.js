@@ -45,7 +45,6 @@ const addEstudiante = async (req, res) => {
     // Definir los valores para las fechas (si son null, no se insertan en la base de datos)
     const fecha_inicial_db = fecha_inicial || null;
     const fecha_final_db = fecha_final || null;
-    const id_huella = 1;  // ID de huella por defecto
     const id_rol = 3;     // ID de rol por defecto (por ejemplo, estudiante)
 
     // Construir la consulta SQL para insertar el estudiante
