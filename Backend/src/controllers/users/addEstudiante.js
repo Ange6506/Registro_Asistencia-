@@ -13,6 +13,7 @@ const addEstudiante = async (req, res) => {
     fecha_inicial,
     fecha_final,
     programa,
+    huella, 
   } = req.body;
 
   // Mapeo de los programas a sus respectivos ID
@@ -42,10 +43,20 @@ const addEstudiante = async (req, res) => {
       return res.status(400).json({ message: "El número de documento ya está registrado." });
     }
 
+    // Obtener el id_huella de la tabla huella basado en el huella
+    const getHuellaQuery = "SELECT id_huella FROM huella WHERE huella_estudiante = $1";
+    const huellaResult = await pool.query(getHuellaQuery, [huella]);
+
+    if (huellaResult.rows.length === 0) {
+      return res.status(400).json({ message: "Huella no encontrada." });
+    }
+
+    const id_huella = huellaResult.rows[0].id_huella;
+
     // Definir los valores para las fechas (si son null, no se insertan en la base de datos)
     const fecha_inicial_db = fecha_inicial || null;
     const fecha_final_db = fecha_final || null;
-    const id_rol = 3;     // ID de rol por defecto (por ejemplo, estudiante)
+    const id_rol = 3; // ID de rol por defecto (por ejemplo, estudiante)
 
     // Construir la consulta SQL para insertar el estudiante
     const insertQuery = `
@@ -72,7 +83,7 @@ const addEstudiante = async (req, res) => {
       fecha_inicial_db,
       fecha_final_db,
       id_programa,   // Aquí insertamos el id_programa (ya no será null)
-      id_huella,
+      id_huella,     // Aquí insertamos el id_huella obtenido de la tabla huella
       id_rol,
     ]);
 
