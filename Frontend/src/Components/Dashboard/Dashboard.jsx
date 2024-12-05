@@ -1,13 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./DashboardComponents/Navbar";
 import { Sidebar } from "./DashboardComponents/Sidebar";
-import { Principal } from "./Principal/Principal";
 import { RegisterUser } from "./RegisterPage/RegisterUser";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
+import { Huellero } from "./Simulador_huellero/huellero";
+import { ListAsistencia } from "./Dashboard_User/ListAsistencia";
 
 export const Dashboard = () => {
-  const [contenido, setContenido] = useState("Principal");
-  console.log(contenido);
+  const [contenido, setContenido] = useState("");  // Estado para manejar el contenido
+  const [username, setUsername] = useState("");  // Estado para manejar el nombre de usuario
+
+  useEffect(() => {
+    // Recuperamos el nombre de usuario desde localStorage
+    const storedUsername = localStorage.getItem("username");
+
+    if (storedUsername) {
+      setUsername(storedUsername);  // Establecer el nombre de usuario
+
+      // Establecer el contenido inicial dependiendo del nombre de usuario
+      if (storedUsername === "Administrador") {
+        setContenido("Registro");  // Si es Administrador, muestra "Registro"
+      } else if (storedUsername === "Usuario") {
+        setContenido("Lista_Asistencia");  // Si es Usuario, muestra "Lista de Asistencia"
+      }
+    } else {
+      // Si no hay usuario logueado, redirigir al login (opcional)
+      window.location.href = "/";
+    }
+  }, []);  // Solo se ejecuta al montar el componente
+
   return (
     <>
       <div className="min-h-screen flex flex-col">
@@ -22,11 +43,11 @@ export const Dashboard = () => {
           </div>
           <div className="bg-gray-200 w-5/6">
             <div className="p-8">
-              {contenido === "Principal" && <Principal />}
+              {/* Renderizar contenido según el estado de "contenido" */}
               {contenido === "Registro" && <RegisterUser />}
               {contenido === "Lista_Alumnos" && <ListaAlumnos />}
-
-              {/* Renderiza otros contenidos según sea necesario */}
+              {contenido === "Huellero" && <Huellero />}
+              {contenido === "Lista_Asistencia" && <ListAsistencia />}
             </div>
           </div>
         </div>
