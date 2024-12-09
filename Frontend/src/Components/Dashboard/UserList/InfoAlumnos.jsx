@@ -115,36 +115,35 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   return (
     <>
       {isSuccessVisible && (
-        <div className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg shadow-blue rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
-        role="alert">
-        
-        <p>{successMessage}</p>
-      
-        <button
-          type="button"
-          className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
-          data-dismiss-target="#alert-border-1"
-          aria-label="Close"
+        <div
+          className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg shadow-blue rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
+          role="alert"
         >
-          <svg
-            className="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
+          <p>{successMessage}</p>
+
+          <button
+            type="button"
+            className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+            data-dismiss-target="#alert-border-1"
+            aria-label="Close"
           >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
-        </button>
-      </div>
-      
-        
+            <svg
+              className="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+          </button>
+        </div>
       )}
       <div
         className={`fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center ${
@@ -191,124 +190,29 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 </div>
               </div>
 
+
               {/* Campos del formulario */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-                {/* Campo de Nombres */}
+                {/* Campo de Clinica */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="nombre_completo"
+                    htmlFor=" Clinica"
                     className="block text-sm font-medium text-gray-900"
                   >
-                    Nombres
+                    Clinica
                   </label>
                   <div className="mt-2">
                     <input
                       type="text"
-                      name="nombre_completo"
-                      id="nombre_completo"
+                      name="clinica"
+                      id="clinica"
                       value={formData.nombre_completo}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Nombres completos"
+                      placeholder="Clinica"
                     />
                   </div>
                 </div>
-
-                {/* Primer Apellido */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="primer_apellido"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Primer Apellido
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="primer_apellido"
-                      id="primer_apellido"
-                      value={formData.primer_apellido}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Primer apellido"
-                    />
-                  </div>
-                </div>
-
-                {/* Segundo Apellido */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="segundo_apellido"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Segundo Apellido
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="segundo_apellido"
-                      id="segundo_apellido"
-                      value={formData.segundo_apellido}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Segundo apellido"
-                    />
-                  </div>
-                </div>
-
-                {/* Tipo de documento */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="tipo_documento"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Tipo de documento
-                  </label>
-                  <div className="mt-2">
-                    <select
-                      id="tipo_documento"
-                      name="tipo_documento"
-                      value={formData.tipo_documento}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                    >
-                      <option value="" disabled>
-                        Seleccione tipo de documento
-                      </option>
-                      <option value="cedula">Cédula de ciudadanía</option>
-                      <option value="dni">DNI</option>
-                      <option value="passport">Pasaporte</option>
-                      <option value="carnet_extranjeria">
-                        Carné de extranjería
-                      </option>
-                      <option value="licencia_conducir">
-                        Licencia de conducir
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Número de documento */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="num_documento"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Número de documento
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="num_documento"
-                      id="num_documento"
-                      value={formData.num_documento}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Número de documento"
-                    />
-                  </div>
-                </div>
-
                 {/* Programa */}
                 <div className="sm:col-span-1">
                   <label
@@ -328,17 +232,203 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       <option value="Enfermería">Enfermería</option>
                       <option value="Psicología">Psicología</option>
                       <option value="Medicina">Medicina</option>
-                      <option value="Medicina - Internos">Medicina - Internos</option>
-                      <option value="Medicina - Residentes">Medicina - Residentes</option>
+                      <option value="Medicina - Internos">
+                        Medicina - Internos
+                      </option>
+                      <option value="Medicina - Residentes">
+                        Medicina - Residentes
+                      </option>
                       <option value="No Definido">No Definido</option>
                     </select>
                   </div>
                 </div>
+                {/* Campo de  Semenestre academico */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="semestre_academico"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                   Semenestre academico
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="semestre_academico"
+                      id="semestre_academico"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder=" Semenestre academico"
+                    />
+                  </div>
+                </div>
+                {/* Campo de Asignatura */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="asignatura"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Asignatura
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="asignatura"
+                      id="asignatura"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="Asignatura"
+                    />
+                  </div>
+                </div>
+                {/* Campo de Especialidad */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="especialidad"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                   Especialidad
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="especialidad"
+                      id="especialidad"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="Especialidad"
+                    />
+                  </div>
+                </div>
+                {/* Campo de Nombres */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="nombre_estudiante"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Nombre Completo
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="nombre_estudiante"
+                      id="nombre_estudiante"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="Nombres completos"
+                    />
+                  </div>
+                </div>
 
+
+                {/* Número de documento */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="identificacion"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Número de documento
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="identificacion"
+                      id="identificacion"
+                      value={formData.num_documento}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="Número de documento"
+                    />
+                  </div>
+                </div>
+                {/* Campo de Semana de Rotación */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="semanas_rotacion"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Semana de Rotación
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="semanas_rotacion"
+                      id="semanas_rotacion"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder=" Semana de Rotación"
+                    />
+                  </div>
+                </div>
+                
+                {/* Campo de Hora por Día */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="horas_por_dia"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Hora por Día
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="horas_por_dia"
+                      id="horas_por_dia"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="horas_por_dia"
+                    />
+                  </div>
+                </div>
+                {/* Campo de Día Semana */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="dias_semana"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Día Semana
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="dias_semana"
+                      id="dias_semana"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="dias_semana"
+                    />
+                  </div>
+                </div>
+                {/* Campo de Numero de horas semanales */}
+                <div className="sm:col-span-1">
+                  <label
+                    htmlFor="numero_horas_semanales"
+                    className="block text-sm font-medium text-gray-900"
+                  >
+                    Numero de horas semanales
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="numero_horas_semanales"
+                      id="numero_horas_semanales"
+                      value={formData.nombre_completo}
+                      onChange={handleChange}
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="numero_horas_semanales"
+                    />
+                  </div>
+                </div>
                 {/* Fecha de Inicio */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="fecha_inicial"
+                    htmlFor="fecha_inicio"
                     className="block text-sm font-medium text-gray-900"
                   >
                     Fecha de Inicio
@@ -346,8 +436,8 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="date"
-                      name="fecha_inicial"
-                      id="fecha_inicial"
+                      name="fecha_inicio"
+                      id="fecha_inicio"
                       value={formData.fecha_inicial}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
@@ -358,16 +448,16 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 {/* Fecha Final */}
                 <div className="sm:col-span-1">
                   <label
-                    htmlFor="fecha_final"
+                    htmlFor="fecha_terminacion"
                     className="block text-sm font-medium text-gray-900"
                   >
-                    Fecha Final
+                    Fecha Terminación
                   </label>
                   <div className="mt-2">
                     <input
                       type="date"
-                      name="fecha_final"
-                      id="fecha_final"
+                      name="fecha_terminacion"
+                      id="fecha_terminacion"
                       value={formData.fecha_final}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"

@@ -147,6 +147,41 @@ export const ListaAlumnos = () => {
                   <table className="min-w-full divide-y divide-blue dark:divide-blue">
                     <thead className="bg-DarkSlate dark:bg-gray-800">
                       <tr>
+                      <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Clinica</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Programa</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Semenestre academico</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Asignatura</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Especialidad</span>
+                            </button>
+                          </div>
+                        </th>
                         <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
@@ -157,14 +192,35 @@ export const ListaAlumnos = () => {
                         <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span> Nº Cédula</span>
+                              <span> Identificación</span>
                             </button>
                           </div>
                         </th>
                         <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-2">
                             <button>
-                              <span>Programas</span>
+                              <span>Semanas Rotación</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Horas por Dia</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Dia Semana</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Numero horas semanales</span>
                             </button>
                           </div>
                         </th>
@@ -178,7 +234,7 @@ export const ListaAlumnos = () => {
                         <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-2">
                             <button>
-                              <span>Fecha Final</span>
+                              <span>Fecha Terminación</span>
                             </button>
                           </div>
                         </th>
@@ -197,7 +253,7 @@ export const ListaAlumnos = () => {
                           <tr key={index}>
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-300 whitespace-nowrap">
                               <div className="flex flex-col justify-center items-center gap-x-2">
-                                <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
+                                <span>{student.nombre_completo}</span>
                               </div>
                             </td>
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
@@ -218,6 +274,21 @@ export const ListaAlumnos = () => {
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
                                 <span>{formatFecha(student.fecha_final)}</span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-300 whitespace-nowrap">
+                              <div className="flex flex-col justify-center items-center gap-x-2">
+                                <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span>{student.num_documento}</span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span>{student.num_documento}</span>
                               </div>
                             </td>
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
@@ -264,7 +335,7 @@ export const ListaAlumnos = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="6" className="text-center py-4">No se encontraron estudiantes.</td>
+                          <td colSpan="14" className="text-center py-4">No se encontraron estudiantes.</td>
                         </tr>
                       )}
                     </tbody>
