@@ -328,12 +328,8 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       <option value="Enfermería">Enfermería</option>
                       <option value="Psicología">Psicología</option>
                       <option value="Medicina">Medicina</option>
-                      <option value="Medicina - Internos">
-                        Medicina - Internos
-                      </option>
-                      <option value="Medicina - Residentes">
-                        Medicina - Residentes
-                      </option>
+                      <option value="Medicina - Internos">Medicina - Internos</option>
+                      <option value="Medicina - Residentes">Medicina - Residentes</option>
                       <option value="No Definido">No Definido</option>
                     </select>
                   </div>

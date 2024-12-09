@@ -185,7 +185,7 @@ export const RegisterUser = () => {
 
   const registerFingerprint = () => {
     // Verifica si ya existe un valor para la huella antes de enviarlo
-    const huella_estudiante = "123e4567-e89b-12h3-a456-426655440006";  // Aquí deberías obtener la huella del dispositivo
+    const huella_estudiante = "123e4567-e89b-12h3-a456-426655440019";  // Aquí deberías obtener la huella del dispositivo
   
     if (!huella_estudiante) {
       alert("Debe registrar una huella primero.");

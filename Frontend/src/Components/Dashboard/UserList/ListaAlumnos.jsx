@@ -106,7 +106,7 @@ export const ListaAlumnos = () => {
             <div className="flex flex-col justify-center items-start">
               <div className="flex flex-row items-center gap-x-3">
                 <h2 className="font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
-                  Lista de Asistencia
+                  Lista de Alumnos
                 </h2>
               </div>
             </div>
