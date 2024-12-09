@@ -1,7 +1,7 @@
 const CONFIG_DB = {
   user: "postgres",
   host: "localhost",
-  database: "Register_attendance",
+  database: "RegisterAsistencia",
   password: "Admin",
   port: 5432, // Puerto por defecto de PostgreSQL
 };
