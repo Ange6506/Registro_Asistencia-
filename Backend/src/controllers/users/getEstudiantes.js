@@ -8,17 +8,27 @@ const getEstudiantes = async (req, res) => {
     // Ejecutar la consulta para obtener todos los estudiantes con los datos relacionados
     const result = await pool.query(`
       SELECT 
-      e.id_estudiante,
-        e.nombre_completo,
-        e.num_documento,
-        e.primer_apellido,
-        e.segundo_apellido,
-        p.programa,
-        e.tipo_documento,
-        e.fecha_inicial,
-        e.fecha_final
-      FROM estudiantes AS e
-      JOIN programa AS p ON e.id_programa = p.id_programa
+        e.id_estudiante,
+        e.id_huella,
+        e.id_rol,
+        c.clinica,                                  -- Clínica
+        p.programa,                                 -- Programa académico
+        e.semestre_academico,                        -- Semestre académico
+        e.asignatura,                                -- Asignatura
+        e.especialidad,                              -- Especialidad
+        e.nombre_estudiante,
+        e.identificacion,
+        e.semanas_rotacion,
+        e.horas_por_dia,
+        e.dias_semana,
+        e.numero_horas_semanales,
+        e.fecha_inicio,
+        e.fecha_terminacion
+      FROM public.estudiantes AS e
+      JOIN public.rol AS r ON e.id_rol = r.Id_rol
+      JOIN public.huella AS h ON e.id_huella = h.id_huella
+      JOIN public.clinica AS c ON e.id_clinica = c.id_clinica  -- Relación con la clínica
+      JOIN public.programa AS p ON e.id_programa = p.id_programa  -- Relación con el programa
     `);
 
     // Si se obtienen resultados, responder con los datos de los estudiantes
@@ -33,5 +43,4 @@ const getEstudiantes = async (req, res) => {
   }
 };
 
-module.exports = { getEstudiantes, };
- 
+module.exports = { getEstudiantes };

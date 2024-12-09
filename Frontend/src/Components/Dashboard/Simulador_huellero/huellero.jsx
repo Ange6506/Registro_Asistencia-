@@ -5,7 +5,6 @@ export const Huellero = () => {
   const [registroActivo, setRegistroActivo] = useState(null);
   const [errorSalida, setErrorSalida] = useState(false);
   const id_huella = 1; // ID del estudiante simulado
-  const tiempoLimite = 1 * 60 * 1000; // Tiempo límite de 1 minuto (en milisegundos)
 
   const handleRegistroAsistencia = async () => {
     try {
@@ -56,13 +55,18 @@ export const Huellero = () => {
           setRegistroActivo(data);
           setAsistencia((prevAsistencia) => [...prevAsistencia, data]);
 
-          // Establecer un temporizador para manejar el límite de 1 minuto
+          // Calcular cuánto falta para la medianoche
+          const ahora = new Date();
+          const medianoche = new Date();
+          medianoche.setHours(24, 0, 0, 0); // Establecer la hora a las 12 de la noche
+
+          const tiempoHastaMedianoche = medianoche - ahora; // Milisegundos restantes hasta la medianoche
+
+          // Establecer un temporizador que actúe cuando llegue la medianoche
           setTimeout(() => {
-            const tiempoTranscurrido = new Date() - new Date(data.fecha_hora_entrada);
-            if (tiempoTranscurrido > tiempoLimite) {
-              setErrorSalida(true);
-            }
-          }, tiempoLimite); // Actuar después de 1 minuto
+            // Registramos la salida a las 12 de la noche
+            setErrorSalida(true); // Indicamos que no se registró la salida a tiempo (medianoche)
+          }, tiempoHastaMedianoche); // Actuar cuando llegue la medianoche
         } else {
           console.error(data.message);
         }
@@ -78,7 +82,6 @@ export const Huellero = () => {
 
       {/* Caja principal de asistencia */}
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6 space-y-6">
-
         {/* Área de huella digital */}
         <div className="flex flex-col items-center">
           <div
