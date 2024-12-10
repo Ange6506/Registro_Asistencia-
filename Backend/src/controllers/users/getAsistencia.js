@@ -5,21 +5,19 @@ const pool = new Pool(CONFIG_DB);
 
 const getAsistencia = async (req, res) => {
   try {
-    // Ejecutar la consulta para obtener todos los estudiantes y sus asistencias
+    // Ejecutar la consulta para obtener todos los estudiantes y sus asistencias sin el JOIN con la tabla programa
     const result = await pool.query(`
-   SELECT 
-  e.nombre_completo || ' ' || e.primer_apellido || ' ' || e.segundo_apellido AS nombre_completo, 
-  e.num_documento,
-  p.programa,
-  e.fecha_inicial,
-  e.fecha_final,
-  a.fecha_hora_entrada,
-  a.fecha_hora_salida
-FROM estudiantes AS e
-JOIN programa AS p ON e.id_programa = p.id_programa
-JOIN asistencia AS a ON e.id_estudiante = a.id_estudiante
-ORDER BY a.fecha_hora_entrada;
-
+      SELECT 
+        e.nombre_estudiante, 
+        e.identificacion,
+        e.programa,               -- Ahora el programa es parte de la tabla 'estudiantes'
+        e.fecha_inicio,
+        e.fecha_terminacion,
+        a.fecha_hora_entrada,
+        a.fecha_hora_salida
+      FROM estudiantes AS e
+      JOIN asistencia AS a ON e.id_estudiante = a.id_estudiante
+      ORDER BY a.fecha_hora_entrada;
     `);
 
     // Si se obtienen resultados, responder con los datos de los estudiantes y sus asistencias
