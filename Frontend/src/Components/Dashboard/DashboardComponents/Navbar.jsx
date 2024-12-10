@@ -19,7 +19,7 @@ const Navbar = () => {
             <div className="flex items-center justify-center">
               <div className="flex flex-col">
                 <p className="text-md font-medium font-serif text-violet">
-                  Clínica
+                  Clínica Nueva
                 </p>
                 <p className="text-lg font-medium font-serif text-violet">
                   Rafael Uribe Uribe

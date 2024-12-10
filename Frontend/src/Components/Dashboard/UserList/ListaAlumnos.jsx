@@ -8,6 +8,7 @@ export const ListaAlumnos = () => {
   const [filteredStudents, setFilteredStudents] = useState([]); // Lista de estudiantes filtrados
   const [studentsData, setStudentsData] = useState([]); // Lista de todos los estudiantes
   const [showConfirmModal, setShowConfirmModal] = useState(false); // Estado para controlar la ventana de confirmación
+  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -101,7 +102,43 @@ export const ListaAlumnos = () => {
   return (
     <section className="container p-4 mx-auto flex flex-col" style={{ minHeight: "87vh" }}>
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
-        {/* ... */}
+      <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
+            <div className="flex flex-col justify-center items-start">
+              <div className="flex flex-row items-center gap-x-3">
+                <h2 className="font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
+                  Lista de Alumnos
+                </h2>
+              </div>
+            </div>
+
+            <div className="w-full md:w-80">
+              <div className="flex items-center">
+                <span className="absolute">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 mx-3 text-blue"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Búsqueda por Nombre o Cédula"
+                  className="w-full py-2.5 md:py-1 text-gray-700 placeholder-gray-400/70 bg-white border border-blue rounded-lg pl-11 pr-5 focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
+            </div>
+          </div>
         <div className="flex flex-col justify-between flex-1">
           <div className="flex flex-col mt-6">
             <div className="-mx-4 -my-2 overflow-x-auto">
@@ -110,6 +147,41 @@ export const ListaAlumnos = () => {
                   <table className="min-w-full divide-y divide-blue dark:divide-blue">
                     <thead className="bg-DarkSlate dark:bg-gray-800">
                       <tr>
+                      <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Clinica</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Programa</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Semenestre academico</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Asignatura</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Especialidad</span>
+                            </button>
+                          </div>
+                        </th>
                         <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
@@ -120,14 +192,35 @@ export const ListaAlumnos = () => {
                         <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-3">
                             <button>
-                              <span> Nº Cédula</span>
+                              <span> Identificación</span>
                             </button>
                           </div>
                         </th>
                         <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-2">
                             <button>
-                              <span>Programas</span>
+                              <span>Semanas Rotación</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Horas por Dia</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Dia Semana</span>
+                            </button>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                          <div className="flex justify-center items-center gap-x-3">
+                            <button>
+                              <span>Numero horas semanales</span>
                             </button>
                           </div>
                         </th>
@@ -141,7 +234,7 @@ export const ListaAlumnos = () => {
                         <th scope="col" className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
                           <div className="flex justify-center items-center gap-x-2">
                             <button>
-                              <span>Fecha Final</span>
+                              <span>Fecha Terminación</span>
                             </button>
                           </div>
                         </th>
@@ -160,7 +253,7 @@ export const ListaAlumnos = () => {
                           <tr key={index}>
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-300 whitespace-nowrap">
                               <div className="flex flex-col justify-center items-center gap-x-2">
-                                <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
+                                <span>{student.nombre_completo}</span>
                               </div>
                             </td>
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
@@ -181,6 +274,21 @@ export const ListaAlumnos = () => {
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
                               <div className="w-full inline-flex justify-center items-center gap-x-3">
                                 <span>{formatFecha(student.fecha_final)}</span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-300 whitespace-nowrap">
+                              <div className="flex flex-col justify-center items-center gap-x-2">
+                                <span>{student.nombre_completo} {student.primer_apellido} {student.segundo_apellido}</span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span>{student.num_documento}</span>
+                              </div>
+                            </td>
+                            <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
+                              <div className="w-full inline-flex justify-center items-center gap-x-3">
+                                <span>{student.num_documento}</span>
                               </div>
                             </td>
                             <td className="px-3 py-3.5 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
@@ -227,7 +335,7 @@ export const ListaAlumnos = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="6" className="text-center py-4">No se encontraron estudiantes.</td>
+                          <td colSpan="14" className="text-center py-4">No se encontraron estudiantes.</td>
                         </tr>
                       )}
                     </tbody>
@@ -238,6 +346,35 @@ export const ListaAlumnos = () => {
           </div>
         </div>
       </div>
+
+      {successMessage && (
+          <div className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg shadow-blue rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800" role="alert">
+            <p>{successMessage}</p>
+            <button
+              type="button"
+              className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+              data-dismiss-target="#alert-border-1"
+              aria-label="Close"
+              onClick={() => setSuccessMessage("")}
+            >
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
 
       {/* Modal de Confirmación */}
       {showConfirmModal && (
