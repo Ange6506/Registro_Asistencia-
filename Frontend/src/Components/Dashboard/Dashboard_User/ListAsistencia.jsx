@@ -20,48 +20,49 @@ export const ListAsistencia = () => {
       });
   }, []);
 
+  // Actualizar el término de búsqueda y realizar el filtrado
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    filterStudents(value, selectedDate, selectedProgram);
   };
 
+  // Actualizar el programa seleccionado y realizar el filtrado
   const handleProgramChange = (event) => {
     const program = event.target.value;
     setSelectedProgram(program);
-    filterStudents(searchTerm, selectedDate, program);
   };
 
+  // Actualizar la fecha seleccionada y realizar el filtrado
   const handleDateChange = (event) => {
     const date = event.target.value;
-    setSelectedDate(date); // Establecer la fecha seleccionada
-    filterStudents(searchTerm, date, selectedProgram); // Filtrar estudiantes según la nueva fecha seleccionada
+    setSelectedDate(date);
   };
 
-  const filterStudents = (nameOrCedula, date, program) => {
+  // Filtrar estudiantes según los filtros de búsqueda, fecha y programa
+  useEffect(() => {
     const filtered = studentsData.filter((student) => {
       // Filtro por nombre o cédula
       const nameMatch =
-        student.nombre_completo
+        student.nombre_estudiante
           .toLowerCase()
-          .includes(nameOrCedula.toLowerCase()) ||
-        student.num_documento.includes(nameOrCedula);
+          .includes(searchTerm.toLowerCase()) ||
+        student.identificacion.includes(searchTerm);
 
-      // Filtro por programa (comparación insensible a mayúsculas/minúsculas y eliminando espacios)
-      const programMatch = program
-        ? student.programa.trim().toLowerCase() === program.trim().toLowerCase()
+      // Filtro por programa (si se seleccionó un programa específico)
+      const programMatch = selectedProgram
+        ? student.programa.toLowerCase() === selectedProgram.toLowerCase()
         : true;
 
       // Filtro por fecha (si se seleccionó una fecha específica)
-      const attendanceDateMatch = date
-        ? formatDate(student.fecha_hora_entrada) === formatDate(date)
+      const attendanceDateMatch = selectedDate
+        ? formatDate(student.fecha_hora_entrada) === formatDate(selectedDate)
         : true;
 
       return nameMatch && programMatch && attendanceDateMatch;
     });
 
     setFilteredStudents(filtered);
-  };
+  }, [searchTerm, selectedDate, selectedProgram, studentsData]); // Se vuelve a ejecutar cuando cambian los filtros
 
   // Función para formatear la fecha a 'YYYY-MM-DD'
   const formatDate = (dateString) => {
@@ -84,83 +85,42 @@ export const ListAsistencia = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
+  // Función para imprimir la tabla
   const printTable = () => {
-    // Obtén el contenido de la tabla
     const tableContent = document.getElementById("table-to-print").outerHTML;
-
-    // Crea un iframe oculto para manejar la impresión
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'absolute';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = 'none';
-    iframe.style.visibility = 'hidden'; // Asegura que el iframe sea invisible
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "none";
+    iframe.style.visibility = "hidden";
     document.body.appendChild(iframe);
-
-    // Obtén el documento dentro del iframe
     const iframeDoc = iframe.contentWindow.document;
 
-    // Elimina cualquier contenido predeterminado y asegura que el documento sea completamente limpio
-    iframeDoc.open();  // Abre un nuevo documento completamente vacío
+    iframeDoc.open();
     iframeDoc.write(`
       <html>
         <head>
           <style>
-            /* Eliminar cualquier margen, borde, o estilo predeterminado */
-            body, html {
-              margin: 0;
-              padding: 0;
-              height: 100%;
-              width: 100%;
-              font-family: Arial, sans-serif;
-              background-color: white;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-            }
-            th, td {
-              padding: 8px;
-              text-align: left;
-              border: 1px solid #ddd;
-              font-size: 10px;
-            }
-            th {
-              background-color: #f4f4f4;
-            }
-            h1 {
-              font-size: 24px;
-              text-align: center;
-              margin-bottom: 20px;
-            }
-            .date {
-              text-align: right;
-              margin-top: 10px;
-              font-size: 12px;
-              color: #333;
-            }
+            body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: white; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { padding: 8px; text-align: left; border: 1px solid #ddd; font-size: 10px; }
+            th { background-color: #f4f4f4; }
+            h1 { font-size: 24px; text-align: center; margin-bottom: 20px; }
           </style>
         </head>
         <body>
           <h1>Lista de Asistencia</h1>
           ${tableContent}
-          <div class="date">Fecha: ${new Date().toLocaleString()}</div>
         </body>
       </html>
     `);
     iframeDoc.close();
-
-    // Llama al método print() en el iframe para imprimir su contenido
     iframe.contentWindow.focus();
     iframe.contentWindow.print();
-
-    // Elimina el iframe después de la impresión
     document.body.removeChild(iframe);
-};
+  };
 
-
-
-  
   return (
     <section
       className="container p-4 mx-auto flex flex-col"
@@ -213,29 +173,25 @@ export const ListAsistencia = () => {
               <select
                 value={selectedProgram}
                 onChange={handleProgramChange}
-                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
+                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg"
               >
                 <option value="">Seleccionar Programa</option>
-                <option value="Enfermería">Enfermería</option>
-                <option value="Psicología">Psicología</option>
-                <option value="Medicina">Medicina</option>
-                <option value="Medicina - Internos">Medicina - Internos</option>
-                <option value="Medicina - Residentes">
-                  Medicina - Residentes
-                </option>
+                <option value="ENFERMERIA">Enfermería</option>
+                <option value="PSICOLOGIA">Psicología</option>
+                <option value="MEDICINA">Medicina</option>
+                <option value="INTERNO">Medicina - Internos</option>
+                <option value="RESIDENTE">Medicina - Residentes</option>
               </select>
             </div>
 
             {/* Filtro por fecha */}
             <div className="flex flex-col w-32 sm:w-auto">
-              <label className="text-sm text-gray-700">
-                Fecha de Asistencia
-              </label>
+              <label className="text-sm text-gray-700">Fecha de Asistencia</label>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
+                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg"
               />
             </div>
             <div className="flex w-full sm:w-auto  justify-end mt-6 ml-auto">
@@ -267,7 +223,10 @@ export const ListAsistencia = () => {
               <div className="-mx-4 -my-2 overflow-x-auto">
                 <div className="inline-block min-w-full py-2 align-middle md:px-5 lg:px-4">
                   <div className="overflow-hidden border border-blue dark:border-blue md:rounded-lg bg-blue">
-                    <table id="table-to-print" className="min-w-full divide-y divide-blue dark:divide-blue">
+                    <table
+                      id="table-to-print"
+                      className="min-w-full divide-y divide-blue dark:divide-blue"
+                    >
                       <thead className="bg-DarkSlate dark:bg-gray-800">
                         <tr>
                           <th className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
@@ -291,11 +250,11 @@ export const ListAsistencia = () => {
                         {filteredStudents.length > 0 ? (
                           filteredStudents.map((student, index) => (
                             <tr key={index}>
-                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.nombre_completo}
+                              <td className="px-3 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {student.nombre_estudiante}
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.num_documento}
+                                {student.identificacion}
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {formatDateTime(student.fecha_hora_entrada)}
@@ -305,7 +264,7 @@ export const ListAsistencia = () => {
                                   ? formatDateTime(student.fecha_hora_salida)
                                   : "No se registró Salida"}
                               </td>
-                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                              <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {student.programa}
                               </td>
                             </tr>
