@@ -8,7 +8,8 @@ const getEstudiantes = async (req, res) => {
     const result = await pool.query(`
       SELECT id_estudiante, 
        id_huella,
-       id_rol, clinica,
+       id_rol, 
+       clinica,
        programa, 
        semestre_academico, 
        asignatura,
