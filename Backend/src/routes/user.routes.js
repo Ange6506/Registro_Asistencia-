@@ -19,6 +19,6 @@ router.get("/get_estudiante", getEstudiantes.getEstudiantes);
 router.get("/getAsistencia", getAsistencia.getAsistencia);
 router.put("/updateEstudiantes/:id", updateEstudiante.updateEstudiante);
 router.post("/login", loginUser.loginUser);
-router.delete('/deletestudent/:num_documento', deleteEstudiante.deleteEstudiante);
+router.delete("/deletestudent/:identificacion", deleteEstudiante.deleteEstudiante);
 
 module.exports = router;

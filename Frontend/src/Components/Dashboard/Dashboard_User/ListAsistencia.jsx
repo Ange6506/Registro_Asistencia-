@@ -247,39 +247,40 @@ export const ListAsistencia = () => {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
-                        {filteredStudents.length > 0 ? (
-                          filteredStudents.map((student, index) => (
-                            <tr key={index}>
-                              <td className="px-3 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.nombre_estudiante}
-                              </td>
-                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.identificacion}
-                              </td>
-                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {formatDateTime(student.fecha_hora_entrada)}
-                              </td>
-                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.fecha_hora_salida
-                                  ? formatDateTime(student.fecha_hora_salida)
-                                  : "No se registró Salida"}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.programa}
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td
-                              colSpan="6"
-                              className="text-center py-4 text-sm text-gray-500"
-                            >
-                              No se encontraron resultados
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
+  {filteredStudents.length > 0 ? (
+    filteredStudents.map((student, index) => (
+      <tr key={index}>
+        <td className="px-3 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          {student.nombre_estudiante}
+        </td>
+        <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          {student.identificacion}
+        </td>
+        <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          {formatDateTime(student.fecha_hora_entrada)}
+        </td>
+        <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          {student.fecha_hora_salida
+            ? formatDateTime(student.fecha_hora_salida)
+            : "No se registró Salida"}
+        </td>
+        <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          {student.programa}
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan="5" // Cambié este valor a 5 porque la tabla tiene 5 columnas
+        className="text-center py-4 text-sm text-gray-500"
+      >
+        No hay asistencia registrada
+      </td>
+    </tr>
+  )}
+</tbody>
+
                     </table>
                   </div>
                 </div>

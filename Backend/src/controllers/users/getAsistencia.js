@@ -10,7 +10,7 @@ const getAsistencia = async (req, res) => {
       SELECT 
         e.nombre_estudiante, 
         e.identificacion,
-        e.programa,               -- Ahora el programa es parte de la tabla 'estudiantes'
+        e.programa,               
         e.fecha_inicio,
         e.fecha_terminacion,
         a.fecha_hora_entrada,

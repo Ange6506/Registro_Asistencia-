@@ -54,19 +54,23 @@ export const ListaAlumnos = () => {
     return new Date(fecha).toLocaleDateString("es-ES");
   };
 
-  const handleDeleteStudent = async (num_documento) => {
+  const handleDeleteStudent = async (identificacion) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/deletestudent/${num_documento}`,
+        `http://localhost:5000/deletestudent/${identificacion}`,
         {
           method: "DELETE",
         }
       );
-
+  
+      // Agregar más detalles para ver la respuesta completa
+      const data = await response.json();
+      console.log(data); // Verifica la respuesta de la API
+  
       if (response.ok) {
         setFilteredStudents(
           filteredStudents.filter(
-            (student) => student.num_documento !== num_documento
+            (student) => student.identificacion !== identificacion
           )
         );
         alert("Estudiante eliminado correctamente");
@@ -78,6 +82,7 @@ export const ListaAlumnos = () => {
       alert("Error al eliminar estudiante");
     }
   };
+  
 
   const openConfirmModal = (student) => {
     setSelectedStudent(student);
@@ -91,10 +96,12 @@ export const ListaAlumnos = () => {
 
   const confirmDelete = () => {
     if (selectedStudent) {
-      handleDeleteStudent(selectedStudent.num_documento);
+      console.log("Estudiante seleccionado para eliminar:", selectedStudent);
+      handleDeleteStudent(selectedStudent.identificacion);
       closeConfirmModal();
     }
   };
+  
 
   return (
     <section
