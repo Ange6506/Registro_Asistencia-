@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-export const Sidebar = ({ contenido, setContenido }) => {
+const Sidebar = ({ contenido, setContenido }) => {
   const [username, setUsername] = useState(""); // Estado para el nombre de usuario
   const navigate = useNavigate(); // useNavigate para redirección
 
@@ -16,162 +16,97 @@ export const Sidebar = ({ contenido, setContenido }) => {
     }
   }, [navigate]);
 
-  // Función para cerrar sesión
-  const handleLogout = () => {
-    // Eliminar los datos de autenticación del localStorage
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("username");
-
-    // Redirigir al usuario a la página de login
-    navigate("/"); // Asegúrate de que esta ruta esté configurada correctamente
-  };
+  // Reusable button component for list items
+  const SidebarButton = ({ onClick, icon, text }) => (
+    <button
+      className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
+      onClick={onClick}
+    >
+      {icon && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          {icon}
+        </svg>
+      )}
+      <span className="mx-4 text-md font-medium">{text}</span>
+    </button>
+  );
 
   return (
-    <>
-      <ul className="flex flex-col gap-y-2">
-        {/* Si el usuario es Administrador, mostramos estas opciones */}
-        {username === "Administrador" && (
-          <>
-            <li>
-              <button
-                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-                onClick={() => setContenido("Registro")}
-              >
-                <span className="mx-4 text-md font-medium">
-                  Registrar Alumno
-                </span>
-              </button>
-            </li>
-
-            <li>
-              <button
-                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-                onClick={() => setContenido("Lista_Alumnos")}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-5 "
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
-                  />
-                </svg>
-
-                <span className="mx-4 text-md font-medium">
-                  Lista de Alumnos
-                </span>
-              </button>
-            </li>
-
-            <li>
-              <button
-                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-                onClick={() => setContenido("Huellero")}
-              >
-                <span className="mx-4 text-md font-medium">Huellero</span>
-              </button>
-            </li>
-          </>
-        )}
-
-        {/* Si el usuario es Usuario, mostramos estas opciones */}
-        {username === "Usuario" && (
-          <>
-            <li>
-              <button
-                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-                onClick={() => setContenido("Lista_Asistencia")}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
-                  />
-                </svg>
-
-                <span className="mx-4 text-md font-medium">
-                  Lista de Asistencia
-                </span>
-              </button>
-            </li>
-
-            <li>
-              <button
-                className="flex items-center px-4 py-2 text-violet transition hover:bg-gray-100 hover:text-Purple rounded-md w-full"
-                onClick={() => setContenido("Lista_Alumnos")}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6 "
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
-                  />
-                </svg>
-                <span className="mx-4 text-md font-medium">
-                  Lista de Alumnos
-                </span>
-              </button>
-            </li>
-          </>
-        )}
-      </ul>
-
-      <ul className="p-4">
-        <div className="flex items-center gap-x-2">
-          <div className="relative">
-            <img
-              className="object-cover w-8 h-8 rounded-full ring ring-gray-300"
-              src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
-              alt="Perfil"
+    <ul className="flex flex-col gap-y-2">
+      {/* Si el usuario es Administrador, mostramos estas opciones */}
+      {username === "Administrador" && (
+        <>
+          <li>
+            <SidebarButton
+              onClick={() => setContenido("Registro")}
+              text="Registrar Alumno"
             />
-            <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white"></span>
-          </div>
+          </li>
 
-          <div className="px-2 border-x border-gray-300">
-            <h1 className="text-base text-gray-700 capitalize">
-              Hola, <span className="text-Violet">{username}</span>
-            </h1>
-          </div>
+          <li>
+            <SidebarButton
+              onClick={() => setContenido("Lista_Alumnos")}
+              icon={
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+                />
+              }
+              text="Lista de Alumnos"
+            />
+          </li>
 
-          <button onClick={handleLogout}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6 text-gray-700"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
-              />
-            </svg>
-          </button>
-        </div>
-      </ul>
-    </>
+          <li>
+            <SidebarButton
+              onClick={() => setContenido("Huellero")}
+              text="Huellero"
+            />
+          </li>
+        </>
+      )}
+
+      {/* Si el usuario es Usuario, mostramos estas opciones */}
+      {username === "Usuario" && (
+        <>
+          <li>
+            <SidebarButton
+              onClick={() => setContenido("Lista_Asistencia")}
+              icon={
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+                />
+              }
+              text="Lista de Asistencia"
+            />
+          </li>
+
+          <li>
+            <SidebarButton
+              onClick={() => setContenido("Lista_Alumnos")}
+              icon={
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+                />
+              }
+              text="Lista de Alumnos"
+            />
+          </li>
+        </>
+      )}
+    </ul>
   );
 };
+
+export default Sidebar;
