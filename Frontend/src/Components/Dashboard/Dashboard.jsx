@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./DashboardComponents/Navbar";
-import { Sidebar } from "./DashboardComponents/Sidebar";
+import Sidebar  from "./DashboardComponents/Sidebar";
 import { RegisterUser } from "./RegisterPage/RegisterUser";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
 import { Huellero } from "./Simulador_huellero/huellero";
