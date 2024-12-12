@@ -45,13 +45,6 @@ const Sidebar = ({ contenido, setContenido }) => {
         <>
           <li>
             <SidebarButton
-              onClick={() => setContenido("Registro")}
-              text="Registrar Alumno"
-            />
-          </li>
-
-          <li>
-            <SidebarButton
               onClick={() => setContenido("Lista_Alumnos")}
               icon={
                 <path

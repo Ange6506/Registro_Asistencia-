@@ -44,7 +44,6 @@ export const Dashboard = () => {
           <div className="bg-gray-200 w-5/6">
             <div className="p-8">
               {/* Renderizar contenido según el estado de "contenido" */}
-              {contenido === "Registro" && <RegisterUser />}
               {contenido === "Lista_Alumnos" && <ListaAlumnos />}
               {contenido === "Huellero" && <Huellero />}
               {contenido === "Lista_Asistencia" && <ListAsistencia />}
