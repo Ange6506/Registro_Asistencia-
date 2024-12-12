@@ -6,20 +6,20 @@ const pool = new Pool(CONFIG_DB);
 const getEstudiantes = async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT id_estudiante, 
+      SELECT id_estudiante,
        id_huella,
        id_rol, clinica,
-       programa, 
-       semestre_academico, 
+       programa,
+       semestre_academico,
        asignatura,
        especialidad,
-       nombre_estudiante, 
-       identificacion, 
-       semanas_rotacion, 
-       horas_por_dia, 
-       dias_semana, 
-       numero_horas_semanales, 
-       fecha_inicio, 
+       nombre_estudiante,
+       identificacion,
+       semanas_rotacion,
+       horas_por_dia,
+       dias_semana,
+       numero_horas_semanales,
+       fecha_inicio,
        fecha_terminacion
        FROM public.estudiantes;
     `);
