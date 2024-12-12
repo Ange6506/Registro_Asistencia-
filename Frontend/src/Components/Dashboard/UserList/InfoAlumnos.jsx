@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [formData, setFormData] = useState({
-    nombre_completo: "",
-    primer_apellido: "",
-    segundo_apellido: "",
-    tipo_documento: "",
-    num_documento: "",
+    clinica: "",
     programa: "",
-    fecha_inicial: "",
-    fecha_final: "",
+    semestre_academico: "",
+    asignatura: "",
+    especialidad: "",
+    nombre_estudiante: "",
+    identificacion: "",
+    semanas_rotacion: "",
+    horas_por_dia: "",
+    dias_semana: "",
+    numero_horas_semanales: "",
+    fecha_inicio: "",
+    fecha_terminacion: "",
   });
 
   const [error, setError] = useState("");
@@ -37,7 +42,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       fecha_terminacion: student.fecha_terminacion
         ? student.fecha_terminacion.split("T")[0]
         : "",
-      
+     
       });
     }
   }, [student]);
@@ -59,14 +64,20 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
     // Validación de los campos requeridos
     if (
-      !formData.nombre_completo ||
-      !formData.primer_apellido ||
-      !formData.segundo_apellido ||
-      !formData.tipo_documento ||
-      !formData.num_documento ||
-      !formData.fecha_inicial ||
-      !formData.fecha_final ||
-      !formData.programa
+      !formData.clinica ||
+      !formData.programa ||
+      !formData.semestre_academico ||
+      !formData.asignatura ||
+      !formData.especialidad ||
+      !formData.nombre_estudiante ||
+      !formData.identificacion ||
+      !formData.semanas_rotacion ||
+      !formData.horas_por_dia ||
+      !formData.dias_semana ||
+      !formData.numero_horas_semanales ||
+      !formData.fecha_inicio ||
+      !formData.fecha_terminacion
+     
     ) {
       setError("Todos los campos deben estar llenos.");
       return;
@@ -196,7 +207,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 </div>
               </div>
 
-
               {/* Campos del formulario */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
                 {/* Campo de Clinica */}
@@ -212,7 +222,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="clinica"
                       id="clinica"
-                      value={formData.nombre_completo}
+                      value={formData.clinica}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Clinica"
@@ -245,14 +255,14 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     htmlFor="semestre_academico"
                     className="block text-sm font-medium text-gray-900"
                   >
-                   Semenestre academico
+                    Semenestre academico
                   </label>
                   <div className="mt-2">
                     <input
                       type="text"
                       name="semestre_academico"
                       id="semestre_academico"
-                      value={formData.nombre_completo}
+                      value={formData.semestre_academico}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder=" Semenestre academico"
@@ -272,7 +282,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="asignatura"
                       id="asignatura"
-                      value={formData.nombre_completo}
+                      value={formData.asignatura}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Asignatura"
@@ -285,14 +295,14 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     htmlFor="especialidad"
                     className="block text-sm font-medium text-gray-900"
                   >
-                   Especialidad
+                    Especialidad
                   </label>
                   <div className="mt-2">
                     <input
                       type="text"
                       name="especialidad"
                       id="especialidad"
-                      value={formData.nombre_completo}
+                      value={formData.especialidad}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Especialidad"
@@ -312,14 +322,13 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="nombre_estudiante"
                       id="nombre_estudiante"
-                      value={formData.nombre_completo}
+                      value={formData.nombre_estudiante}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Nombres completos"
                     />
                   </div>
                 </div>
-
 
                 {/* Número de documento */}
                 <div className="sm:col-span-1">
@@ -334,7 +343,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="identificacion"
                       id="identificacion"
-                      value={formData.num_documento}
+                      value={formData.identificacion}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="Número de documento"
@@ -354,14 +363,14 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="semanas_rotacion"
                       id="semanas_rotacion"
-                      value={formData.nombre_completo}
+                      value={formData.semanas_rotacion}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder=" Semana de Rotación"
                     />
                   </div>
                 </div>
-                
+
                 {/* Campo de Hora por Día */}
                 <div className="sm:col-span-1">
                   <label
@@ -375,7 +384,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="horas_por_dia"
                       id="horas_por_dia"
-                      value={formData.nombre_completo}
+                      value={formData.horas_por_dia}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="horas_por_dia"
@@ -395,7 +404,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="dias_semana"
                       id="dias_semana"
-                      value={formData.nombre_completo}
+                      value={formData.dias_semana}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="dias_semana"
@@ -415,7 +424,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="numero_horas_semanales"
                       id="numero_horas_semanales"
-                      value={formData.nombre_completo}
+                      value={formData.numero_horas_semanales}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder="numero_horas_semanales"
@@ -435,7 +444,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="date"
                       name="fecha_inicio"
                       id="fecha_inicio"
-                      value={formData.fecha_inicial}
+                      value={formData.fecha_inicio}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     />
@@ -455,7 +464,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="date"
                       name="fecha_terminacion"
                       id="fecha_terminacion"
-                      value={formData.fecha_final}
+                      value={formData.fecha_terminacion}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 px-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     />
