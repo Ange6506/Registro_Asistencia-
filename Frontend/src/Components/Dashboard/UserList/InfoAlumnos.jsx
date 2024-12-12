@@ -20,18 +20,24 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   useEffect(() => {
     if (student) {
       setFormData({
-        nombre_completo: student.nombre_completo || "",
-        primer_apellido: student.primer_apellido || "",
-        segundo_apellido: student.segundo_apellido || "",
-        tipo_documento: student.tipo_documento || "",
-        num_documento: student.num_documento || "",
-        programa: student.programa ? student.programa.trim() : "", // Usamos trim aquí
-        fecha_inicial: student.fecha_inicial
-          ? student.fecha_inicial.split("T")[0]
-          : "",
-        fecha_final: student.fecha_final
-          ? student.fecha_final.split("T")[0]
-          : "",
+        clinica: student.clinica || "",
+        programa: student.programa || "", // Usamos trim aquí
+        semestre_academico: student.semestre_academico || "",
+        asignatura: student.asignatura || "",
+        especialidad: student.especialidad || "",
+        nombre_estudiante: student.nombre_estudiante || "",
+        identificacion: student.identificacion || "",
+        semanas_rotacion: student.semanas_rotacion || "",
+        horas_por_dia: student.horas_por_dia || "",
+        dias_semana: student.dias_semana || "",
+        numero_horas_semanales: student.numero_horas_semanales || "",
+        fecha_inicio: student.fecha_inicio
+        ? student.fecha_inicio.split("T")[0]
+        : "",
+      fecha_terminacion: student.fecha_terminacion
+        ? student.fecha_terminacion.split("T")[0]
+        : "",
+      
       });
     }
   }, [student]);
@@ -152,10 +158,10 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       >
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full mx-auto"
+          className="bg-white p-3 rounded-lg shadow-xl max-w-6xl w-full mx-auto"
         >
           <div className="space-y-11">
-            <div className="border-b border-gray-900/10 pb-11">
+            <div className="border-b border-gray-900/10 p-8 pb-11">
               <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
                 <div className="flex flex-col justify-center items-start">
                   <div className="flex flex-row items-center gap-x-3">
@@ -222,24 +228,15 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     Programa
                   </label>
                   <div className="mt-2">
-                    <select
-                      id="programa"
-                      name="programa"
+                    <input
+                      type="text"
+                      name="clinica"
+                      id="clinica"
                       value={formData.programa}
                       onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                    >
-                      <option value="Enfermería">Enfermería</option>
-                      <option value="Psicología">Psicología</option>
-                      <option value="Medicina">Medicina</option>
-                      <option value="Medicina - Internos">
-                        Medicina - Internos
-                      </option>
-                      <option value="Medicina - Residentes">
-                        Medicina - Residentes
-                      </option>
-                      <option value="No Definido">No Definido</option>
-                    </select>
+                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      placeholder="Clinica"
+                    />
                   </div>
                 </div>
                 {/* Campo de  Semenestre academico */}

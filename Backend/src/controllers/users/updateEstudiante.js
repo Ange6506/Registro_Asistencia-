@@ -3,15 +3,6 @@ const { CONFIG_DB } = require("../../config/db");
 
 const pool = new Pool(CONFIG_DB);
 
-// Mapeo de los programas a sus correspondientes ID numéricos
-const programaMap = {
- "Enfermería": 1,
- "Psicología": 2,
-  "Medicina": 3,
-  "Medicina - Internos": 4,
-  "Medicina - Residentes": 5,
-  "No Definido": 6, // Añadido valor para "No Definido"
-};
 
 // Controlador para actualizar el estudiante
 const updateEstudiante = async (req, res) => {
@@ -26,14 +17,6 @@ const updateEstudiante = async (req, res) => {
     fecha_inicial,
     fecha_final
   } = req.body;
-
-  // Si no hay programa seleccionado, se asigna el ID 6 (No Definido)
-  const id_programa = programa ? programaMap[programa] : programaMap["No Definido"];
-
-  // Verificar que el id_programa sea válido
-  if (!id_programa) {
-    return res.status(400).json({ message: "Programa no válido." });
-  }
 
   try {
     // Verificamos que el id_estudiante sea obligatorio
