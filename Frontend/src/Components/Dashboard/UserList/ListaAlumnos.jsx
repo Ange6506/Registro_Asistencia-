@@ -163,7 +163,7 @@ export const ListaAlumnos = () => {
                     {" "}
                     <tr>
                       {" "}
-                      <th className="px-6 py-4 text-sm font-normal text-left text-white">
+                      <th className="px-6 py-4 text-sm font-normal text-center text-white">
                         Nombre Completo
                       </th>{" "}
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
@@ -189,7 +189,7 @@ export const ListaAlumnos = () => {
                       filteredStudents.map((student, index) => (
                         <tr key={index}>
                           {" "}
-                          <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+                          <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300 max-w-[200px] whitespace-nowrap overflow-hidden text-center">
                             {" "}
                             {student.nombre_estudiante}{" "}
                           </td>{" "}
@@ -220,7 +220,7 @@ export const ListaAlumnos = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -241,7 +241,7 @@ export const ListaAlumnos = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="red"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -262,7 +262,7 @@ export const ListaAlumnos = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                               >
                                 <path
                                   strokeLinecap="round"
