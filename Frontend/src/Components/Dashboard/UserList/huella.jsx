@@ -16,7 +16,7 @@ export const Huella = ({ isModalOpen, onClose, student }) => {
 
   // Función para registrar la huella digital
   const registerFingerprint = () => {
-    const huella_estudiante = "123e4567-e89b-12h3-a456-426655440019"; // Aquí debería obtenerse la huella del dispositivo
+    const huella_estudiante = "123e4567-e89b-12h3-a456-426655440016"; // Aquí debería obtenerse la huella del dispositivo
 
     if (!huella_estudiante) {
       alert("Debe registrar una huella primero.");

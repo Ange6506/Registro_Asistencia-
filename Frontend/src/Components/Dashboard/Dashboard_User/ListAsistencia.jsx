@@ -12,8 +12,13 @@ export const ListAsistencia = () => {
     fetch("http://localhost:5000/getAsistencia")
       .then((response) => response.json()) // Convierte la respuesta en JSON
       .then((data) => {
-        setStudentsData(data); // Guarda los datos en el estado
-        setFilteredStudents(data); // Inicializa la lista filtrada con todos los datos
+        // Verificamos si 'data' es un arreglo antes de usarlo
+        if (Array.isArray(data)) {
+          setStudentsData(data); // Guarda los datos en el estado
+          setFilteredStudents(data); // Inicializa la lista filtrada con todos los datos
+        } else {
+          console.error("Error: La respuesta no es un arreglo", data);
+        }
       })
       .catch((error) => {
         console.error("Error al obtener los estudiantes:", error);
@@ -40,7 +45,7 @@ export const ListAsistencia = () => {
 
   // Filtrar estudiantes según los filtros de búsqueda, fecha y programa
   useEffect(() => {
-    const filtered = studentsData.filter((student) => {
+    const filtered = (Array.isArray(studentsData) ? studentsData : []).filter((student) => {
       // Filtro por nombre o cédula
       const nameMatch =
         student.nombre_estudiante
@@ -264,7 +269,7 @@ export const ListAsistencia = () => {
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {student.fecha_hora_salida
                                   ? formatDateTime(student.fecha_hora_salida)
-                                  : "No se registró Salida"}
+                                  : "Sin salida"}
                               </td>
                               <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {student.programa}
@@ -274,10 +279,10 @@ export const ListAsistencia = () => {
                         ) : (
                           <tr>
                             <td
-                              colSpan="5" // Cambié este valor a 5 porque la tabla tiene 5 columnas
-                              className="text-center py-4 text-sm text-gray-500"
+                              colSpan={5}
+                              className="px-6 py-4 text-sm text-center text-gray-500 dark:text-gray-300"
                             >
-                              No hay asistencia registrada
+                              No se encontraron resultados
                             </td>
                           </tr>
                         )}

@@ -4,7 +4,7 @@ export const Huellero = () => {
   const [asistencia, setAsistencia] = useState([]);
   const [registroActivo, setRegistroActivo] = useState(null);
   const [errorSalida, setErrorSalida] = useState(false);
-  const id_huella = 1; // ID del estudiante simulado
+  const id_huella = 2; // ID del estudiante simulado
 
   const handleRegistroAsistencia = async () => {
     try {

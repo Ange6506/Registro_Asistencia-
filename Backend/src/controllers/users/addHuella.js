@@ -12,35 +12,61 @@ const addHuella = async (req, res) => {
     return res.status(400).json({ message: "Faltan datos requeridos." });
   }
 
-  try {
-    // Verifica si la huella ya está registrada para el estudiante
-    const checkQuery = `SELECT * FROM huella WHERE huella_estudiante = $1 LIMIT 1;`;
-    const checkValues = [huella_estudiante];
-    const checkResult = await pool.query(checkQuery, checkValues);
+  const client = await pool.connect();
 
-    if (checkResult.rows.length > 0) {
+  try {
+    // Inicia la transacción
+    await client.query('BEGIN');
+
+    // Verifica si el estudiante existe
+    const checkEstudianteQuery = `SELECT * FROM estudiantes WHERE id_estudiante = $1 LIMIT 1;`;
+    const estudianteResult = await client.query(checkEstudianteQuery, [huella_estudiante]);
+
+    if (estudianteResult.rows.length === 0) {
+      return res.status(400).json({ message: "Estudiante no encontrado." });
+    }
+
+    // Verifica si la huella ya está registrada para el estudiante
+    const checkHuellaQuery = `SELECT * FROM huella WHERE id_huella = $1 LIMIT 1;`;
+    const checkHuellaResult = await client.query(checkHuellaQuery, [huella_estudiante]);
+
+    if (checkHuellaResult.rows.length > 0) {
       return res.status(400).json({ message: "La huella ya está registrada." });
     }
 
-    // Inserta el `huella_estudiante` en la base de datos
-    const insertQuery = `
+    // Inserta la huella en la tabla huella
+    const insertHuellaQuery = `
       INSERT INTO huella (huella_estudiante)
       VALUES ($1)
       RETURNING id_huella;
     `;
-    const insertValues = [huella_estudiante]; // Solo se inserta el ID del estudiante
+    const insertHuellaResult = await client.query(insertHuellaQuery, [huella_estudiante]);
+    const idHuella = insertHuellaResult.rows[0].id_huella;
 
-    // Ejecuta la consulta para insertar la huella
-    const result = await pool.query(insertQuery, insertValues);
+    // Actualiza la tabla estudiante con el `id_huella`
+    const updateEstudianteQuery = `
+      UPDATE estudiantes
+      SET id_huella = $1
+      WHERE id_estudiante = $2;
+    `;
+    await client.query(updateEstudianteQuery, [idHuella, huella_estudiante]);
+
+    // Confirma la transacción
+    await client.query('COMMIT');
 
     // Devuelve la respuesta con el ID de la huella registrada
     return res.status(201).json({
-      message: "Huella registrada exitosamente.",
-      huellaId: result.rows[0].id_huella,  // El ID de la huella registrada
+      message: "Huella registrada y asociada al estudiante exitosamente.",
+      huellaId: idHuella,  // El ID de la huella registrada
     });
   } catch (err) {
+    // Si hay un error, revierte la transacción
+    await client.query('ROLLBACK');
     console.error("Error al registrar la huella:", err);
     return res.status(500).json({ message: "Error en el servidor" });
+  } finally {
+    // Libera el cliente después de usarlo
+    client.release();
   }
 };
 
