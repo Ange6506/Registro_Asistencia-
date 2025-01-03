@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [formData, setFormData] = useState({
-    clinica: "",
     programa: "",
     semestre_academico: "",
     asignatura: "",
     especialidad: "",
     nombre_estudiante: "",
     identificacion: "",
-    semanas_rotacion: "",
+    semanas_de_rotacion: "",
     horas_por_dia: "",
     dias_semana: "",
     numero_horas_semanales: "",
@@ -25,14 +24,13 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   useEffect(() => {
     if (student) {
       setFormData({
-        clinica: student.clinica || "",
         programa: student.programa || "", // Usamos trim aquí
         semestre_academico: student.semestre_academico || "",
         asignatura: student.asignatura || "",
         especialidad: student.especialidad || "",
         nombre_estudiante: student.nombre_estudiante || "",
         identificacion: student.identificacion || "",
-        semanas_rotacion: student.semanas_rotacion || "",
+        semanas_de_rotacion: student.semanas_de_rotacion || "",
         horas_por_dia: student.horas_por_dia || "",
         dias_semana: student.dias_semana || "",
         numero_horas_semanales: student.numero_horas_semanales || "",
@@ -209,26 +207,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
               {/* Campos del formulario */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-                {/* Campo de Clinica */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor=" Clinica"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Clinica
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="clinica"
-                      id="clinica"
-                      value={formData.clinica}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Clinica"
-                    />
-                  </div>
-                </div>
+             
                 {/* Programa */}
                 <div className="sm:col-span-1">
                   <label
@@ -309,47 +288,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     />
                   </div>
                 </div>
-                {/* Campo de Nombres */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="nombre_estudiante"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Nombre Completo
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="nombre_estudiante"
-                      id="nombre_estudiante"
-                      value={formData.nombre_estudiante}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Nombres completos"
-                    />
-                  </div>
-                </div>
-
-                {/* Número de documento */}
-                <div className="sm:col-span-1">
-                  <label
-                    htmlFor="identificacion"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Número de documento
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      name="identificacion"
-                      id="identificacion"
-                      value={formData.identificacion}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Número de documento"
-                    />
-                  </div>
-                </div>
+              
                 {/* Campo de Semana de Rotación */}
                 <div className="sm:col-span-1">
                   <label
@@ -363,7 +302,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       type="text"
                       name="semanas_rotacion"
                       id="semanas_rotacion"
-                      value={formData.semanas_rotacion}
+                      value={formData.semanas_de_rotacion}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                       placeholder=" Semana de Rotación"
