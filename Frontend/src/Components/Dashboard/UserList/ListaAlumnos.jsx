@@ -49,12 +49,12 @@ export const ListaAlumnos = () => {
     setFilteredStudents(filtered);
   };
 
-  const closeModal = () => setIsModalOpen(false); // Cierra el modal
+  const closeModal = () => setIsModalOpen(false); // Close modal
   const openModal = (student) => {
     setSelectedStudent(student);
     setIsModalOpen(true);
   };
-  
+
   const formatFecha = (fecha) => {
     if (!fecha || fecha === "0000-00-00") {
       return "Fecha no registrada";
@@ -71,9 +71,9 @@ export const ListaAlumnos = () => {
         }
       );
 
-      // Agregar más detalles para ver la respuesta completa
+      // Add more details to see the full response
       const data = await response.json();
-      console.log(data); // Verifica la respuesta de la API
+      console.log(data); // Check the API response
 
       if (response.ok) {
         setFilteredStudents(
@@ -158,58 +158,48 @@ export const ListaAlumnos = () => {
             <div className="inline-block min-w-full py-2 align-middle md:px-5 lg:px-4">
               <div className="overflow-hidden border border-blue dark:border-blue md:rounded-lg bg-blue">
                 <table className="min-w-full divide-y divide-blue dark:divide-blue">
-                  {" "}
                   <thead className="bg-DarkSlate dark:bg-gray-800">
-                    {" "}
                     <tr>
-                      {" "}
-                      <th className="px-6 py-4 text-sm font-normal text-center text-white">
+                      <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Nombre Completo
-                      </th>{" "}
+                      </th>
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Identificación
-                      </th>{" "}
+                      </th>
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Programa
-                      </th>{" "}
+                      </th>
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Fecha Inicio
-                      </th>{" "}
+                      </th>
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Fecha Final
-                      </th>{" "}
+                      </th>
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Acción
-                      </th>{" "}
-                    </tr>{" "}
-                  </thead>{" "}
+                      </th>
+                    </tr>
+                  </thead>
                   <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
-                    {" "}
                     {filteredStudents.length > 0 ? (
                       filteredStudents.map((student, index) => (
                         <tr key={index}>
-                          {" "}
-                          <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300 max-w-[200px] whitespace-nowrap overflow-hidden text-center">
-                            {" "}
-                            {student.nombre_estudiante}{" "}
-                          </td>{" "}
+                          <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+                            {student.nombre_del_estudiante}
+                          </td>
                           <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300">
-                            {" "}
-                            {student.identificacion}{" "}
-                          </td>{" "}
+                            {student.identificacion}
+                          </td>
                           <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300">
-                            {" "}
-                            {student.programa}{" "}
-                          </td>{" "}
+                            {student.programa}
+                          </td>
                           <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300">
-                            {" "}
-                            {formatFecha(student.fecha_inicio)}{" "}
-                          </td>{" "}
+                            {formatFecha(student.fecha_inicio)}
+                          </td>
                           <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300">
                             {formatFecha(student.fecha_terminacion)}
                           </td>
                           <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
-                            {/* Botón de Editar */}
                             <button
                               onClick={() => handleShowModal(student)}
                               className="mr-2"
@@ -230,7 +220,6 @@ export const ListaAlumnos = () => {
                               </svg>
                             </button>
 
-                            {/* Botón de Eliminar con Confirmación */}
                             <button
                               onClick={() => openConfirmModal(student)}
                               className="mr-2"
@@ -251,11 +240,7 @@ export const ListaAlumnos = () => {
                               </svg>
                             </button>
 
-                            {/* Botón huella */}
-                            {/* Botón huella */}
-                            <button
-                              onClick={() => openModal(student)} // Open modal with the selected student
-                            >
+                            <button onClick={() => openModal(student)}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -276,14 +261,12 @@ export const ListaAlumnos = () => {
                       ))
                     ) : (
                       <tr>
-                        {" "}
                         <td colSpan="6" className="text-center py-4">
-                          {" "}
-                          No se encontraron estudiantes.{" "}
-                        </td>{" "}
+                          No se encontraron estudiantes.
+                        </td>
                       </tr>
-                    )}{" "}
-                  </tbody>{" "}
+                    )}
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -299,10 +282,10 @@ export const ListaAlumnos = () => {
       />
       {/* Modal de huella */}
       <Huella
-  isModalOpen={isModalOpen}
-  onClose={closeModal}
-  student={selectedStudent}
-/>
+        isModalOpen={isModalOpen}
+        onClose={closeModal}
+        student={selectedStudent}
+      />
 
       {/* Modal de Confirmación */}
       {showConfirmModal && (
