@@ -5,70 +5,55 @@ const pool = new Pool(CONFIG_DB);
 
 // Función para registrar la huella digital
 const addHuella = async (req, res) => {
-  const { huella_estudiante } = req.body; // `huella_estudiante` es el ID del estudiante
+  const { huella_estudiante, id_estudiantes } = req.body; // Se recibe el ID del estudiante y la huella
 
-  // Verifica que el `huella_estudiante` esté presente
-  if (!huella_estudiante) {
+  // Verifica los datos recibidos
+  console.log("Datos recibidos:", req.body);
+
+  // Verifica que el `huella_estudiante` y `id_estudiantes` estén presentes
+  if (!huella_estudiante || !id_estudiantes) {
     return res.status(400).json({ message: "Faltan datos requeridos." });
   }
 
-  const client = await pool.connect();
-
   try {
-    // Inicia la transacción
-    await client.query('BEGIN');
-
-    // Verifica si el estudiante existe
-    const checkEstudianteQuery = `SELECT * FROM estudiantes WHERE id_estudiante = $1 LIMIT 1;`;
-    const estudianteResult = await client.query(checkEstudianteQuery, [huella_estudiante]);
-
-    if (estudianteResult.rows.length === 0) {
-      return res.status(400).json({ message: "Estudiante no encontrado." });
-    }
-
     // Verifica si la huella ya está registrada para el estudiante
-    const checkHuellaQuery = `SELECT * FROM huella WHERE id_huella = $1 LIMIT 1;`;
-    const checkHuellaResult = await client.query(checkHuellaQuery, [huella_estudiante]);
+    const checkQuery = `SELECT huella FROM estudiantes WHERE id_estudiantes = $1 LIMIT 1;`;
+    const checkValues = [id_estudiantes];  // Se usa `id_estudiantes` para verificar si ya tiene huella registrada
+    const checkResult = await pool.query(checkQuery, checkValues);
 
-    if (checkHuellaResult.rows.length > 0) {
-      return res.status(400).json({ message: "La huella ya está registrada." });
+    // Si ya tiene una huella registrada, se devuelve un error
+    if (checkResult.rows.length > 0 && checkResult.rows[0].huella) {
+      return res.status(400).json({ message: "La huella ya está registrada para este estudiante." });
     }
 
-    // Inserta la huella en la tabla huella
-    const insertHuellaQuery = `
-      INSERT INTO huella (huella_estudiante)
-      VALUES ($1)
-      RETURNING id_huella;
-    `;
-    const insertHuellaResult = await client.query(insertHuellaQuery, [huella_estudiante]);
-    const idHuella = insertHuellaResult.rows[0].id_huella;
-
-    // Actualiza la tabla estudiante con el `id_huella`
-    const updateEstudianteQuery = `
+    // Actualiza la columna `huella` en la tabla `estudiantes` con el valor `huella_estudiante`
+    const updateQuery = `
       UPDATE estudiantes
-      SET id_huella = $1
-      WHERE id_estudiante = $2;
+      SET huella = $2
+      WHERE id_estudiantes = $1
+      RETURNING id_estudiantes;
     `;
-    await client.query(updateEstudianteQuery, [idHuella, huella_estudiante]);
+    const updateValues = [id_estudiantes, huella_estudiante]; // Se usa `id_estudiantes` para hacer la actualización
 
-    // Confirma la transacción
-    await client.query('COMMIT');
+    // Ejecuta la consulta para actualizar la huella
+    const result = await pool.query(updateQuery, updateValues);
 
-    // Devuelve la respuesta con el ID de la huella registrada
-    return res.status(201).json({
-      message: "Huella registrada y asociada al estudiante exitosamente.",
-      huellaId: idHuella,  // El ID de la huella registrada
+    // Verifica si la actualización afectó alguna fila
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Estudiante no encontrado." });
+    }
+
+    // Devuelve la respuesta con el ID del estudiante que tiene la huella registrada
+    return res.status(200).json({
+      message: "Huella registrada exitosamente.",
+      estudianteId: result.rows[0].id_estudiantes, // Se devuelve el ID del estudiante actualizado
     });
   } catch (err) {
-    // Si hay un error, revierte la transacción
-    await client.query('ROLLBACK');
     console.error("Error al registrar la huella:", err);
     return res.status(500).json({ message: "Error en el servidor" });
-  } finally {
-    // Libera el cliente después de usarlo
-    client.release();
   }
 };
+
 
 module.exports = {
   addHuella,
