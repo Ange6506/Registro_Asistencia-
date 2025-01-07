@@ -42,10 +42,9 @@ export const ListaAlumnos = () => {
     // Filter students by name or identification
     const filtered = studentsData.filter(
       (student) =>
-        student.nombre_estudiante.toLowerCase().includes(value.toLowerCase()) ||
-        student.identificacion.includes(value)
+        student.nombre_del_estudiante.toLowerCase().includes(value.toLowerCase()) ||
+        (student.identificacion && String(student.identificacion).includes(value)) // Ensure it's defined before using includes
     );
-
     setFilteredStudents(filtered);
   };
 
