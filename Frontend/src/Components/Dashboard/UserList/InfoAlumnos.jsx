@@ -98,11 +98,11 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
     // Realizamos la solicitud PUT al backend
     fetch(`http://localhost:5000/updateEstudiantes/${student.id_estudiante}`, {
-      method: "PUT", // Enviamos los datos en una solicitud PUT
+      method: "PUT",  // Enviamos los datos en una solicitud PUT
       headers: {
-        "Content-Type": "application/json", // Asegúrate de que el backend espera JSON
+        "Content-Type": "application/json",  // Asegúrate de que el backend espera JSON
       },
-      body: JSON.stringify(formData), // Convierte el objeto formData en una cadena JSON
+      body: JSON.stringify(formData),  // Convierte el objeto formData en una cadena JSON
     })
       .then((response) => {
         if (!response.ok) {
@@ -112,17 +112,10 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       })
       .then((data) => {
         console.log("Datos actualizados:", data);
-        setSuccessMessage("Actualización exitosa!"); // Establecemos el mensaje de éxito
-        setError(""); // Limpiamos el mensaje de error si existe
-        setIsSuccessVisible(true); // Mostramos el mensaje emergente
-        setTimeout(() => {
-          setIsSuccessVisible(false); // Cerramos el mensaje después de 4 segundos
-        }, 4000);
-        onClose(); // Cerramos el modal al recibir respuesta exitosa
+        onClose();  // Cerramos el modal al recibir respuesta exitosa
       })
       .catch((error) => {
         setError(`Error al actualizar los datos: ${error.message}`);
-        setSuccessMessage(""); // Limpiamos el mensaje de éxito si ocurre un error
       });
   };
 

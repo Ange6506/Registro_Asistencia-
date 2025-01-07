@@ -42,10 +42,9 @@ export const ListaAlumnos = () => {
     // Filter students by name or identification
     const filtered = studentsData.filter(
       (student) =>
-        student.nombre_estudiante.toLowerCase().includes(value.toLowerCase()) ||
-        student.identificacion.includes(value)
+        student.nombre_del_estudiante.toLowerCase().includes(value.toLowerCase()) ||
+        (student.identificacion && String(student.identificacion).includes(value)) // Ensure it's defined before using includes
     );
-
     setFilteredStudents(filtered);
   };
 
@@ -210,7 +209,7 @@ export const ListaAlumnos = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -230,7 +229,7 @@ export const ListaAlumnos = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="red"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                               >
                                 <path
                                   strokeLinecap="round"
@@ -247,7 +246,7 @@ export const ListaAlumnos = () => {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="w-6 h-6"
+                                className="w-5 h-5"
                               >
                                 <path
                                   strokeLinecap="round"
