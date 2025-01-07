@@ -14,35 +14,49 @@ export const Huella = ({ isModalOpen, onClose, student }) => {
     console.log("Información del estudiante:", student);
   }, [student]);
 
-  // Función para registrar la huella digital
-  const registerFingerprint = () => {
-    const huella_estudiante = "123e4567-e89b-12h3-a456-426655440016"; // Aquí debería obtenerse la huella del dispositivo
 
-    if (!huella_estudiante) {
-      alert("Debe registrar una huella primero.");
-      return;
-    }
+// Función para registrar la huella digital
+const registerFingerprint = () => {
+  const huella_estudiante = "3"; // Este valor debería ser dinámico, por ejemplo, de un dispositivo
 
-    fetch("http://localhost:5000/add_Huella", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ huella_estudiante }),
+  // Verifica que huella_estudiante tenga un valor válido
+  if (!huella_estudiante) {
+    alert("Debe registrar una huella primero.");
+    return;
+  }
+
+  // Verifica que student tenga el id_estudiantes
+  if (!student || !student.id_estudiantes) {
+    alert("Faltan datos del estudiante.");
+    console.log("Estudiante no tiene id_estudiantes:", student);
+    return;
+  }
+
+  console.log("Enviando:", { huella_estudiante, id_estudiantes: student.id_estudiantes });
+
+  // Asegúrate de enviar el id_estudiantes como `student.id_estudiantes`
+  fetch("http://localhost:5000/add_Huella", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ huella_estudiante, id_estudiantes: student.id_estudiantes }), // Usamos student.id_estudiantes
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.message === "Huella registrada exitosamente.") {
+        alert("Huella registrada correctamente.");
+      } else {
+        alert("Error al registrar huella: " + data.message);
+      }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message === "Huella registrada exitosamente.") {
-          alert("Huella registrada correctamente.");
-        } else {
-          alert("Error al registrar huella.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Error al registrar huella.");
-      });
-  };
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Error al registrar huella.");
+    });
+};
+
+
 
   return (
     <div>

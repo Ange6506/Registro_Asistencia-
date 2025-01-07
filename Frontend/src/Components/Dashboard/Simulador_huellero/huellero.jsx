@@ -4,15 +4,15 @@ export const Huellero = () => {
   const [asistencia, setAsistencia] = useState([]);
   const [registroActivo, setRegistroActivo] = useState(null);
   const [errorSalida, setErrorSalida] = useState(false);
-  const id_huella = 2; // ID del estudiante simulado
+  const [huella, setHuella] = useState(3); // Aquí asignamos 3 como valor predeterminado para la huella
 
   const handleRegistroAsistencia = async () => {
     try {
       let response;
       if (registroActivo) {
         // Si ya hay un registro activo, se registra la salida
-        const nuevaAsistencia = {
-          id_huella,
+        const salida = {
+          huella, // Pasamos la huella en lugar del id_huella
         };
 
         response = await fetch("http://localhost:5000/add_Asistencia", {
@@ -20,7 +20,7 @@ export const Huellero = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(nuevaAsistencia),
+          body: JSON.stringify(salida),
         });
 
         const data = await response.json();
@@ -37,8 +37,8 @@ export const Huellero = () => {
         }
       } else {
         // Si no hay un registro activo, se registra la entrada
-        const nuevoRegistro = {
-          id_huella,
+        const entrada = {
+          huella, // Pasamos la huella en lugar del id_huella
         };
 
         response = await fetch("http://localhost:5000/add_Asistencia", {
@@ -46,7 +46,7 @@ export const Huellero = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(nuevoRegistro),
+          body: JSON.stringify(entrada),
         });
 
         const data = await response.json();
