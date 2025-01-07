@@ -48,7 +48,7 @@ export const ListAsistencia = () => {
     const filtered = (Array.isArray(studentsData) ? studentsData : []).filter((student) => {
       // Filtro por nombre o cédula
       const nameMatch =
-        student.nombre_estudiante
+        student.nombre_del_estudiante
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         student.identificacion.includes(searchTerm);
@@ -258,7 +258,7 @@ export const ListAsistencia = () => {
                           filteredStudents.map((student, index) => (
                             <tr key={index}>
                               <td className="px-3 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {student.nombre_estudiante}
+                                {student.nombre_del_estudiante}
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {student.identificacion}
