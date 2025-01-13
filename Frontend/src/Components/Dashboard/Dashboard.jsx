@@ -18,7 +18,7 @@ export const Dashboard = () => {
 
       // Establecer el contenido inicial dependiendo del nombre de usuario
       if (storedUsername === "Administrador") {
-        setContenido("Registro");  // Si es Administrador, muestra "Registro"
+        setContenido("Lista_Alumnos");  // Si es Administrador, muestra "Registro"
       } else if (storedUsername === "Usuario") {
         setContenido("Lista_Asistencia");  // Si es Usuario, muestra "Lista de Asistencia"
       }
