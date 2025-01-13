@@ -1,0 +1,300 @@
+import React, { useState, useEffect } from "react";
+
+export const Programa = () => {
+  const [studentsData, setStudentsData] = useState([]); // Estado para los datos de los estudiantes
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda por nombre o cédula
+  const [filteredStudents, setFilteredStudents] = useState([]); // Lista filtrada de estudiantes
+  const [selectedDate, setSelectedDate] = useState(""); // Estado para la fecha seleccionada
+  const [selectedProgram, setSelectedProgram] = useState(""); // Estado para el programa seleccionado
+
+  // Fetch data when the component mounts
+  useEffect(() => {
+    fetch("http://localhost:5000/getAsistencia")
+      .then((response) => response.json()) // Convierte la respuesta en JSON
+      .then((data) => {
+        // Verificamos si 'data' es un arreglo antes de usarlo
+        if (Array.isArray(data)) {
+          setStudentsData(data); // Guarda los datos en el estado
+          setFilteredStudents(data); // Inicializa la lista filtrada con todos los datos
+        } else {
+          console.error("Error: La respuesta no es un arreglo", data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener los estudiantes:", error);
+      });
+  }, []);
+
+  // Actualizar el término de búsqueda y realizar el filtrado
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+  };
+
+  // Actualizar el programa seleccionado y realizar el filtrado
+  const handleProgramChange = (event) => {
+    const program = event.target.value;
+    setSelectedProgram(program);
+  };
+
+  // Actualizar la fecha seleccionada y realizar el filtrado
+  const handleDateChange = (event) => {
+    const date = event.target.value;
+    setSelectedDate(date);
+  };
+
+  // Filtrar estudiantes según los filtros de búsqueda, fecha y programa
+  useEffect(() => {
+    const filtered = (Array.isArray(studentsData) ? studentsData : []).filter((student) => {
+      // Filtro por nombre o cédula
+      const nameMatch =
+        student.nombre_del_estudiante
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        student.identificacion.includes(searchTerm);
+
+      // Filtro por programa (si se seleccionó un programa específico)
+      const programMatch = selectedProgram
+        ? student.programa.toLowerCase() === selectedProgram.toLowerCase()
+        : true;
+
+      // Filtro por fecha (si se seleccionó una fecha específica)
+      const attendanceDateMatch = selectedDate
+        ? formatDate(student.fecha_hora_entrada) === formatDate(selectedDate)
+        : true;
+
+      return nameMatch && programMatch && attendanceDateMatch;
+    });
+
+    setFilteredStudents(filtered);
+  }, [searchTerm, selectedDate, selectedProgram, studentsData]); // Se vuelve a ejecutar cuando cambian los filtros
+
+  // Función para formatear la fecha a 'YYYY-MM-DD'
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]; // Devuelve la fecha en formato 'YYYY-MM-DD'
+  };
+
+  // Función para formatear la fecha y hora en el formato 'YYYY-MM-DD HH:MM'
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+
+  // Función para imprimir la tabla
+  const printTable = () => {
+    const tableContent = document.getElementById("table-to-print").outerHTML;
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "none";
+    iframe.style.visibility = "hidden";
+    document.body.appendChild(iframe);
+    const iframeDoc = iframe.contentWindow.document;
+
+    iframeDoc.open();
+    iframeDoc.write(`
+      <html>
+        <head>
+          <style>
+            body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: white; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { padding: 8px; text-align: left; border: 1px solid #ddd; font-size: 10px; }
+            th { background-color: #f4f4f4; }
+            h1 { font-size: 24px; text-align: center; margin-bottom: 20px; }
+          </style>
+        </head>
+        <body>
+          <h1>Lista de Asistencia</h1>
+          ${tableContent}
+        </body>
+      </html>
+    `);
+    iframeDoc.close();
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+    document.body.removeChild(iframe);
+  };
+
+  return (
+    <section
+      className="container p-4 mx-auto flex flex-col"
+      style={{ minHeight: "87vh" }}
+    >
+      <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
+        <div>
+          <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
+            <div className="flex flex-col justify-center items-start">
+              <div className="flex flex-row items-center gap-x-3">
+                <h2 className="font-medium py-2 text-xl font-medium font-serif font-bold text-blue">
+                  Lista de Asistencia
+                </h2>
+              </div>
+            </div>
+
+            <div className="w-full md:w-80">
+              <div className="flex items-center">
+                <span className="absolute">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 mx-3 text-blue"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Búsqueda por Nombre o Cédula"
+                  className="w-full py-2.5 md:py-1 text-gray-700 placeholder-gray-400/70 bg-white border border-blue rounded-lg pl-11 pr-5 focus:border-DarkSlate focus:ring-emerald-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-y-4 mt-6 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-4">
+            {/* Filtro por programa */}
+            <div className="flex flex-col w-32 sm:w-auto">
+              <label className="text-sm text-gray-700">Programa</label>
+              <select
+                value={selectedProgram}
+                onChange={handleProgramChange}
+                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg"
+              >
+                <option value="">Seleccionar Programa</option>
+                <option value="ENFERMERIA">Enfermería</option>
+                <option value="PSICOLOGIA">Psicología</option>
+                <option value="MEDICINA">Medicina</option>
+                <option value="INTERNO">Medicina - Internos</option>
+                <option value="RESIDENTE">Medicina - Residentes</option>
+              </select>
+            </div>
+
+            {/* Filtro por fecha */}
+            <div className="flex flex-col w-32 sm:w-auto">
+              <label className="text-sm text-gray-700">
+                Fecha de Asistencia
+              </label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+                className="w-full py-2 px-2 text-gray-700 bg-white border border-blue rounded-lg"
+              />
+            </div>
+            <div className="flex w-full sm:w-auto  justify-end mt-6 ml-auto">
+              <button
+                onClick={printTable}
+                className="px-6 py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm flex items-center"
+              >
+                Imprimir
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-5 h-5 ml-2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-between flex-1 mt-6">
+            <div className="flex flex-col">
+              <div className="-mx-4 -my-2 overflow-x-auto">
+                <div className="inline-block min-w-full py-2 align-middle md:px-5 lg:px-4">
+                  <div className="overflow-hidden border border-blue dark:border-blue md:rounded-lg bg-blue">
+                    <table
+                      id="table-to-print"
+                      className="min-w-full divide-y divide-blue dark:divide-blue"
+                    >
+                      <thead className="bg-DarkSlate dark:bg-gray-800">
+                        <tr>
+                          <th className="px-3 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                            Nombre Completo
+                          </th>
+                          <th className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
+                            Nº Cédula
+                          </th>
+                          <th className="px-4 py-3.5 md:px-6 md:py-4 text-sm font-normal text-left rtl:text-right text-white">
+                            Fecha y Hora Entrada
+                          </th>
+                          <th className="px-4 py-3.5 md:px-6 md:py-4 text-sm font-normal text-left rtl:text-right text-white">
+                            Fecha y Hora Salida
+                          </th>
+                          <th className="px-6 py-4 text-sm font-normal text-left rtl:text-right text-white">
+                            Programa
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
+                        {filteredStudents.length > 0 ? (
+                          filteredStudents.map((student, index) => (
+                            <tr key={index}>
+                              <td className="px-3 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {student.nombre_del_estudiante}
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {student.identificacion}
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {formatDateTime(student.fecha_hora_entrada)}
+                              </td>
+                              <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {student.fecha_hora_salida
+                                  ? formatDateTime(student.fecha_hora_salida)
+                                  : "Sin salida"}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                                {student.programa}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td
+                              colSpan={5}
+                              className="px-6 py-4 text-sm text-center text-gray-500 dark:text-gray-300"
+                            >
+                              No se encontraron resultados
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
