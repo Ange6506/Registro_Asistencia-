@@ -3,7 +3,6 @@ const { CONFIG_DB } = require("../../config/db");
 
 const pool = new Pool(CONFIG_DB);
 
-
 // Controlador para actualizar el estudiante
 const updateEstudiante = async (req, res) => {
   const id_estudiante = req.params.id; // Obtén el id del parámetro de la URL
@@ -15,7 +14,7 @@ const updateEstudiante = async (req, res) => {
     especialidad,
     nombre_estudiante,
     identificacion,
-    semanas_rotacion,
+    semanas_de_rotacion,
     horas_por_dia,
     dias_semana,
     numero_horas_semanales,
@@ -40,7 +39,7 @@ const updateEstudiante = async (req, res) => {
       !especialidad ||
       !nombre_estudiante ||
       !identificacion ||
-      !semanas_rotacion ||
+      !semanas_de_rotacion ||
       !horas_por_dia ||
       !dias_semana ||
       !numero_horas_semanales ||
@@ -68,40 +67,43 @@ const updateEstudiante = async (req, res) => {
     const fechaISOFinal = fecha_terminacion.toISOString();
 
     // Definimos la consulta SQL que actualizará al estudiante
+    // Consulta SQL corregida
     const query = `
-      UPDATE estudiantes
-      SET
-        clinica = $1,
-        programa = $2,
-        semestre_academico = $3,
-       asignatura = $4,
-       especialidad = $5,
-       nombre_estudiante  = $6,
-       identificacion = $7,
-       semanas_rotacion = $8,
-       horas_por_dia = $9,
-       dias_semana = $10,
-       numero_horas_semanales = $11,
-       fecha_inicio = $12,
-       fecha_terminacion = $13
-      WHERE id_estudiante = $14
-      RETURNING *;  -- Devuelve el registro actualizado
-    `;
+UPDATE estudiantes
+SET
+  clinica = $1,
+  programa = $2,
+  semestre_academico = $3,
+  asignatura = $4,
+  especialidad = $5,
+  nombre_estudiante  = $6,
+  identificacion = $7,
+  semanas_de_rotacion = $8,
+  horas_por_dia = $9,
+  dias_semana = $10,
+  numero_horas_semanales = $11,
+  fecha_inicio = $12,
+  fecha_terminacion = $13
+WHERE id_estudiante = $14
+RETURNING *;
+`;
 
     // Los valores a insertar en los parámetros de la consulta SQL
     const values = [
-      id_estudiante,
+      clinica,
+      programa,
       semestre_academico,
       asignatura,
       especialidad,
       nombre_estudiante,
       identificacion,
-      semanas_rotacion,
+      semanas_de_rotacion,
       horas_por_dia,
       dias_semana,
       numero_horas_semanales,
       fechaISOInicial,
       fechaISOFinal,
+      id_estudiante, // El id del estudiante debe ser el último
     ];
 
     // Ejecutamos la consulta en la base de datos
@@ -127,5 +129,3 @@ const updateEstudiante = async (req, res) => {
 module.exports = {
   updateEstudiante,
 };
-
-
