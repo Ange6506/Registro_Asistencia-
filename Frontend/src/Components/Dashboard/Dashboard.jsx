@@ -4,6 +4,7 @@ import Sidebar  from "./DashboardComponents/Sidebar";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
 import { Huellero } from "./Simulador_huellero/huellero";
 import { ListAsistencia } from "./Dashboard_User/ListAsistencia";
+import { Programa } from "./Dashboard_User/Programa";
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("");  // Estado para manejar el contenido
@@ -46,6 +47,8 @@ export const Dashboard = () => {
               {contenido === "Lista_Alumnos" && <ListaAlumnos />}
               {contenido === "Huellero" && <Huellero />}
               {contenido === "Lista_Asistencia" && <ListAsistencia />}
+              {contenido === "Programa" && <Programa />}
+
             </div>
           </div>
         </div>
