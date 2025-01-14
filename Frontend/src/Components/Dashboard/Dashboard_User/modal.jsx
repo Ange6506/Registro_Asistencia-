@@ -12,15 +12,13 @@ const Modal = ({
 
   useEffect(() => {
     if (isOpen) {
-      // Establecer la fecha y hora del sistema del usuario al abrir el modal
       const currentDate = new Date();
-      const formattedDate = currentDate.toISOString().split("T")[0]; // Formato 'YYYY-MM-DD'
+      const formattedDate = currentDate.toISOString().split("T")[0];
       const formattedTime = currentDate
         .toISOString()
         .split("T")[1]
-        .split(".")[0]; // Formato 'HH:MM:SS'
+        .split(".")[0];
 
-      // Actualizar newProgram con la fecha y hora del sistema si no están definidos
       if (!newProgram.fecha_ingreso) {
         handleInputChange({
           target: { name: "fecha_ingreso", value: formattedDate },
@@ -32,11 +30,10 @@ const Modal = ({
         });
       }
 
-      // Obtener el usuario logueado solo si no se ha establecido previamente
       if (!user) {
-        const loggedInUser = localStorage.getItem("username"); // O la forma en que gestionas el usuario
+        const loggedInUser = localStorage.getItem("username");
         if (loggedInUser) {
-          setUser(loggedInUser); // Establece el usuario en el estado
+          setUser(loggedInUser);
           handleInputChange({
             target: { name: "usuario", value: loggedInUser },
           });
@@ -47,7 +44,6 @@ const Modal = ({
 
   const handleAddProgram = async () => {
     try {
-      // Verificar si los campos están completos
       if (
         !newProgram.programa ||
         !newProgram.fecha_ingreso ||
@@ -59,19 +55,17 @@ const Modal = ({
       } else {
         setError("");
       }
-  
-      // Crear el objeto con los datos del programa a agregar
+
       const programaData = {
         programa: newProgram.programa,
         fecha_ingreso: newProgram.fecha_ingreso,
         hora_ingreso: newProgram.hora_ingreso,
         usuario: newProgram.usuario,
-        estado: newProgram.estado === "activo" ? true : false,
+        estado: newProgram.estado, // Asegúrate de que sea un booleano
       };
-  
+
       console.log("Datos a enviar:", programaData);
-  
-      // Enviar los datos a la API
+
       const response = await fetch("http://localhost:5000/addPrograma", {
         method: "POST",
         headers: {
@@ -79,28 +73,18 @@ const Modal = ({
         },
         body: JSON.stringify(programaData),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         console.log("Programa agregado con éxito:", data);
         
-        // Limpiar el formulario
-        handleInputChange({
-          target: { name: "programa", value: "" },
-        });
-        handleInputChange({
-          target: { name: "fecha_ingreso", value: "" },
-        });
-        handleInputChange({
-          target: { name: "hora_ingreso", value: "" },
-        });
-        handleInputChange({
-          target: { name: "estado", value: "activo" },
-        });
+        handleInputChange({ target: { name: "programa", value: "" } });
+        handleInputChange({ target: { name: "fecha_ingreso", value: "" } });
+        handleInputChange({ target: { name: "hora_ingreso", value: "" } });
+        handleInputChange({ target: { name: "estado", value: true } }); // Reiniciar a "activo"
   
         onClose();
-        // Añadir un pequeño delay antes de recargar para que el modal se cierre correctamente
         setTimeout(() => {
           window.location.reload();
         }, 300);
@@ -111,13 +95,12 @@ const Modal = ({
       console.error("Error al agregar el programa:", error);
     }
   };
-  
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 w-96 relative">
-        {/* Botón de cierre con la "X" */}
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
@@ -126,7 +109,6 @@ const Modal = ({
         </button>
         <h3 className="text-lg font-bold mb-4">Agregar Programa</h3>
 
-        {/* Mostrar mensaje de error */}
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         <div>
@@ -172,37 +154,37 @@ const Modal = ({
           <input
             type="text"
             name="usuario"
-            value={newProgram.usuario || user} // Si no hay usuario, usar el valor por defecto
+            value={newProgram.usuario || user}
             onChange={handleInputChange}
             className="w-full mt-2 p-2 border border-gray-300 rounded"
-            disabled // Deshabilitar el campo si se auto llena
+            disabled
           />
         </div>
         <div className="mt-4">
-  <label className="block text-sm font-medium text-gray-700">
-    Estado
-  </label>
-  <select
-    name="estado"
-    value={newProgram.estado === false ? "inactivo" : "activo"}
-    onChange={(e) =>
-      handleInputChange({
-        target: {
-          name: "estado",
-          value: e.target.value === "activo",
-        },
-      })
-    }
-    className="w-full mt-2 p-2 border border-gray-300 rounded"
-  >
-    <option value="activo">Activo</option>
-    <option value="inactivo">Inactivo</option>
-  </select>
-</div>
+          <label className="block text-sm font-medium text-gray-700">
+            Estado
+          </label>
+          <select
+            name="estado"
+            value={newProgram.estado ? "activo" : "inactivo"}
+            onChange={(e) =>
+              handleInputChange({
+                target: {
+                  name: "estado",
+                  value: e.target.value === "activo",
+                },
+              })
+            }
+            className="w-full mt-2 p-2 border border-gray-300 rounded"
+          >
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
 
         <div className="mt-6 flex justify-center">
           <button
-            onClick={handleAddProgram} // Llamar a handleAddProgram
+            onClick={handleAddProgram}
             className="px-6 py-2 text-gray-700 bg-green-300 rounded-lg mr-4"
           >
             Agregar

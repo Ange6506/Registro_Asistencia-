@@ -1,4 +1,3 @@
-// Programa.js
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal"; // Importa el componente Modal
 
@@ -12,17 +11,16 @@ export const Programa = () => {
     fecha_ingreso: "",
     hora_ingreso: "",
     usuario: "",
-    estado: "",
+    estado: true, // Inicializa como 'activo'
   });
 
-  // Fetch data when the component mounts
   useEffect(() => {
     fetch("http://localhost:5000/getPrograma")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
           setProgramsData(data);
-          setFilteredPrograms(data); // Initialize the filtered list with all programs
+          setFilteredPrograms(data);
         } else {
           console.error("Error: La respuesta no es un arreglo", data);
         }
@@ -32,13 +30,11 @@ export const Programa = () => {
       });
   }, []);
 
-  // Handle search term changes
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
   };
 
-  // Filter programs based on search term
   useEffect(() => {
     const filtered = programsData.filter((program) =>
       program.programa.toLowerCase().includes(searchTerm.toLowerCase())
@@ -46,21 +42,18 @@ export const Programa = () => {
     setFilteredPrograms(filtered);
   }, [searchTerm, programsData]);
 
-  // Handle modal input changes
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProgram((prevProgram) => ({
       ...prevProgram,
-      [name]: value,
+      [name]: name === "estado" ? value === "activo" : value,
     }));
   };
 
-  // Open modal
   const openModal = () => {
     setIsModalOpen(true);
   };
 
-  // Close modal
   const closeModal = () => {
     setIsModalOpen(false);
     setNewProgram({
@@ -68,18 +61,16 @@ export const Programa = () => {
       fecha_ingreso: "",
       hora_ingreso: "",
       usuario: "",
-      estado: "",
+      estado: true, // Reiniciar a 'activo'
     });
   };
 
-  // Add new program
   const handleAddProgram = () => {
     const programToAdd = {
       ...newProgram,
-      estado: newProgram.estado.toLowerCase() === "activo", // TRUE if "activo", FALSE if "inactivo"
     };
 
-    fetch("http://localhost:5000/getPrograma", {
+    fetch("http://localhost:5000/addPrograma", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +81,7 @@ export const Programa = () => {
       .then((data) => {
         setProgramsData((prevData) => [...prevData, data]);
         setFilteredPrograms((prevData) => [...prevData, data]);
-        closeModal(); // Close the modal after adding the program
+        closeModal();
       })
       .catch((error) => {
         console.error("Error al agregar el programa:", error);
@@ -214,7 +205,6 @@ export const Programa = () => {
         </div>
       </div>
 
-      {/* Modal para agregar un nuevo programa */}
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
