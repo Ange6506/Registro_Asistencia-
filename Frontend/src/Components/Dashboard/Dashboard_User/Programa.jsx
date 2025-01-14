@@ -73,7 +73,7 @@ export const Programa = () => {
   // Agregar el nuevo programa
   const handleAddProgram = () => {
     // Aquí puedes hacer el POST a tu servidor para agregar el programa
-    fetch("http://localhost:5000/addPrograma", {
+    fetch("http://localhost:5000/getPrograma", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

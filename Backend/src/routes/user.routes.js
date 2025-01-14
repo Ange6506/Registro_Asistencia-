@@ -9,6 +9,7 @@ const loginUser = require("../controllers/users/loginUser");
 const  updateEstudiante  = require("../controllers/users/updateEstudiante");
 const  deleteEstudiante  = require("../controllers/users/deleteEstudiante");
 const  addHuella  = require("../controllers/users/addHuella");
+const  getPrograma  = require("../controllers/users/getPrograma");
 
 router.post("/add_user", addUsers.addUser);
 router.post("/add_Asistencia", addAsistencia.addAsistencia);
@@ -18,5 +19,6 @@ router.get("/getAsistencia", getAsistencia.getAsistencia);
 router.put("/updateEstudiantes/:id", updateEstudiante.updateEstudiante);
 router.post("/login", loginUser.loginUser);
 router.delete("/deletestudent/:identificacion", deleteEstudiante.deleteEstudiante);
+router.get("/getPrograma", getPrograma.getPrograma);
 
 module.exports = router;
