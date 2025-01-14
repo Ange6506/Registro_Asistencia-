@@ -1,26 +1,28 @@
+// Programa.js
 import React, { useState, useEffect } from "react";
+import Modal from "./Modal"; // Importa el componente Modal
 
 export const Programa = () => {
-  const [programsData, setProgramsData] = useState([]); // Estado para los datos de los programas
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda por nombre del programa
-  const [filteredPrograms, setFilteredPrograms] = useState([]); // Lista filtrada de programas
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la apertura del modal
+  const [programsData, setProgramsData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredPrograms, setFilteredPrograms] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProgram, setNewProgram] = useState({
     programa: "",
     fecha_ingreso: "",
     hora_ingreso: "",
     usuario: "",
     estado: "",
-  }); // Estado para los datos del nuevo programa
+  });
 
   // Fetch data when the component mounts
   useEffect(() => {
-    fetch("http://localhost:5000/getProgramas") // Asegúrate de que este endpoint sea el correcto
+    fetch("http://localhost:5000/getPrograma")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
           setProgramsData(data);
-          setFilteredPrograms(data); // Inicializa la lista filtrada con todos los programas
+          setFilteredPrograms(data); // Initialize the filtered list with all programs
         } else {
           console.error("Error: La respuesta no es un arreglo", data);
         }
@@ -30,13 +32,13 @@ export const Programa = () => {
       });
   }, []);
 
-  // Actualizar el término de búsqueda y realizar el filtrado
+  // Handle search term changes
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
   };
 
-  // Filtrar los programas según el término de búsqueda
+  // Filter programs based on search term
   useEffect(() => {
     const filtered = programsData.filter((program) =>
       program.programa.toLowerCase().includes(searchTerm.toLowerCase())
@@ -44,7 +46,7 @@ export const Programa = () => {
     setFilteredPrograms(filtered);
   }, [searchTerm, programsData]);
 
-  // Manejar los cambios en los campos del modal
+  // Handle modal input changes
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProgram((prevProgram) => ({
@@ -53,12 +55,12 @@ export const Programa = () => {
     }));
   };
 
-  // Manejar la apertura del modal
+  // Open modal
   const openModal = () => {
     setIsModalOpen(true);
   };
 
-  // Manejar el cierre del modal
+  // Close modal
   const closeModal = () => {
     setIsModalOpen(false);
     setNewProgram({
@@ -70,21 +72,25 @@ export const Programa = () => {
     });
   };
 
-  // Agregar el nuevo programa
+  // Add new program
   const handleAddProgram = () => {
-    // Aquí puedes hacer el POST a tu servidor para agregar el programa
+    const programToAdd = {
+      ...newProgram,
+      estado: newProgram.estado.toLowerCase() === "activo", // TRUE if "activo", FALSE if "inactivo"
+    };
+
     fetch("http://localhost:5000/getPrograma", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newProgram),
+      body: JSON.stringify(programToAdd),
     })
       .then((response) => response.json())
       .then((data) => {
-        setProgramsData((prevData) => [...prevData, data]); // Actualiza los programas con el nuevo programa
+        setProgramsData((prevData) => [...prevData, data]);
         setFilteredPrograms((prevData) => [...prevData, data]);
-        closeModal(); // Cierra el modal después de agregar el programa
+        closeModal(); // Close the modal after adding the program
       })
       .catch((error) => {
         console.error("Error al agregar el programa:", error);
@@ -133,7 +139,6 @@ export const Programa = () => {
             </div>
           </div>
 
-          {/* Botón de Agregar Programa debajo del buscador */}
           <div className="flex justify-end mt-4">
             <button
               onClick={openModal}
@@ -185,7 +190,7 @@ export const Programa = () => {
                                 {program.usuario}
                               </td>
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                                {program.estado}
+                                {program.estado ? "Activo" : "Inactivo"}
                               </td>
                             </tr>
                           ))
@@ -210,77 +215,13 @@ export const Programa = () => {
       </div>
 
       {/* Modal para agregar un nuevo programa */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg p-6 w-96">
-            <h3 className="text-lg font-bold mb-4">Agregar Programa</h3>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Programa</label>
-              <input
-                type="text"
-                name="programa"
-                value={newProgram.programa}
-                onChange={handleInputChange}
-                className="w-full mt-2 p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Fecha Ingreso</label>
-              <input
-                type="date"
-                name="fecha_ingreso"
-                value={newProgram.fecha_ingreso}
-                onChange={handleInputChange}
-                className="w-full mt-2 p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Hora Ingreso</label>
-              <input
-                type="time"
-                name="hora_ingreso"
-                value={newProgram.hora_ingreso}
-                onChange={handleInputChange}
-                className="w-full mt-2 p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Usuario</label>
-              <input
-                type="text"
-                name="usuario"
-                value={newProgram.usuario}
-                onChange={handleInputChange}
-                className="w-full mt-2 p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Estado</label>
-              <input
-                type="text"
-                name="estado"
-                value={newProgram.estado}
-                onChange={handleInputChange}
-                className="w-full mt-2 p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={closeModal}
-                className="px-6 py-2 text-gray-700 bg-gray-300 rounded-lg mr-4"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleAddProgram}
-                className="px-6 py-2 text-white bg-blue-600 rounded-lg"
-              >
-                Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onAddProgram={handleAddProgram}
+        newProgram={newProgram}
+        handleInputChange={handleInputChange}
+      />
     </section>
   );
 };
