@@ -3,18 +3,18 @@ import React, { useEffect, useState } from "react";
 const EditarProgramaModal = ({
   isOpen,
   onClose,
-  newProgram = {}, // Asegúrate de que newProgram tenga un valor predeterminado vacío
+  newProgram = {},
   handleInputChange,
 }) => {
-  const [user, setUser] = useState(""); // Para almacenar el usuario logueado
-  const [error, setError] = useState(""); // Para manejar errores de validación
-  const [initialProgram, setInitialProgram] = useState(newProgram); // Guardar los datos iniciales para compararlos
-  const [localProgram, setLocalProgram] = useState(newProgram); // Estado local para controlar los cambios en los campos
+  const [user, setUser] = useState("");
+  const [error, setError] = useState("");
+  const [initialProgram, setInitialProgram] = useState({});
 
   useEffect(() => {
     if (isOpen) {
-      setInitialProgram(newProgram); // Actualiza initialProgram al abrir el modal
-      setLocalProgram(newProgram); // Asegúrate de que el formulario tenga los datos correctos cuando se abra
+      const programCopy = JSON.parse(JSON.stringify(newProgram));
+      setInitialProgram(programCopy);
+
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString().split("T")[0];
       const formattedTime = currentDate.toISOString().split("T")[1].split(".")[0];
@@ -40,32 +40,26 @@ const EditarProgramaModal = ({
         }
       }
     }
-  }, [isOpen, handleInputChange, user, newProgram]);
-
-  // Reset the form when modal is closed
-  const handleClose = () => {
-    setLocalProgram(initialProgram); // Reset the local program state
-    onClose(); // Close the modal
-  };
+  }, [isOpen]);
 
   const handleUpdateProgram = async () => {
     if (
-      !localProgram.programa ||
-      !localProgram.fecha_ingreso ||
-      !localProgram.hora_ingreso ||
-      !localProgram.usuario
+      !newProgram.programa ||
+      !newProgram.fecha_ingreso ||
+      !newProgram.hora_ingreso ||
+      !newProgram.usuario
     ) {
       setError("Por favor, complete todos los campos.");
       return;
     }
 
-    // Check if the fields have actually changed
-    const isChanged =
-      initialProgram.programa !== localProgram.programa ||
-      initialProgram.fecha_ingreso !== localProgram.fecha_ingreso ||
-      initialProgram.hora_ingreso !== localProgram.hora_ingreso ||
-      initialProgram.usuario !== localProgram.usuario ||
-      initialProgram.estado !== localProgram.estado;
+    // Verificar si ha habido cambios en algún campo
+    const isChanged = 
+      (initialProgram.programa !== newProgram.programa) ||
+      (initialProgram.fecha_ingreso !== newProgram.fecha_ingreso) ||
+      (initialProgram.hora_ingreso !== newProgram.hora_ingreso) ||
+      (initialProgram.usuario !== newProgram.usuario) ||
+      (initialProgram.estado !== newProgram.estado);
 
     if (!isChanged) {
       setError("No ha realizado ningún cambio. Por favor, actualice algún dato.");
@@ -73,41 +67,56 @@ const EditarProgramaModal = ({
     }
 
     try {
-      setError(""); // Limpiar errores
+      setError(""); // Limpiar el error si todo está bien
 
       const programaData = {
-        id_programa: localProgram.id_programa,
-        programa: localProgram.programa,
-        fecha_ingreso: localProgram.fecha_ingreso,
-        hora_ingreso: localProgram.hora_ingreso,
-        usuario: localProgram.usuario,
-        estado: localProgram.estado,
+        id_programa: newProgram.id_programa,
+        programa: newProgram.programa,
+        fecha_ingreso: newProgram.fecha_ingreso,
+        hora_ingreso: newProgram.hora_ingreso,
+        usuario: newProgram.usuario,
+        estado: newProgram.estado,
       };
 
       console.log("Datos a enviar:", programaData);
 
-      const response = await fetch(`http://localhost:5000/updatePrograma/${localProgram.id_programa}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(programaData),
-      });
+      const response = await fetch(
+        `http://localhost:5000/update_programa/${newProgram.id_programa}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(programaData),
+        }
+      );
 
-      const data = await response.json();
+      // Log the raw response for debugging
+      const responseText = await response.text();
+      console.log('Raw response:', responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Error parsing response:', responseText);
+        throw new Error(`Error en la respuesta del servidor: ${responseText.substring(0, 100)}...`);
+      }
 
       if (response.ok) {
         console.log("Programa actualizado con éxito:", data);
-
-        handleClose(); // Cierra el modal y restablece los campos
+        onClose();
         setTimeout(() => {
-          window.location.reload(); // Recarga la página
+          window.location.reload();
         }, 300);
       } else {
-        console.error("Error al actualizar el programa:", data.message);
+        const errorMessage = data?.message || 'Error desconocido al actualizar el programa';
+        console.error("Error al actualizar el programa:", errorMessage);
+        setError(errorMessage);
       }
     } catch (error) {
-      console.error("Error al actualizar el programa:", error);
+      console.error("Error completo:", error);
+      setError(`Error al actualizar el programa: ${error.message}`);
     }
   };
 
@@ -117,7 +126,7 @@ const EditarProgramaModal = ({
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 w-96 relative">
         <button
-          onClick={handleClose}
+          onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
         >
           &times;
@@ -125,15 +134,20 @@ const EditarProgramaModal = ({
 
         <h3 className="text-lg font-bold mb-4">Editar Programa</h3>
 
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700">Programa</label>
           <input
             type="text"
             name="programa"
-            value={localProgram.programa || ""} // Usar el valor del estado local
-            onChange={e => handleInputChange(e, setLocalProgram)}
+            value={newProgram.programa || ""}
+            onChange={handleInputChange}
             className="w-full mt-2 p-2 border border-gray-300 rounded"
           />
         </div>
@@ -143,8 +157,8 @@ const EditarProgramaModal = ({
           <input
             type="date"
             name="fecha_ingreso"
-            value={localProgram.fecha_ingreso || ""}
-            onChange={e => handleInputChange(e, setLocalProgram)}
+            value={newProgram.fecha_ingreso || ""}
+            onChange={handleInputChange}
             className="w-full mt-2 p-2 border border-gray-300 rounded"
           />
         </div>
@@ -154,8 +168,8 @@ const EditarProgramaModal = ({
           <input
             type="time"
             name="hora_ingreso"
-            value={localProgram.hora_ingreso || ""}
-            onChange={e => handleInputChange(e, setLocalProgram)}
+            value={newProgram.hora_ingreso || ""}
+            onChange={handleInputChange}
             className="w-full mt-2 p-2 border border-gray-300 rounded"
           />
         </div>
@@ -165,9 +179,10 @@ const EditarProgramaModal = ({
           <input
             type="text"
             name="usuario"
-            value={localProgram.usuario || user} // Usar el valor del estado local o el usuario logueado
-            onChange={e => handleInputChange(e, setLocalProgram)}
+            value={newProgram.usuario || user}
+            onChange={handleInputChange}
             className="w-full mt-2 p-2 border border-gray-300 rounded"
+            disabled
           />
         </div>
 
@@ -175,8 +190,15 @@ const EditarProgramaModal = ({
           <label className="block text-sm font-medium text-gray-700">Estado</label>
           <select
             name="estado"
-            value={localProgram.estado ? "activo" : "inactivo"}
-            onChange={e => handleInputChange(e, setLocalProgram)}
+            value={newProgram.estado ? "activo" : "inactivo"}
+            onChange={(e) =>
+              handleInputChange({
+                target: {
+                  name: "estado",
+                  value: e.target.value === "activo",
+                },
+              })
+            }
             className="w-full mt-2 p-2 border border-gray-300 rounded"
           >
             <option value="activo">Activo</option>
