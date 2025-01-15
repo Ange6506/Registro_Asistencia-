@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./Modal"; // Importa el componente Modal
+import Modal from "./AgregarProgramaModal"; // Modal de agregar
+import EditarProgramaModal from "./EditarProgramaModal"; // Modal de edición
 
 export const Programa = () => {
   const [programsData, setProgramsData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPrograms, setFilteredPrograms] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Estado para el modal de edición
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal de agregar
   const [newProgram, setNewProgram] = useState({
+    id_programa: "",
     programa: "",
     fecha_ingreso: "",
     hora_ingreso: "",
@@ -88,6 +91,56 @@ export const Programa = () => {
       });
   };
 
+  // Lógica para abrir el modal de edición y pasar los datos correctos
+  const handleEditProgram = (program) => {
+    setNewProgram(program);  // Asigna los valores del programa a editar
+    setIsEditModalOpen(true);  // Abre el modal de edición
+  };
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    // Restablece los valores del nuevo programa cuando se cierra el modal de edición
+    setNewProgram({
+      id_programa: "",
+      programa: "",
+      fecha_ingreso: "",
+      hora_ingreso: "",
+      usuario: "",
+      estado: true, // Reinicia a 'activo'
+    });
+  };
+  // Lógica para guardar los cambios en un programa editado
+  const handleSaveEditedProgram = () => {
+    const updatedProgram = {
+      ...newProgram,
+    };
+
+    fetch(`http://localhost:5000/editPrograma/${newProgram.id_programa}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProgram),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Actualiza el estado con el programa editado
+        setProgramsData((prevData) =>
+          prevData.map((program) =>
+            program.id_programa === data.id_programa ? data : program
+          )
+        );
+        setFilteredPrograms((prevData) =>
+          prevData.map((program) =>
+            program.id_programa === data.id_programa ? data : program
+          )
+        );
+        setIsEditModalOpen(false); // Cierra el modal de edición
+      })
+      .catch((error) => {
+        console.error("Error al editar el programa:", error);
+      });
+  };
+
   return (
     <section className="container p-4 mx-auto flex flex-col" style={{ minHeight: "87vh" }}>
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
@@ -162,6 +215,9 @@ export const Programa = () => {
                           <th className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                             Estado
                           </th>
+                          <th className="px-6 py-4 text-sm font-normal text-left text-white">
+                            Acción
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
@@ -183,12 +239,33 @@ export const Programa = () => {
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {program.estado ? "Activo" : "Inactivo"}
                               </td>
+                              <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
+                                <button
+                                  onClick={() => handleEditProgram(program)} 
+                                  className="mr-2"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-5 h-5"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m16.862 4.487a2.6 2.6 0 1 0-3.673 3.673l-7.252 7.253a2.25 2.25 0 0 0-.57.92l-1.565 4.687a2.25 2.25 0 0 0 2.729 2.73l4.687-1.565a2.25 2.25 0 0 0 .92-.57l7.253-7.252a2.6 2.6 0 1 0-3.672-3.673l-4.687 4.688"
+                                    />
+                                  </svg>
+                                </button>
+                              </td>
                             </tr>
                           ))
                         ) : (
                           <tr>
                             <td
-                              colSpan={5}
+                              colSpan={6}
                               className="px-6 py-4 text-sm text-center text-gray-500 dark:text-gray-300"
                             >
                               No se encontraron programas
@@ -205,6 +282,16 @@ export const Programa = () => {
         </div>
       </div>
 
+      {/* Modal de edición */}
+      <EditarProgramaModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal} 
+        onSave={handleSaveEditedProgram} // Guarda la edición
+        newProgram={newProgram} // Pasa los datos del programa a editar
+        handleInputChange={handleInputChange}
+      />
+
+      {/* Modal de agregar programa */}
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}

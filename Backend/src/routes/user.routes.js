@@ -11,6 +11,7 @@ const  deleteEstudiante  = require("../controllers/users/deleteEstudiante");
 const  addHuella  = require("../controllers/users/addHuella");
 const  getPrograma  = require("../controllers/users/getPrograma");
 const  addPrograma  = require("../controllers/users/addPrograma");
+const  updatePrograma  = require("../controllers/users/updatePrograma");
 
 router.post("/add_user", addUsers.addUser);
 router.post("/add_Asistencia", addAsistencia.addAsistencia);
@@ -22,5 +23,7 @@ router.post("/login", loginUser.loginUser);
 router.delete("/deletestudent/:identificacion", deleteEstudiante.deleteEstudiante);
 router.get("/getPrograma", getPrograma.getPrograma);
 router.post("/addPrograma", addPrograma.addPrograma);
+router.put("/update_programa/:id", updatePrograma.updatePrograma);
+
 
 module.exports = router;

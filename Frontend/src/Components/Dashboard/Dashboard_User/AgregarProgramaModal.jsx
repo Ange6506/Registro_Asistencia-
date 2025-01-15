@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Modal = ({
+const AgregarProgramaModal = ({
   isOpen,
   onClose,
   onAddProgram,
@@ -14,10 +14,7 @@ const Modal = ({
     if (isOpen) {
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString().split("T")[0];
-      const formattedTime = currentDate
-        .toISOString()
-        .split("T")[1]
-        .split(".")[0];
+      const formattedTime = currentDate.toISOString().split("T")[1].split(".")[0];
 
       if (!newProgram.fecha_ingreso) {
         handleInputChange({
@@ -61,7 +58,7 @@ const Modal = ({
         fecha_ingreso: newProgram.fecha_ingreso,
         hora_ingreso: newProgram.hora_ingreso,
         usuario: newProgram.usuario,
-        estado: newProgram.estado, // Asegúrate de que sea un booleano
+        estado: newProgram.estado,
       };
 
       console.log("Datos a enviar:", programaData);
@@ -112,9 +109,7 @@ const Modal = ({
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Programa
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Programa</label>
           <input
             type="text"
             name="programa"
@@ -124,9 +119,7 @@ const Modal = ({
           />
         </div>
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Fecha Ingreso
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Fecha Ingreso</label>
           <input
             type="date"
             name="fecha_ingreso"
@@ -136,9 +129,7 @@ const Modal = ({
           />
         </div>
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Hora Ingreso
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Hora Ingreso</label>
           <input
             type="time"
             name="hora_ingreso"
@@ -148,9 +139,7 @@ const Modal = ({
           />
         </div>
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Usuario
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Usuario</label>
           <input
             type="text"
             name="usuario"
@@ -161,9 +150,7 @@ const Modal = ({
           />
         </div>
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Estado
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Estado</label>
           <select
             name="estado"
             value={newProgram.estado ? "activo" : "inactivo"}
@@ -195,4 +182,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default AgregarProgramaModal;
