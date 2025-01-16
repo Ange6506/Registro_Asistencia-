@@ -16,7 +16,7 @@ router.post("/add_Asistencia", addAsistencia.addAsistencia);
 router.post("/add_Huella", addHuella.addHuella);
 router.get("/get_estudiante", getEstudiantes.getEstudiantes);
 router.get("/getAsistencia", getAsistencia.getAsistencia);
-router.put("/updateEstudiantes/:id", updateEstudiante.updateEstudiante);
+router.put("/updateEstudiantes/:id_semestre", updateEstudiante.updateEstudiante);
 router.post("/login", loginUser.loginUser);
 router.delete("/deletestudent/:identificacion", deleteEstudiante.deleteEstudiante);
 router.get("/getPrograma", getPrograma.getPrograma);

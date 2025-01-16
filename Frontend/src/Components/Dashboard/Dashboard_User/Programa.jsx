@@ -15,7 +15,7 @@ export const Programa = () => {
 
   // Fetch data when the component mounts
   useEffect(() => {
-    fetch("http://localhost:5000/getProgramas") // Asegúrate de que este endpoint sea el correcto
+    fetch("http://localhost:5000/getPrograma") // Asegúrate de que este endpoint sea el correcto
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {

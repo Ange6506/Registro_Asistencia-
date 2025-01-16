@@ -3,18 +3,15 @@ const { CONFIG_DB } = require("../../config/db");
 
 const pool = new Pool(CONFIG_DB);
 
+
 // Controlador para actualizar el estudiante
 const updateEstudiante = async (req, res) => {
-  const id_estudiante = req.params.id; // Obtén el id del parámetro de la URL
+  const id_semestre = req.params.id;  // Obtén el id del parámetro de la URL
   const {
-    clinica,
-    programa,
     semestre_academico,
     asignatura,
     especialidad,
-    nombre_estudiante,
-    identificacion,
-    semanas_de_rotacion,
+    semanas_rotacion,
     horas_por_dia,
     dias_semana,
     numero_horas_semanales,
@@ -24,7 +21,7 @@ const updateEstudiante = async (req, res) => {
 
   try {
     // Verificamos que el id_estudiante sea obligatorio
-    if (!id_estudiante) {
+    if (!id_semestre) {
       return res
         .status(400)
         .json({ message: "El id del estudiante es obligatorio" });
@@ -32,14 +29,10 @@ const updateEstudiante = async (req, res) => {
 
     // Validamos que todos los campos requeridos estén presentes
     if (
-      !clinica ||
-      !programa ||
       !semestre_academico ||
       !asignatura ||
       !especialidad ||
-      !nombre_estudiante ||
-      !identificacion ||
-      !semanas_de_rotacion ||
+      !semanas_rotacion ||
       !horas_por_dia ||
       !dias_semana ||
       !numero_horas_semanales ||
@@ -67,43 +60,34 @@ const updateEstudiante = async (req, res) => {
     const fechaISOFinal = fecha_terminacion.toISOString();
 
     // Definimos la consulta SQL que actualizará al estudiante
-    // Consulta SQL corregida
     const query = `
-UPDATE estudiantes
-SET
-  clinica = $1,
-  programa = $2,
-  semestre_academico = $3,
-  asignatura = $4,
-  especialidad = $5,
-  nombre_estudiante  = $6,
-  identificacion = $7,
-  semanas_de_rotacion = $8,
-  horas_por_dia = $9,
-  dias_semana = $10,
-  numero_horas_semanales = $11,
-  fecha_inicio = $12,
-  fecha_terminacion = $13
-WHERE id_estudiante = $14
-RETURNING *;
+  UPDATE "Semestre Academico"
+  SET
+    semestre_academico = $1,
+    asignatura = $2,
+    especialidad = $3,
+    semanas_de_rotacion = $4,
+    horas_por_dia = $5,
+    dias_semana = $6,
+    numero_horas_semanales = $7,
+    fecha_inicio = $8,
+    fecha_terminacion = $9
+  WHERE id_semestre = $10
+  RETURNING *;
 `;
-
+ 
     // Los valores a insertar en los parámetros de la consulta SQL
     const values = [
-      clinica,
-      programa,
       semestre_academico,
       asignatura,
       especialidad,
-      nombre_estudiante,
-      identificacion,
-      semanas_de_rotacion,
+      semanas_rotacion,
       horas_por_dia,
       dias_semana,
       numero_horas_semanales,
       fechaISOInicial,
       fechaISOFinal,
-      id_estudiante, // El id del estudiante debe ser el último
+      id_semestre
     ];
 
     // Ejecutamos la consulta en la base de datos
@@ -129,3 +113,5 @@ RETURNING *;
 module.exports = {
   updateEstudiante,
 };
+
+
