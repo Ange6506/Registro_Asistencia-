@@ -55,7 +55,8 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("Formulario enviado");
+  
     // Validación de los campos requeridos
     if (
       !formData.programa ||
@@ -68,12 +69,14 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       !formData.numero_horas_semanales ||
       !formData.fecha_inicio ||
       !formData.fecha_terminacion
-     
     ) {
       setError("Todos los campos deben estar llenos.");
       return;
     }
-
+    
+    // Si las validaciones pasan, imprime el formData en consola
+    console.log("Datos del formulario: ", formData);
+    
     // Validación de fechas
     const fechaInicial = new Date(formData.fecha_inicial);
     const fechaFinal = new Date(formData.fecha_final);
@@ -104,12 +107,14 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         return response.json();
       })
       .then((data) => {
-        console.log("Datos actualizados:", data);
-        onClose();  // Cerramos el modal al recibir respuesta exitosa
+        if (data.message === "Estudiante actualizado correctamente") {
+          console.log("Datos actualizados:", data);
+          onClose();  // Cierra el modal si la actualización fue exitosa
+        } else {
+          setError("Error al actualizar los datos");
+        }
       })
-      .catch((error) => {
-        setError(`Error al actualizar los datos: ${error.message}`);
-      });
+      
   };
 
   if (!student) return null;
