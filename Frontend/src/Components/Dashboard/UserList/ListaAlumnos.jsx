@@ -27,9 +27,9 @@ export const ListaAlumnos = () => {
   }, []);
 
   const handleShowModal = (student) => {
-    setSelectedStudent(student);
-    setShowModal(true);
-  };
+    setSelectedStudent(student); 
+    setShowModal(true); 
+  }
 
   const handleCloseModal = () => {
     setShowModal(false);

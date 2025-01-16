@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
+  // Mapeo de programas a ids
+  const programaMap = {
+    "ENFERMERIA": 1,
+    "MEDICINA": 2,
+    "PSICOLOGIA": 3,
+    // Agregar más programas aquí
+  };
+
   const [formData, setFormData] = useState({
     programa: "",
     semestre_academico: "",
@@ -15,14 +23,15 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   });
 
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
-  const [isSuccessVisible, setIsSuccessVisible] = useState(false); // Estado para manejar la visibilidad del mensaje
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
 
   // Actualizamos el estado de formData cuando cambia el estudiante
   useEffect(() => {
     if (student) {
       setFormData({
-        programa: student.programa || "", // Usamos trim aquí
+        id_semestre: student.id_semestre || "", 
+        programa: student.programa || "",
         semestre_academico: student.semestre_academico || "",
         asignatura: student.asignatura || "",
         especialidad: student.especialidad || "",
@@ -30,13 +39,8 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         horas_por_dia: student.horas_por_dia || "",
         dias_semana: student.dias_semana || "",
         numero_horas_semanales: student.numero_horas_semanales || "",
-        fecha_inicio: student.fecha_inicio
-        ? student.fecha_inicio.split("T")[0]
-        : "",
-      fecha_terminacion: student.fecha_terminacion
-        ? student.fecha_terminacion.split("T")[0]
-        : "",
-     
+        fecha_inicio: student.fecha_inicio ? student.fecha_inicio.split("T")[0] : "",
+        fecha_terminacion: student.fecha_terminacion ? student.fecha_terminacion.split("T")[0] : "",
       });
     }
   }, [student]);
@@ -44,20 +48,26 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const cleanedValue = name === "programa" ? value.trim() : value;
-
     setFormData((prev) => ({
       ...prev,
-      [name]: cleanedValue,
+      [name]: value.trim(),
+    }));
+  };
+
+  // Manejar la selección de programa
+  const handleProgramaChange = (e) => {
+    const selectedPrograma = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      programa: selectedPrograma,
     }));
   };
 
   // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Formulario enviado");
   
-    // Validación de los campos requeridos
+    // Verificar que los campos requeridos están completos
     if (
       !formData.programa ||
       !formData.semestre_academico ||
@@ -71,34 +81,41 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       !formData.fecha_terminacion
     ) {
       setError("Todos los campos deben estar llenos.");
+      alert("Error: Todos los campos deben estar llenos.");
       return;
     }
-    
-    // Si las validaciones pasan, imprime el formData en consola
-    console.log("Datos del formulario: ", formData);
-    
+  
     // Validación de fechas
-    const fechaInicial = new Date(formData.fecha_inicial);
-    const fechaFinal = new Date(formData.fecha_final);
-
+    const fechaInicial = new Date(formData.fecha_inicio);
+    const fechaFinal = new Date(formData.fecha_terminacion);
+  
     if (isNaN(fechaInicial.getTime()) || isNaN(fechaFinal.getTime())) {
       setError("Las fechas proporcionadas no son válidas.");
+      alert("Error: Las fechas proporcionadas no son válidas.");
       return;
     }
-
-    // Asegurarnos de que el id del estudiante esté presente antes de enviar
-    if (!student.id_semestre) {
-      setError("ID del estudiante no disponible");
+  
+    // Obtener el id_programa según el programa seleccionado
+    const idPrograma = programaMap[formData.programa];
+  
+    // Si no hay id_programa, mostrar un error
+    if (!idPrograma) {
+      setError("Programa no válido.");
+      alert("Error: Programa no válido.");
       return;
     }
-
+  
+    // Actualizamos el formData con el id_programa
+    const updatedFormData = { ...formData, id_programa: idPrograma };
+  
     // Realizamos la solicitud PUT al backend
-    fetch(`http://localhost:5000/updateEstudiantes/${student.id_semestre}`, {
-      method: "PUT",  // Enviamos los datos en una solicitud PUT
+    console.log("Enviando datos:", updatedFormData);
+    fetch(`http://localhost:5000/updateSemestre/${formData.id_semestre}`, {
+      method: "PUT",
       headers: {
-        "Content-Type": "application/json",  // Asegúrate de que el backend espera JSON
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),  // Convierte el objeto formData en una cadena JSON
+      body: JSON.stringify(updatedFormData),
     })
       .then((response) => {
         if (!response.ok) {
@@ -107,31 +124,36 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         return response.json();
       })
       .then((data) => {
-        if (data.message === "Estudiante actualizado correctamente") {
-          console.log("Datos actualizados:", data);
-          onClose();  // Cierra el modal si la actualización fue exitosa
+        if (data.message === "Información del semestre actualizada exitosamente") {
+          setSuccessMessage("Información actualizada correctamente.");
+          setIsSuccessVisible(true);
+          setError(""); // Limpiar el error si la actualización fue exitosa
+          onClose(); // Cierra el modal si la actualización fue exitosa
         } else {
           setError("Error al actualizar los datos");
+          alert("Error: " + data.message);
         }
       })
-      
-  };
+      .catch((error) => {
+        console.error("Error en la solicitud:", error);
+        alert("Error: " + error.message);
+      });
+  };  
 
   if (!student) return null;
+
   return (
     <>
       {isSuccessVisible && (
         <div
-          className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg shadow-blue rounded-md shadow-lg z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
+          className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg rounded-md z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
           role="alert"
         >
           <p>{successMessage}</p>
-
           <button
             type="button"
-            className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
-            data-dismiss-target="#alert-border-1"
-            aria-label="Close"
+            className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8"
+            onClick={() => setIsSuccessVisible(false)}
           >
             <svg
               className="w-3 h-3"
@@ -198,7 +220,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
               {/* Campos del formulario */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-             
                 {/* Programa */}
                 <div className="sm:col-span-1">
                   <label
@@ -210,22 +231,22 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      name="clinica"
-                      id="clinica"
+                      name="programa"
+                      id="programa"
                       value={formData.programa}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Clinica"
+                      placeholder="Programa"
                     />
                   </div>
                 </div>
-                {/* Campo de  Semenestre academico */}
+                {/* Campo de Semestre académico */}
                 <div className="sm:col-span-1">
                   <label
                     htmlFor="semestre_academico"
                     className="block text-sm font-medium text-gray-900"
                   >
-                    Semenestre academico
+                    Semestre académico
                   </label>
                   <div className="mt-2">
                     <input
@@ -235,7 +256,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       value={formData.semestre_academico}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder=" Semenestre academico"
+                      placeholder="Semestre académico"
                     />
                   </div>
                 </div>
@@ -279,7 +300,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     />
                   </div>
                 </div>
-              
                 {/* Campo de Semana de Rotación */}
                 <div className="sm:col-span-1">
                   <label
@@ -296,11 +316,10 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       value={formData.semanas_de_rotacion}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder=" Semana de Rotación"
+                      placeholder="Semana de Rotación"
                     />
                   </div>
                 </div>
-
                 {/* Campo de Hora por Día */}
                 <div className="sm:col-span-1">
                   <label
@@ -317,7 +336,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       value={formData.horas_por_dia}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="horas_por_dia"
+                      placeholder="Horas por Día"
                     />
                   </div>
                 </div>
@@ -337,17 +356,17 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       value={formData.dias_semana}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="dias_semana"
+                      placeholder="Días de la Semana"
                     />
                   </div>
                 </div>
-                {/* Campo de Numero de horas semanales */}
+                {/* Campo de Número de horas semanales */}
                 <div className="sm:col-span-1">
                   <label
                     htmlFor="numero_horas_semanales"
                     className="block text-sm font-medium text-gray-900"
                   >
-                    Numero de horas semanales
+                    Número de horas semanales
                   </label>
                   <div className="mt-2">
                     <input
@@ -357,7 +376,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                       value={formData.numero_horas_semanales}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="numero_horas_semanales"
+                      placeholder="Número de horas semanales"
                     />
                   </div>
                 </div>
@@ -380,7 +399,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     />
                   </div>
                 </div>
-
                 {/* Fecha Final */}
                 <div className="sm:col-span-1">
                   <label
