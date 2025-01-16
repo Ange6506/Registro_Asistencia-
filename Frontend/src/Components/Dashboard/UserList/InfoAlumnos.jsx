@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
-  // Mapeo de programas a ids
   const programaMap = {
-    "ENFERMERIA": 1,
-    "PSICOLOGIA": 2,
-    "MEDICINA": 3,
+    ENFERMERIA: 1,
+    PSICOLOGIA: 2,
+    MEDICINA: 3,
     "MEDICINA - INTERNOS": 4,
     "MEDICINA - RESIDENTES": 5,
     "No Definidoo": 6,
-    // Agregar más programas aquí
   };
 
   const [formData, setFormData] = useState({
@@ -29,11 +27,10 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
 
-  // Actualizamos el estado de formData cuando cambia el estudiante
   useEffect(() => {
     if (student) {
       setFormData({
-        id_semestre: student.id_semestre || "", 
+        id_semestre: student.id_semestre || "",
         programa: student.programa || "",
         semestre_academico: student.semestre_academico || "",
         asignatura: student.asignatura || "",
@@ -42,13 +39,16 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         horas_por_dia: student.horas_por_dia || "",
         dias_semana: student.dias_semana || "",
         numero_horas_semanales: student.numero_horas_semanales || "",
-        fecha_inicio: student.fecha_inicio ? student.fecha_inicio.split("T")[0] : "",
-        fecha_terminacion: student.fecha_terminacion ? student.fecha_terminacion.split("T")[0] : "",
+        fecha_inicio: student.fecha_inicio
+          ? student.fecha_inicio.split("T")[0]
+          : "",
+        fecha_terminacion: student.fecha_terminacion
+          ? student.fecha_terminacion.split("T")[0]
+          : "",
       });
     }
   }, [student]);
 
-  // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -57,20 +57,9 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
     }));
   };
 
-  // Manejar la selección de programa
-  const handleProgramaChange = (e) => {
-    const selectedPrograma = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      programa: selectedPrograma,
-    }));
-  };
-
-  // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // Verificar que los campos requeridos están completos
+
     if (
       !formData.programa ||
       !formData.semestre_academico ||
@@ -87,31 +76,25 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       alert("Error: Todos los campos deben estar llenos.");
       return;
     }
-  
-    // Validación de fechas
+
     const fechaInicial = new Date(formData.fecha_inicio);
     const fechaFinal = new Date(formData.fecha_terminacion);
-  
+
     if (isNaN(fechaInicial.getTime()) || isNaN(fechaFinal.getTime())) {
       setError("Las fechas proporcionadas no son válidas.");
       alert("Error: Las fechas proporcionadas no son válidas.");
       return;
     }
-  
-    // Obtener el id_programa según el programa seleccionado
+
     const idPrograma = programaMap[formData.programa];
-  
-    // Si no hay id_programa, mostrar un error
     if (!idPrograma) {
       setError("Programa no válido.");
       alert("Error: Programa no válido.");
       return;
     }
-  
-    // Actualizamos el formData con el id_programa
+
     const updatedFormData = { ...formData, id_programa: idPrograma };
-  
-    // Realizamos la solicitud PUT al backend
+
     console.log("Enviando datos:", updatedFormData);
     fetch(`http://localhost:5000/updateSemestre/${formData.id_semestre}`, {
       method: "PUT",
@@ -127,9 +110,17 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         return response.json();
       })
       .then((data) => {
-        if (data.message === "Información del semestre actualizada exitosamente") {
+        if (
+          data.message === "Información del semestre actualizada exitosamente"
+        ) {
           setSuccessMessage("Información actualizada correctamente.");
           setIsSuccessVisible(true);
+
+          // Ocultar el mensaje después de 2 segundos
+          setTimeout(() => {
+            setIsSuccessVisible(false);
+          }, 2000);
+
           setError(""); // Limpiar el error si la actualización fue exitosa
           onClose(); // Cierra el modal si la actualización fue exitosa
         } else {
@@ -141,12 +132,13 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         console.error("Error en la solicitud:", error);
         alert("Error: " + error.message);
       });
-  };  
+  };
 
   if (!student) return null;
 
   return (
     <>
+      {/* Mostrar mensaje de éxito solo cuando se actualiza correctamente */}
       {isSuccessVisible && (
         <div
           className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg rounded-md z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
@@ -232,17 +224,28 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     Programa
                   </label>
                   <div className="mt-2">
-                    <input
-                      type="text"
+                    <select
                       name="programa"
                       id="programa"
                       value={formData.programa}
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                      placeholder="Programa"
-                    />
+                    >
+                      <option value="">Selecciona un programa</option>
+                      <option value="ENFERMERIA">ENFERMERIA</option>
+                      <option value="PSICOLOGIA">PSICOLOGIA</option>
+                      <option value="MEDICINA">MEDICINA</option>
+                      <option value="MEDICINA - INTERNOS">
+                        MEDICINA - INTERNOS
+                      </option>
+                      <option value="MEDICINA - RESIDENTES">
+                        MEDICINA - RESIDENTES
+                      </option>
+                      <option value="No Definidoo">No Definidoo</option>
+                    </select>
                   </div>
                 </div>
+
                 {/* Campo de Semestre académico */}
                 <div className="sm:col-span-1">
                   <label
