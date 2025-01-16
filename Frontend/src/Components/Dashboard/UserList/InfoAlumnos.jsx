@@ -4,8 +4,11 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   // Mapeo de programas a ids
   const programaMap = {
     "ENFERMERIA": 1,
-    "MEDICINA": 2,
-    "PSICOLOGIA": 3,
+    "PSICOLOGIA": 2,
+    "MEDICINA": 3,
+    "MEDICINA - INTERNOS": 4,
+    "MEDICINA - RESIDENTES": 5,
+    "No Definidoo": 6,
     // Agregar más programas aquí
   };
 
