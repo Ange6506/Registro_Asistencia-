@@ -6,8 +6,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
     semestre_academico: "",
     asignatura: "",
     especialidad: "",
-    nombre_estudiante: "",
-    identificacion: "",
     semanas_de_rotacion: "",
     horas_por_dia: "",
     dias_semana: "",
@@ -20,25 +18,30 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje de éxito
   const [isSuccessVisible, setIsSuccessVisible] = useState(false); // Estado para manejar la visibilidad del mensaje
 
+  // Actualizamos el estado de formData cuando cambia el estudiante
   useEffect(() => {
     if (student) {
       setFormData({
-        programa: student.programa || "",
+        programa: student.programa || "", // Usamos trim aquí
         semestre_academico: student.semestre_academico || "",
         asignatura: student.asignatura || "",
         especialidad: student.especialidad || "",
-        nombre_estudiante: student.nombre_estudiante || "",
-        identificacion: student.identificacion || "",
         semanas_de_rotacion: student.semanas_de_rotacion || "",
         horas_por_dia: student.horas_por_dia || "",
         dias_semana: student.dias_semana || "",
         numero_horas_semanales: student.numero_horas_semanales || "",
-        fecha_inicio: student.fecha_inicio ? student.fecha_inicio.split("T")[0] : "",
-        fecha_terminacion: student.fecha_terminacion ? student.fecha_terminacion.split("T")[0] : "",
+        fecha_inicio: student.fecha_inicio
+        ? student.fecha_inicio.split("T")[0]
+        : "",
+      fecha_terminacion: student.fecha_terminacion
+        ? student.fecha_terminacion.split("T")[0]
+        : "",
+     
       });
     }
   }, [student]);
 
+  // Manejar cambios en los campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     const cleanedValue = name === "programa" ? value.trim() : value;
@@ -49,52 +52,51 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
     }));
   };
 
+  // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validación de campos requeridos
+    // Validación de los campos requeridos
     if (
       !formData.programa ||
       !formData.semestre_academico ||
       !formData.asignatura ||
       !formData.especialidad ||
-      !formData.nombre_estudiante ||
-      !formData.identificacion ||
       !formData.semanas_de_rotacion ||
       !formData.horas_por_dia ||
       !formData.dias_semana ||
       !formData.numero_horas_semanales ||
       !formData.fecha_inicio ||
       !formData.fecha_terminacion
+     
     ) {
       setError("Todos los campos deben estar llenos.");
       return;
     }
 
     // Validación de fechas
-    const fechaInicial = new Date(formData.fecha_inicio);
-    const fechaFinal = new Date(formData.fecha_terminacion);
+    const fechaInicial = new Date(formData.fecha_inicial);
+    const fechaFinal = new Date(formData.fecha_final);
 
     if (isNaN(fechaInicial.getTime()) || isNaN(fechaFinal.getTime())) {
       setError("Las fechas proporcionadas no son válidas.");
       return;
     }
 
-    // Verificar ID del estudiante
-    if (!student || !student.id_estudiante) {
+    // Asegurarnos de que el id del estudiante esté presente antes de enviar
+    if (!student.id_semestre) {
       setError("ID del estudiante no disponible");
       return;
     }
 
-    // Realizar la solicitud PUT al backend
-    fetch(`http://localhost:5000/updateEstudiantes/${student.id_estudiante}`, {
-      method: "PUT",  
+    // Realizamos la solicitud PUT al backend
+    fetch(`http://localhost:5000/updateEstudiantes/${student.id_semestre}`, {
+      method: "PUT",  // Enviamos los datos en una solicitud PUT
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json",  // Asegúrate de que el backend espera JSON
       },
-      body: JSON.stringify(formData),  // Envío de datos en JSON
+      body: JSON.stringify(formData),  // Convierte el objeto formData en una cadena JSON
     })
-    
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error al actualizar los datos.");
@@ -103,9 +105,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       })
       .then((data) => {
         console.log("Datos actualizados:", data);
-        setSuccessMessage("Datos actualizados correctamente.");
-        setIsSuccessVisible(true);
-        onClose();  // Cerrar el modal si se actualiza correctamente
+        onClose();  // Cerramos el modal al recibir respuesta exitosa
       })
       .catch((error) => {
         setError(`Error al actualizar los datos: ${error.message}`);
@@ -113,7 +113,6 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   };
 
   if (!student) return null;
-
   return (
     <>
       {isSuccessVisible && (
@@ -122,11 +121,12 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
           role="alert"
         >
           <p>{successMessage}</p>
+
           <button
             type="button"
             className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+            data-dismiss-target="#alert-border-1"
             aria-label="Close"
-            onClick={() => setIsSuccessVisible(false)}
           >
             <svg
               className="w-3 h-3"
