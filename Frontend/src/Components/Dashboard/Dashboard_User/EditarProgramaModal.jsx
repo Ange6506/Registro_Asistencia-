@@ -189,21 +189,21 @@ const EditarProgramaModal = ({
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700">Estado</label>
           <select
-  name="estado"
-  value={newProgram.estado === "activo" ? "activo" : "inactivo"}
-  onChange={(e) =>
-    handleInputChange({
-      target: {
-        name: "estado",
-        value: e.target.value,
-      },
-    })
-  }
-  className="w-full mt-2 p-2 border border-gray-300 rounded"
->
-  <option value="activo">Activo</option>
-  <option value="inactivo">Inactivo</option>
-</select>
+            name="estado"
+            value={newProgram.estado || "inactivo"} // Aseguramos que el valor inicial sea 'inactivo' si no hay valor
+            onChange={(e) =>
+              handleInputChange({
+                target: {
+                  name: "estado",
+                  value: e.target.value, // Cambiamos directamente el valor del estado a 'activo' o 'inactivo'
+                },
+              })
+            }
+            className="w-full mt-2 p-2 border border-gray-300 rounded"
+          >
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
 
         </div>
 
