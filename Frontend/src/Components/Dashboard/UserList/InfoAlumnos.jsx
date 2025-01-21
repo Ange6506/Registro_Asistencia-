@@ -24,8 +24,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   });
 
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje emergente
 
   useEffect(() => {
     if (student) {
@@ -109,24 +108,17 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
         }
         return response.json();
       })
-      .then((data) => {
-        if (
-          data.message === "Información del semestre actualizada exitosamente"
-        ) {
-          setSuccessMessage("Información actualizada correctamente.");
-          setIsSuccessVisible(true);
+      .then(() => {
+        // Mostrar el mensaje de éxito solo si la actualización es exitosa
+        setSuccessMessage("Información actualizada correctamente.");
 
-          // Ocultar el mensaje después de 2 segundos
-          setTimeout(() => {
-            setIsSuccessVisible(false);
-          }, 2000);
+        // Cerrar el modal
+        onClose();
 
-          setError(""); // Limpiar el error si la actualización fue exitosa
-          onClose(); // Cierra el modal si la actualización fue exitosa
-        } else {
-          setError("Error al actualizar los datos");
-          alert("Error: " + data.message);
-        }
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error en la solicitud:", error);
@@ -138,9 +130,10 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
   return (
     <>
-      {/* Mostrar mensaje de éxito solo cuando se actualiza correctamente */}
-      {isSuccessVisible && (
-        <div
+      {/* Mostrar el mensaje solo si es un éxito */}
+      {successMessage && (
+       
+          <div
           className="fixed top-4 right-4 bg-white dark:bg-blue-800 p-4 shadow-lg rounded-md z-50 flex items-center text-blue-800 dark:text-blue-400 border-t-4 border-blue dark:border-blue-800"
           role="alert"
         >
@@ -148,7 +141,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
           <button
             type="button"
             className="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8"
-            onClick={() => setIsSuccessVisible(false)}
+       
           >
             <svg
               className="w-3 h-3"
@@ -168,6 +161,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
           </button>
         </div>
       )}
+     
       <div
         className={`fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center ${
           showModal ? "block" : "hidden"
@@ -192,7 +186,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                 </div>
 
                 <div className="w-10">
-                  <button onClick={onClose}>
+                <button type="button" onClick={onClose}>
                     <div className="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
