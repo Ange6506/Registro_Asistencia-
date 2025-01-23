@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { InfoAlumnos } from "./InfoAlumnos";
 import { Huella } from "./huella";
+import { ModalAlumno } from "./modalAlumno";
 
 export const ListaAlumnos = () => {
   const [showModal, setShowModal] = useState(false);
+  const [username, setUsername] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [studentsData, setStudentsData] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalAlumnoOpen, setModalAlumnoOpen] = useState(false);
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+      setIsAdmin(storedUsername === "Administrador");
+    } else {
+      window.location.href = "/";
+    }
+  }, []);
 
   // Fetch students data
   useEffect(() => {
@@ -27,9 +40,9 @@ export const ListaAlumnos = () => {
   }, []);
 
   const handleShowModal = (student) => {
-    setSelectedStudent(student); 
-    setShowModal(true); 
-  }
+    setSelectedStudent(student);
+    setShowModal(true);
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -42,8 +55,11 @@ export const ListaAlumnos = () => {
     // Filter students by name or identification
     const filtered = studentsData.filter(
       (student) =>
-        student.nombre_del_estudiante.toLowerCase().includes(value.toLowerCase()) ||
-        (student.identificacion && String(student.identificacion).includes(value)) // Ensure it's defined before using includes
+        student.nombre_del_estudiante
+          .toLowerCase()
+          .includes(value.toLowerCase()) ||
+        (student.identificacion &&
+          String(student.identificacion).includes(value)) // Ensure it's defined before using includes
     );
     setFilteredStudents(filtered);
   };
@@ -107,6 +123,10 @@ export const ListaAlumnos = () => {
       closeConfirmModal();
     }
   };
+ 
+  const openModalAlumno = () => {
+    setModalAlumnoOpen(true); // Abre el modalAlumno
+  };
 
   return (
     <section
@@ -151,6 +171,15 @@ export const ListaAlumnos = () => {
             </div>
           </div>
         </div>
+        
+        <div className="flex justify-end gap-4 mt-4">
+            <button
+              onClick={openModalAlumno} 
+              className="px-6 py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
+            >
+              Agregar Programa
+            </button>
+          </div>
 
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto">
@@ -174,9 +203,11 @@ export const ListaAlumnos = () => {
                       <th className="px-6 py-4 text-sm font-normal text-left text-white">
                         Fecha Final
                       </th>
-                      <th className="px-6 py-4 text-sm font-normal text-left text-white">
-                        Acción
-                      </th>
+                      {isAdmin && (
+                        <th className="px-6 py-4 text-sm font-normal text-left text-white">
+                          Acción
+                        </th>
+                      )}
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
@@ -198,64 +229,46 @@ export const ListaAlumnos = () => {
                           <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-300">
                             {formatFecha(student.fecha_terminacion)}
                           </td>
-                          <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
-                            <button
-                              onClick={() => handleShowModal(student)}
-                              className="mr-2"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-5 h-5"
+                          {isAdmin && (
+                            <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
+                              <button
+                                onClick={() => handleShowModal(student)}
+                                className="mr-2"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M16.862 4.487a2.6 2.6 0 1 0-3.673 3.673l-7.252 7.253a2.25 2.25 0 0 0-.57.92l-1.565 4.687a2.25 2.25 0 0 0 2.729 2.73l4.687-1.565a2.25 2.25 0 0 0 .92-.57l7.253-7.252a2.6 2.6 0 1 0-3.672-3.673l-4.687 4.688"
-                                />
-                              </svg>
-                            </button>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-5 h-5"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M16.862 4.487a2.6 2.6 0 1 0-3.673 3.673l-7.252 7.253a2.25 2.25 0 0 0-.57.92l-1.565 4.687a2.25 2.25 0 0 0 2.729 2.73l4.687-1.565a2.25 2.25 0 0 0 .92-.57l7.253-7.252a2.6 2.6 0 1 0-3.672-3.673l-4.687 4.688"
+                                  />
+                                </svg>
+                              </button>
 
-                            <button
-                              onClick={() => openConfirmModal(student)}
-                              className="mr-2"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="red"
-                                className="w-5 h-5"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                />
-                              </svg>
-                            </button>
-
-                            <button onClick={() => openModal(student)}>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-5 h-5"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"
-                                />
-                              </svg>
-                            </button>
-                          </td>
+                              <button onClick={() => openModal(student)}>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="w-5 h-5"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"
+                                  />
+                                </svg>
+                              </button>
+                            </td>
+                          )}
                         </tr>
                       ))
                     ) : (
@@ -284,6 +297,11 @@ export const ListaAlumnos = () => {
         isModalOpen={isModalOpen}
         onClose={closeModal}
         student={selectedStudent}
+      />
+      {/* Modal de modalAlumno */}
+      <ModalAlumno
+        ModalOpen={modalAlumnoOpen} 
+        onClose={() => setModalAlumnoOpen(false)} 
       />
 
       {/* Modal de Confirmación */}

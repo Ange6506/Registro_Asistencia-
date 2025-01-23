@@ -4,7 +4,7 @@ export const Huellero = () => {
   const [asistencia, setAsistencia] = useState([]);
   const [registroActivo, setRegistroActivo] = useState(null);
   const [errorSalida, setErrorSalida] = useState(false);
-  const [huella, setHuella] = useState(3); // Aquí asignamos 3 como valor predeterminado para la huella
+  const [huella, setHuella] = useState(2); // Aquí asignamos 3 como valor predeterminado para la huella
 
   const handleRegistroAsistencia = async () => {
     try {

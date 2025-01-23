@@ -208,6 +208,13 @@ export const Programa = () => {
             th, td { padding: 8px; text-align: left; border: 1px solid #ddd; font-size: 10px; }
             th { background-color: #f4f4f4; }
             h1 { font-size: 24px; text-align: center; margin-bottom: 20px; }
+
+            /* Regla de impresión para ocultar la columna de acciones */
+            @media print {
+              .no-print {
+                display: none;
+              }
+            }
           </style>
         </head>
         <body>
@@ -319,9 +326,9 @@ export const Programa = () => {
                           <th className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-white">
                             Estado
                           </th>
-                          <th className="px-6 py-4 text-sm font-normal text-left text-white">
-                            Acción
-                          </th>
+                          <th className="px-6 py-4 text-sm font-normal text-left text-white no-print">
+                Acción
+              </th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-blue dark:divide-blue dark:bg-blue">
@@ -343,46 +350,40 @@ export const Programa = () => {
                               <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                                 {program.estado ? "Activo" : "Inactivo"}
                               </td>
-                              <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap">
-                                <button
-                                  onClick={() => handleEditProgram(program)}
-                                  className="mr-2"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="w-5 h-5"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="m16.862 4.487a2.6 2.6 0 1 0-3.673 3.673l-7.252 7.253a2.25 2.25 0 0 0-.57.92l-1.565 4.687a2.25 2.25 0 0 0 2.729 2.73l4.687-1.565a2.25 2.25 0 0 0 .92-.57l7.253-7.252a2.6 2.6 0 1 0-3.672-3.673l-4.687 4.688"
-                                    />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => deleteConfirmModal(program)}
-                                  className="mr-2"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="red"
-                                    className="w-5 h-5"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                    />
-                                  </svg>
-                                </button>
-                              </td>
+                              <td className="px-6 py-4 text-sm text-black-600 dark:text-gray-200 whitespace-nowrap no-print">
+                    <button onClick={() => handleEditProgram(program)} className="mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487a2.6 2.6 0 1 0-3.673 3.673l-7.252 7.253a2.25 2.25 0 0 0-.57.92l-1.565 4.687a2.25 2.25 0 0 0 2.729 2.73l4.687-1.565a2.25 2.25 0 0 0 .92-.57l7.253-7.252a2.6 2.6 0 1 0-3.672-3.673l-4.687 4.688"
+                        />
+                      </svg>
+                    </button>
+                    <button onClick={() => deleteConfirmModal(program)} className="mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="red"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </td>
                             </tr>
                           ))
                         ) : (
