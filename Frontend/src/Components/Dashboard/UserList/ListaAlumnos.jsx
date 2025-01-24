@@ -177,7 +177,7 @@ export const ListaAlumnos = () => {
               onClick={openModalAlumno} 
               className="px-6 py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
             >
-              Agregar Programa
+              Agregar Estudiante
             </button>
           </div>
 
