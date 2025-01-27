@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import EditarProgramaModal from "../Dashboard/Dashboard_UserModal/EditarProgramaModal"; // Modal de edición
+import EditarProgramaModal from "../Dashboard_UserModal/EditarProgramaModal"; // Modal de edición
 
 export const Programa = () => {
   const [programsData, setProgramsData] = useState([]);

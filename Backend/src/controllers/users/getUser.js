@@ -5,15 +5,17 @@ const pool = new Pool(CONFIG_DB);
 
 const getUser = async (req, res) => {
   try {
-    // Ejecutar la consulta para obtener todos los usuarios
+    // Ejecutar la consulta para obtener todos los usuarios con su descripción de rol
     const result = await pool.query(`
       SELECT 
         u.id_usuario, 
         u.id_rol, 
+        r.descripcion AS rol_descripcion,  -- Obtenemos la descripción del rol
         u.username, 
         u.password, 
         u.estado
       FROM public.usuarios AS u
+      LEFT JOIN public.rol AS r ON u.id_rol = r.id_rol  -- Realizamos el JOIN con la tabla rol
       ORDER BY u.username;
     `);
 

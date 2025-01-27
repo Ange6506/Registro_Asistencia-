@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { InfoAlumnos } from "../Dashboard/Dashboard_UserModal/InfoAlumnos";
+import { InfoAlumnos } from "../Dashboard_UserModal/InfoAlumnos";
 import { Huella } from "../Tools/huella";
 
 export const ListaAlumnos = () => {
