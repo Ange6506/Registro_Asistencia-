@@ -1,22 +1,31 @@
 const express = require("express");
 const router = express.Router();
+//estudiantes
+const getEstudiantes  = require("../controllers/student/getEstudiantes");
+const addEstudiante  = require("../controllers/student/addEstudiante");
+const deleteEstudiante  = require("../controllers/student/deleteEstudiante");
+const addHuella  = require("../controllers/student/addHuella");
 
-const addUsers = require("../controllers/users/addUser");
-const addAsistencia = require("../controllers/users/addAsistencia");
-const getEstudiantes  = require("../controllers/users/getEstudiantes");
-const getAsistencia  = require("../controllers/users/getAsistencia");
+
+//Asistencia
+const getAsistencia  = require("../controllers/Attendance/getAsistencia");
+const addAsistencia = require("../controllers/Attendance/addAsistencia");
+
+//program
+const updatePrograma  = require("../controllers/program/updatePrograma");
+const deleteProgram  = require("../controllers/program/deleteProgram");
+const getPrograma  = require("../controllers/program/getPrograma");
+const  addPrograma  = require("../controllers/program/addPrograma");
+
+//Semester
+const  updateSemestre  = require("../controllers/Semester/updateSemestre");
+
+//Users
 const loginUser = require("../controllers/users/loginUser");
-const  deleteEstudiante  = require("../controllers/users/deleteEstudiante");
-const  addHuella  = require("../controllers/users/addHuella");
-const  getPrograma  = require("../controllers/users/getPrograma");
-const  addPrograma  = require("../controllers/users/addPrograma");
-const  updatePrograma  = require("../controllers/users/updatePrograma");
-const  deleteProgram  = require("../controllers/users/deleteProgram");
-const  updateSemestre  = require("../controllers/users/updateSemestre");
-const  addEstudiante  = require("../controllers/users/addEstudiante");
 const  getUser  = require("../controllers/users/getUser");
 const  getRoles  = require("../controllers/users/getRoles");
 const  updateUser  = require("../controllers/users/updateUser");
+const addUsers = require("../controllers/users/addUser");
 
 router.post("/add_user", addUsers.addUser);
 router.post("/add_Asistencia", addAsistencia.addAsistencia);
