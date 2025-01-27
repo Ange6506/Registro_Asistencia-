@@ -33,7 +33,7 @@ router.put("/updateSemestre/:id_semestre", updateSemestre.updateSemestre);
 router.post("/addEstudiante", addEstudiante.addEstudiante);
 router.get("/getUser", getUser.getUser);
 router.get("/getRoles", getRoles.getRoles);
-router.put("/updateUser", updateUser.updateUser);
+router.put("/updateUser/:id", updateUser.updateUser);
 
 
 module.exports = router;

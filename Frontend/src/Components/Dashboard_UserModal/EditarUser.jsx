@@ -57,20 +57,20 @@ const EditarUser = ({
       setError("Por favor, complete todos los campos.");
       return;
     }
-
+  
     try {
-      setError(""); // Limpiar el error si todo está bien
-
+      setError(""); // Clear previous error messages
+  
       const userUpdateData = {
-        id_usuario: newUser.id_usuario, // ID no editable
+        id_usuario: newUser.id_usuario, // ID is not editable
         name: userData.name,
         password: userData.password,
         id_rol: userData.id_rol,
         estado: userData.estado,
       };
-
+  
       console.log("Datos a enviar:", userUpdateData);
-
+  
       const response = await fetch(
         `http://localhost:5000/updateUser/${newUser.id_usuario}`,
         {
@@ -81,18 +81,17 @@ const EditarUser = ({
           body: JSON.stringify(userUpdateData),
         }
       );
-
-      const responseText = await response.text();
-      console.log('Raw response:', responseText);
-
+  
+      const responseText = await response.text(); // Get raw response text
+  
       let data;
       try {
-        data = JSON.parse(responseText);
+        data = JSON.parse(responseText); // Try to parse JSON response
       } catch (parseError) {
-        console.error('Error parsing response:', responseText);
+        console.error("Error parsing response:", responseText);
         throw new Error(`Error en la respuesta del servidor: ${responseText.substring(0, 100)}...`);
       }
-
+  
       if (response.ok) {
         console.log("Usuario actualizado con éxito:", data);
         onClose();
@@ -106,7 +105,7 @@ const EditarUser = ({
       setError(`Error al actualizar el usuario: ${error.message}`);
     }
   };
-
+  
   if (!isOpen) return null; // Esto asegura que el modal no se renderice si no está abierto
 
   return (
