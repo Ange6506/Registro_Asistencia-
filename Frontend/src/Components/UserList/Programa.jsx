@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Modal from "./modal"; // Modal de agregar
-import EditarProgramaModal from "./EditarProgramaModal"; // Modal de edición
+import EditarProgramaModal from "../Dashboard/Dashboard_UserModal/EditarProgramaModal"; // Modal de edición
 
 export const Programa = () => {
   const [programsData, setProgramsData] = useState([]);
@@ -294,13 +293,6 @@ export const Programa = () => {
                 />
               </svg>
             </button>
-
-            <button
-              onClick={openModal}
-              className="px-6 py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
-            >
-              Agregar Programa
-            </button>
           </div>
 
           <div className="flex flex-col justify-between flex-1 mt-6">
@@ -415,14 +407,7 @@ export const Programa = () => {
         handleInputChange={handleInputChange}
       />
 
-      {/* Modal de agregar programa */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onAddProgram={handleAddProgram}
-        newProgram={newProgram}
-        handleInputChange={handleInputChange}
-      />
+     
 
       {isDeleteConfirmOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

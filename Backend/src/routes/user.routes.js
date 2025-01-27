@@ -14,6 +14,7 @@ const  updatePrograma  = require("../controllers/users/updatePrograma");
 const  deleteProgram  = require("../controllers/users/deleteProgram");
 const  updateSemestre  = require("../controllers/users/updateSemestre");
 const  addEstudiante  = require("../controllers/users/addEstudiante");
+const  getUser  = require("../controllers/users/getUser");
 
 router.post("/add_user", addUsers.addUser);
 router.post("/add_Asistencia", addAsistencia.addAsistencia);
@@ -28,6 +29,7 @@ router.put("/update_programa/:id", updatePrograma.updatePrograma);
 router.delete("/deletePrograma/:id_programa", deleteProgram.deleteProgram);
 router.put("/updateSemestre/:id_semestre", updateSemestre.updateSemestre);
 router.post("/addEstudiante", addEstudiante.addEstudiante);
+router.get("/getUser", getUser.getUser);
 
 
 module.exports = router;

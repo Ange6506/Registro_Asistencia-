@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./DashboardComponents/Navbar";
-import Sidebar  from "./DashboardComponents/Sidebar";
+import Navbar from "./Dashboard/DashboardComponents/Navbar";
+import Sidebar  from "./Dashboard/DashboardComponents/Sidebar";
 import { ListaAlumnos } from "./UserList/ListaAlumnos";
-import { Huellero } from "./Simulador_huellero/huellero";
-import { ListAsistencia } from "./Dashboard_User/ListAsistencia";
-import { Programa } from "./Dashboard_User/Programa";
+import { Huellero } from "./Dashboard/Simulador_huellero/huellero";
+import { ListAsistencia } from "./UserList/ListAsistencia";
+import { Programa } from "./UserList/Programa";
+import { FormularioAlumno } from "./DashboardRegister/FormularioAlumno";
+import  AgregarPrograma  from "./DashboardRegister/AgregarPrograma";
+import { ListUsuarios } from "./UserList/ListaUsuarios";
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("");  // Estado para manejar el contenido
@@ -48,6 +51,9 @@ export const Dashboard = () => {
               {contenido === "Huellero" && <Huellero />}
               {contenido === "Lista_Asistencia" && <ListAsistencia />}
               {contenido === "Programa" && <Programa />}
+              {contenido === "FormularioAlumno" && <FormularioAlumno />}
+              {contenido === "AgregarPrograma" && <AgregarPrograma />}
+              {contenido === "ListUsuarios" && <ListUsuarios />}
 
             </div>
           </div>

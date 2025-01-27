@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { InfoAlumnos } from "./InfoAlumnos";
-import { Huella } from "./huella";
-import { ModalAlumno } from "./modalAlumno";
+import { InfoAlumnos } from "../Dashboard/Dashboard_UserModal/InfoAlumnos";
+import { Huella } from "../Tools/huella";
 
 export const ListaAlumnos = () => {
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +12,7 @@ export const ListaAlumnos = () => {
   const [studentsData, setStudentsData] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalAlumnoOpen, setModalAlumnoOpen] = useState(false);
+
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
@@ -86,7 +85,6 @@ export const ListaAlumnos = () => {
         }
       );
 
-      // Add more details to see the full response
       const data = await response.json();
       console.log(data); // Check the API response
 
@@ -122,10 +120,6 @@ export const ListaAlumnos = () => {
       handleDeleteStudent(selectedStudent.identificacion);
       closeConfirmModal();
     }
-  };
- 
-  const openModalAlumno = () => {
-    setModalAlumnoOpen(true); // Abre el modalAlumno
   };
 
   return (
@@ -171,15 +165,6 @@ export const ListaAlumnos = () => {
             </div>
           </div>
         </div>
-        
-        <div className="flex justify-end gap-4 mt-4">
-            <button
-              onClick={openModalAlumno} 
-              className="px-6 py-2 text-gray-700 bg-white border border-blue rounded-lg focus:outline-none text-sm"
-            >
-              Agregar Estudiante
-            </button>
-          </div>
 
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto">
@@ -297,11 +282,6 @@ export const ListaAlumnos = () => {
         isModalOpen={isModalOpen}
         onClose={closeModal}
         student={selectedStudent}
-      />
-      {/* Modal de modalAlumno */}
-      <ModalAlumno
-        ModalOpen={modalAlumnoOpen} 
-        onClose={() => setModalAlumnoOpen(false)} 
       />
 
       {/* Modal de Confirmación */}
