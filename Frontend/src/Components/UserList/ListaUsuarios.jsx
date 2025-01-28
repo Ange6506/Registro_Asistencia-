@@ -7,6 +7,8 @@ export const ListUsuarios = () => {
   const [filteredUsers, setFilteredUsers] = useState([]); // Lista filtrada de usuarios
   const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
   const [selectedUser, setSelectedUser] = useState(null); // Estado para el usuario seleccionado para editar
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Fetch data when the component mounts
   useEffect(() => {
@@ -29,6 +31,12 @@ export const ListUsuarios = () => {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
+  };
+
+  // Función para abrir el modal de confirmación de eliminación
+  const handleDeleteUser = (user) => {
+    setUserToDelete(user); // Guardamos el usuario que se va a eliminar
+    setShowDeleteModal(true); // Mostramos el modal de confirmación
   };
 
   // Filtrar usuarios según el filtro de búsqueda
@@ -54,7 +62,6 @@ export const ListUsuarios = () => {
 
   // Función para abrir el modal y pasar el usuario seleccionado
   const handleEditUser = (user) => {
-    // Renombramos 'username' a 'name' antes de pasar al modal
     const userWithName = { ...user, name: user.username };
     delete userWithName.username; // Eliminamos 'username' si no lo necesitamos
 
@@ -62,12 +69,52 @@ export const ListUsuarios = () => {
     setShowModal(true); // Mostrar el modal
   };
 
-  // Función para cerrar el modal
+  // Función para cerrar los modales
   const closeModal = () => {
     setShowModal(false);
-    setSelectedUser(null); // Limpiar el usuario seleccionado
+    setSelectedUser(null);
+    setShowDeleteModal(false);
+    setUserToDelete(null);
   };
 
+  // Función para eliminar al usuario
+  const deleteUser = async () => {
+    try {
+      // Usamos `userToDelete` en lugar de `newUser`
+      const response = await fetch(
+        `http://localhost:5000/deleteUser/${userToDelete.id_usuario}`, 
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    
+      const responseText = await response.text();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("Error al parsear la respuesta:", responseText);
+        throw new Error(`Error en la respuesta del servidor: ${responseText.substring(0, 100)}...`);
+      }
+    
+      if (response.ok) {
+        console.log("Usuario eliminado con éxito:", data);
+        closeModal(); // Cerramos el modal
+        window.location.reload(); // Recargamos la página para reflejar los cambios
+      } else {
+        const errorMessage = data?.message || 'Error desconocido al eliminar el usuario';
+        console.error("Error al eliminar el usuario:", errorMessage);
+        setError(errorMessage); // Muestra el error si no se pudo eliminar
+      }
+    } catch (error) {
+      console.error("Error completo:", error);
+      setError(`Error al eliminar el usuario: ${error.message}`);
+    }
+  };  
+  
   return (
     <section
       className="container p-4 mx-auto flex flex-col"
@@ -185,10 +232,10 @@ export const ListUsuarios = () => {
                                 </svg>
                               </button>
                               <button
-                                onClick={() => deleteConfirmModal(program)}
+                                onClick={() => handleDeleteUser(user)}
                                 className="mr-2"
                               >
-                                <svg
+                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
                                   viewBox="0 0 24 24"
@@ -228,10 +275,35 @@ export const ListUsuarios = () => {
       {/* Modal de Edición */}
       {showModal && selectedUser && (
         <EditarUser
-          isOpen={showModal} // Estado del modal
-          onClose={closeModal} // Función para cerrar el modal
-          newUser={selectedUser} // Usuario seleccionado con 'name' en lugar de 'username'
+          isOpen={showModal}
+          onClose={closeModal}
+          newUser={selectedUser}
         />
+      )}
+
+      {/* Modal de Confirmación de Eliminación */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <h3 className="text-lg font-bold mb-4">
+              ¿Estás seguro de eliminar este usuario?
+            </h3>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-300 rounded"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={deleteUser}
+                className="px-4 py-2 bg-red-500 text-white rounded"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

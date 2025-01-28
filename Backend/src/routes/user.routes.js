@@ -26,6 +26,7 @@ const  getUser  = require("../controllers/users/getUser");
 const  getRoles  = require("../controllers/users/getRoles");
 const  updateUser  = require("../controllers/users/updateUser");
 const addUsers = require("../controllers/users/addUser");
+const deleteUser = require("../controllers/users/deleteUser");
 
 
 //router post
@@ -34,6 +35,7 @@ router.post("/add_Asistencia", addAsistencia.addAsistencia);
 router.post("/login", loginUser.loginUser);
 router.post("/add_Huella", addHuella.addHuella);
 router.post("/addPrograma", addPrograma.addPrograma);
+router.post("/addEstudiante", addEstudiante.addEstudiante);
 
 //router get
 router.get("/get_estudiante", getEstudiantes.getEstudiantes);
@@ -45,12 +47,12 @@ router.get("/getRoles", getRoles.getRoles);
 //router put
 router.put("/update_programa/:id", updatePrograma.updatePrograma);
 router.put("/updateSemestre/:id_semestre", updateSemestre.updateSemestre);
-router.post("/addEstudiante", addEstudiante.addEstudiante);
-router.put("/updateUser/:id", updateUser.updateUser);
+router.put("/updateUser/:id_usuario", updateUser.updateUser);
 
 //router delete
 router.delete("/deletestudent/:identificacion", deleteEstudiante.deleteEstudiante);
 router.delete("/deletePrograma/:id_programa", deleteProgram.deleteProgram);
+router.delete("/deleteUser/:id_usuario", deleteUser.deleteUser);
 
 
 module.exports = router;

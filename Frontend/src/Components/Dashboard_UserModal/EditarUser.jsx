@@ -7,7 +7,12 @@ const EditarUser = ({
 }) => {
   const [roles, setRoles] = useState([]); // Estado para los roles
   const [error, setError] = useState("");
-  const [userData, setUserData] = useState({}); // Estado local para los datos del usuario
+  const [userData, setUserData] = useState({
+    name: "", 
+    password: "", 
+    id_rol: "", 
+    estado: "inactivo", // Definimos valores por defecto
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -48,29 +53,26 @@ const EditarUser = ({
   };
 
   const handleUpdateUser = async () => {
-    if (
-      !userData.name ||
-      !userData.password ||
-      !userData.id_rol ||
-      !userData.estado
-    ) {
+    console.log(userData);  // Verifica los valores de los campos antes de la validación
+    // Validación de campos
+    if (!userData.name || !userData.password || !userData.id_rol || !userData.estado) {
       setError("Por favor, complete todos los campos.");
       return;
     }
-  
+
     try {
-      setError(""); // Clear previous error messages
-  
+      setError(""); // Limpiar mensajes de error previos
+
       const userUpdateData = {
-        id_usuario: newUser.id_usuario, // ID is not editable
-        name: userData.name,
+        id_usuario: newUser.id_usuario, // ID no es editable
+        username: userData.name, 
         password: userData.password,
         id_rol: userData.id_rol,
         estado: userData.estado,
       };
-  
+
       console.log("Datos a enviar:", userUpdateData);
-  
+
       const response = await fetch(
         `http://localhost:5000/updateUser/${newUser.id_usuario}`,
         {
@@ -81,20 +83,20 @@ const EditarUser = ({
           body: JSON.stringify(userUpdateData),
         }
       );
-  
-      const responseText = await response.text(); // Get raw response text
-  
+
+      const responseText = await response.text(); // Obtener texto de la respuesta
       let data;
       try {
-        data = JSON.parse(responseText); // Try to parse JSON response
+        data = JSON.parse(responseText); // Intentar parsear la respuesta JSON
       } catch (parseError) {
-        console.error("Error parsing response:", responseText);
+        console.error("Error al parsear la respuesta:", responseText);
         throw new Error(`Error en la respuesta del servidor: ${responseText.substring(0, 100)}...`);
       }
-  
+
       if (response.ok) {
         console.log("Usuario actualizado con éxito:", data);
         onClose();
+        window.location.reload(); 
       } else {
         const errorMessage = data?.message || 'Error desconocido al actualizar el usuario';
         console.error("Error al actualizar el usuario:", errorMessage);
@@ -105,7 +107,7 @@ const EditarUser = ({
       setError(`Error al actualizar el usuario: ${error.message}`);
     }
   };
-  
+
   if (!isOpen) return null; // Esto asegura que el modal no se renderice si no está abierto
 
   return (
