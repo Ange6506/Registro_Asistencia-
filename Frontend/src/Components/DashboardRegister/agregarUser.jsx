@@ -1,52 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-const AgregarUser = () => {
-  const [user, setUser] = useState(""); // Para almacenar el usuario logueado
-  const [newProgram, setNewProgram] = useState({
-    programa: "",
-    fecha_ingreso: "",
-    hora_ingreso: "",
-    usuario: "",
+const AgregarUsuario = () => {
+  const [newUser, setNewUser] = useState({
+    username: "",
+    password: "",
+    id_rol: "",
     estado: true,
   });
   const [error, setError] = useState(""); // Para manejar errores de validación
-
-  useEffect(() => {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split("T")[0];
-    const formattedTime = currentDate.toISOString().split("T")[1].split(".")[0];
-
-    if (!newProgram.fecha_ingreso) {
-      setNewProgram((prev) => ({ ...prev, fecha_ingreso: formattedDate }));
-    }
-    if (!newProgram.hora_ingreso) {
-      setNewProgram((prev) => ({ ...prev, hora_ingreso: formattedTime }));
-    }
-
-    if (!user) {
-      const loggedInUser = localStorage.getItem("username");
-      if (loggedInUser) {
-        setUser(loggedInUser);
-        setNewProgram((prev) => ({ ...prev, usuario: loggedInUser }));
-      }
-    }
-  }, [newProgram.fecha_ingreso, newProgram.hora_ingreso, user]);
+  const [success, setSuccess] = useState(""); // Para manejar el mensaje de éxito
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewProgram((prev) => ({
+    setNewUser((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handleAddProgram = async () => {
+  const handleAddUser = async () => {
     try {
       if (
-        !newProgram.programa ||
-        !newProgram.fecha_ingreso ||
-        !newProgram.hora_ingreso ||
-        !newProgram.usuario
+        !newUser.username ||
+        !newUser.password ||
+        !newUser.id_rol ||
+        !newUser.estado
       ) {
         setError("Por favor, complete todos los campos.");
         return;
@@ -54,133 +32,122 @@ const AgregarUser = () => {
         setError("");
       }
 
-      const programaData = {
-        programa: newProgram.programa,
-        fecha_ingreso: newProgram.fecha_ingreso,
-        hora_ingreso: newProgram.hora_ingreso,
-        usuario: newProgram.usuario,
-        estado: newProgram.estado,
+      const userData = {
+        username: newUser.username,
+        password: newUser.password,
+        id_rol: newUser.id_rol,
+        estado: newUser.estado,
       };
 
-      console.log("Datos a enviar:", programaData);
+      console.log("Datos a enviar:", userData);
 
-      const response = await fetch("http://localhost:5000/addPrograma", {
+      const response = await fetch("http://localhost:5000/add_user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(programaData),
+        body: JSON.stringify(userData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Programa agregado con éxito:", data);
-
-        setNewProgram({
-          programa: "",
-          fecha_ingreso: "",
-          hora_ingreso: "",
-          usuario: "",
+        console.log("Usuario agregado con éxito:", data);
+        setSuccess("Usuario agregado con éxito.");
+        setNewUser({
+          username: "",
+          password: "",
+          id_rol: "",
           estado: true,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
       } else {
-        console.error("Error al agregar el programa:", data.message);
+        setError(data.message || "Hubo un error al agregar el usuario.");
       }
     } catch (error) {
-      console.error("Error al agregar el programa:", error);
+      console.error("Error al agregar el usuario:", error);
+      setError("Hubo un error inesperado. Intenta nuevamente.");
     }
   };
 
   return (
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-2xl font-bold text-center mb-6">Agregar Programa</h3>
+    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+      <h3 className="text-2xl font-bold text-center mb-6">Registrar Usuario</h3>
 
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+      {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
 
-        <form>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Programa</label>
-            <input
-              type="text"
-              name="programa"
-              value={newProgram.programa}
-              onChange={handleInputChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded"
-              placeholder="Nombre del programa"
-            />
-          </div>
+      <form>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Nombre de Usuario</label>
+          <input
+            type="text"
+            name="username"
+            value={newUser.username}
+            onChange={handleInputChange}
+            className="w-full mt-2 p-2 border border-gray-300 rounded"
+            placeholder="Nombre de usuario"
+          />
+        </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Fecha Ingreso</label>
-            <input
-              type="date"
-              name="fecha_ingreso"
-              value={newProgram.fecha_ingreso}
-              onChange={handleInputChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded"
-            />
-          </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+          <input
+            type="password"
+            name="password"
+            value={newUser.password}
+            onChange={handleInputChange}
+            className="w-full mt-2 p-2 border border-gray-300 rounded"
+            placeholder="Contraseña"
+          />
+        </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Hora Ingreso</label>
-            <input
-              type="time"
-              name="hora_ingreso"
-              value={newProgram.hora_ingreso}
-              onChange={handleInputChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded"
-            />
-          </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Rol</label>
+          <select
+            name="id_rol"
+            value={newUser.id_rol}
+            onChange={handleInputChange}
+            className="w-full mt-2 p-2 border border-gray-300 rounded"
+          >
+            <option value="">Seleccione un rol</option>
+            <option value="1">Administrador</option>
+            <option value="2">Usuario</option>
+            <option value="3">Invitado</option>
+          </select>
+        </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Usuario</label>
-            <input
-              type="text"
-              name="usuario"
-              value={newProgram.usuario || user}
-              onChange={handleInputChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded"
-              disabled
-            />
-          </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Estado</label>
+          <select
+            name="estado"
+            value={newUser.estado ? "activo" : "inactivo"}
+            onChange={(e) =>
+              handleInputChange({
+                target: {
+                  name: "estado",
+                  value: e.target.value === "activo",
+                },
+              })
+            }
+            className="w-full mt-2 p-2 border border-gray-300 rounded"
+          >
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Estado</label>
-            <select
-              name="estado"
-              value={newProgram.estado ? "activo" : "inactivo"}
-              onChange={(e) =>
-                handleInputChange({
-                  target: {
-                    name: "estado",
-                    value: e.target.value === "activo",
-                  },
-                })
-              }
-              className="w-full mt-2 p-2 border border-gray-300 rounded"
-            >
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo</option>
-            </select>
-          </div>
-
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={handleAddProgram}
-              className="px-6 py-2 text-white bg-blue rounded-lg shadow-md hover:bg-green-600"
-            >
-              Agregar
-            </button>
-          </div>
-        </form>
-      </div>
-
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={handleAddUser}
+            className="px-6 py-2 text-white bg-blue rounded-lg shadow-md hover:bg-green-600"
+          >
+            Registrar
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
-export default AgregarUser;
+export default AgregarUsuario;

@@ -8,6 +8,7 @@ import { Programa } from "./UserList/Programa";
 import { FormularioAlumno } from "./DashboardRegister/FormularioAlumno";
 import  AgregarPrograma  from "./DashboardRegister/AgregarPrograma";
 import { ListUsuarios } from "./UserList/ListaUsuarios";
+import AgregarUser  from "./DashboardRegister/agregarUser";
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("");  // Estado para manejar el contenido
@@ -54,8 +55,8 @@ export const Dashboard = () => {
               {contenido === "FormularioAlumno" && <FormularioAlumno />}
               {contenido === "AgregarPrograma" && <AgregarPrograma />}
               {contenido === "ListUsuarios" && <ListUsuarios />}
-
-            </div>
+              {contenido === "AgregarUser" && <AgregarUser />}
+              </div>
           </div>
         </div>
       </div>

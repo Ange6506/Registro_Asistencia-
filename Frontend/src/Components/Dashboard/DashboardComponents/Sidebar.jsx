@@ -325,7 +325,7 @@ const Sidebar = ({ contenido, setContenido }) => {
               </li>
               <li>
                 <SidebarButton
-                  onClick={() => setContenido("")}
+                  onClick={() => setContenido("AgregarUser")}
                   icon={
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
