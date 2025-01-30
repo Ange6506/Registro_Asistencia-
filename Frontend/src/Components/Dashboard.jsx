@@ -9,6 +9,8 @@ import { FormularioAlumno } from "./DashboardRegister/FormularioAlumno";
 import  AgregarPrograma  from "./DashboardRegister/AgregarPrograma";
 import { ListUsuarios } from "./UserList/ListaUsuarios";
 import AgregarUser  from "./DashboardRegister/agregarUser";
+import InfoTools  from "./Tools/InfoTools";
+import  imgen  from "../assets/Img/Imagen.jpeg"; // Import useNavigate
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("");  // Estado para manejar el contenido
@@ -43,7 +45,11 @@ export const Dashboard = () => {
             <div className="flex flex-col justify-between py-8 px-6 h-full">
               {/* Enviar estado del contenido al componente Sidebar */}
               <Sidebar contenido={contenido} setContenido={setContenido} />
-            </div>
+              <div className="mt-4">
+          <hr className="my-4 border-t border-gray-300" />
+          <img src={imgen} alt="Imagen del menú" className="w-full h-auto rounded-md" />
+        </div>
+           </div>
           </div>
           <div className="bg-gray-200 w-5/6">
             <div className="p-8">
@@ -56,6 +62,8 @@ export const Dashboard = () => {
               {contenido === "AgregarPrograma" && <AgregarPrograma />}
               {contenido === "ListUsuarios" && <ListUsuarios />}
               {contenido === "AgregarUser" && <AgregarUser />}
+              {contenido === "InfoTools" && <InfoTools />}
+
               </div>
           </div>
         </div>

@@ -30,7 +30,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="p-4 bg-white border-b border-gray-300">
+    <nav className="p-4 bg-white border-b">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-center gap-x-2 sm:items-stretch sm:justify-start">

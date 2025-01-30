@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { InfoAlumnos } from "../Dashboard_UserModal/InfoAlumnos";
-import { Huella } from "../Tools/huella";
+import { Huella } from "../DashboardRegister/huella";
 
 export const ListaAlumnos = () => {
   const [showModal, setShowModal] = useState(false);
@@ -124,7 +124,7 @@ export const ListaAlumnos = () => {
 
   return (
     <section
-      className="container p-4 mx-auto flex flex-col"
+      className="container p-4  flex flex-col"
       style={{ minHeight: "87vh" }}
     >
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
