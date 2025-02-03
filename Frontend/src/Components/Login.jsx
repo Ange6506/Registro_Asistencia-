@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import backgroundImage from "../assets/Img/Fondo.jpeg";
-import Logo from "../assets/Img/logo.png";
+import backgroundImage from "../assets/Img/Fondos/Fondo.jpeg";
+import Logo from "../assets/Img/Logos/logo.png";
 
 export const Login = () => {
   // Estado para los campos del formulario

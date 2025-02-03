@@ -10,7 +10,7 @@ import  AgregarPrograma  from "./DashboardRegister/AgregarPrograma";
 import { ListUsuarios } from "./UserList/ListaUsuarios";
 import AgregarUser  from "./DashboardRegister/agregarUser";
 import InfoTools  from "./Tools/InfoTools";
-import  imgen  from "../assets/Img/Imagen.jpeg"; // Import useNavigate
+import  imgen  from "../assets/Img/Diseños/Imagen.jpeg"; // Import useNavigate
 
 export const Dashboard = () => {
   const [contenido, setContenido] = useState("");  // Estado para manejar el contenido

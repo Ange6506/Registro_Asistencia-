@@ -1,8 +1,8 @@
 import React, { useState } from "react"; // Import useState
-import Huellero from "../../assets/Img/Huellero.webp"; // Import useNavigate
-import React_img from "../../assets/Img/React.png"; // Import useNavigate
-import tailwindcss from "../../assets/Img/tailwindcss.png"; // Import useNavigate
-import JavaScript from "../../assets/Img/javascript.svg"; // Import useNavigate
+import Huellero from "../../assets/Img/Logos/Huellero.webp"; // Import useNavigate
+import React_img from "../../assets/Img/logos/React.png"; // Import useNavigate
+import tailwindcss from "../../assets/Img/Logos/tailwindcss.png"; // Import useNavigate
+import JavaScript from "../../assets/Img/Logos/javascript.svg"; // Import useNavigate
 
 import { FaHeart, FaShareAlt } from "react-icons/fa";
 
