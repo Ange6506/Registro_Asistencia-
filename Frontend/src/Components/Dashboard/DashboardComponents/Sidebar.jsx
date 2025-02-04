@@ -386,7 +386,7 @@ const Sidebar = ({ contenido, setContenido }) => {
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
-                  onClick={() => setContenido("")}
+                  onClick={() => setContenido("About")}
                   icon={
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
