@@ -129,7 +129,7 @@ export const ListAsistencia = () => {
   return (
     <section
       className="container p-4  flex flex-col"
-      style={{ minHeight: "87vh" }}
+      style={{ minHeight: "80vh" }}
     >
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
         <div>

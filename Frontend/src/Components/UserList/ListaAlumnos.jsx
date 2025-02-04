@@ -125,7 +125,7 @@ export const ListaAlumnos = () => {
   return (
     <section
       className="container p-4  flex flex-col"
-      style={{ minHeight: "87vh" }}
+      style={{ minHeight: "80vh" }}
     >
       <div className="p-8 rounded-lg shadow-lg w-full mx-auto bg-white">
         <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:justify-between sm:items-start">
