@@ -12,16 +12,34 @@ const addUser = async (req, res) => {
     return res.status(400).json({ message: "Todos los campos son obligatorios." });
   }
 
+  let client;
   try {
     // Iniciar transacción
-    const client = await pool.connect();
+    client = await pool.connect();
     await client.query('BEGIN');  // Iniciar transacción
+
+    // Si id_rol es una descripción, buscar el ID del rol en la tabla rol
+    let roleId = id_rol;
+
+    // Verificar si el id_rol es una descripción (esto depende de cómo llega el parámetro)
+    if (typeof id_rol === 'string') {
+      // Buscar el ID del rol a partir de la descripción en la tabla 'rol'
+      const roleQuery = "SELECT id_rol FROM rol WHERE descripcion = $1";
+      const roleResult = await client.query(roleQuery, [id_rol]);
+
+      if (roleResult.rows.length === 0) {
+        return res.status(400).json({ message: "Rol no encontrado." });
+      }
+
+      // Obtener el id_rol de la tabla rol
+      roleId = roleResult.rows[0].id_rol;
+    }
 
     // Consulta para insertar el nuevo usuario
     const insertQuery =
       "INSERT INTO usuarios (id_rol, username, password, estado) values ($1, $2, $3, $4) RETURNING id_usuario";
 
-    const insertValues = [id_rol, username, password, estado];
+    const insertValues = [roleId, username, password, estado];
 
     const result = await client.query(insertQuery, insertValues);
 
@@ -38,7 +56,9 @@ const addUser = async (req, res) => {
     return res.status(201).json({ message: "Registro de usuario exitoso.", id_usuario: idUsuario });
   } catch (error) {
     console.error("Error al registrar el usuario:", error);
-    await client.query('ROLLBACK');  // Revertir la transacción en caso de error
+    if (client) {
+      await client.query('ROLLBACK');  // Revertir la transacción en caso de error
+    }
     return res.status(500).json({ message: "Error en el servidor", error: error.message });
   }
 };
