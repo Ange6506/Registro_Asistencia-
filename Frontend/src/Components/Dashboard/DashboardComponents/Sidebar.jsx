@@ -6,11 +6,16 @@ const Sidebar = ({ contenido, setContenido }) => {
   const navigate = useNavigate(); // useNavigate para redirección
   const [isOpen, setIsOpen] = useState(false);
 
-  const [openMenuIndex, setOpenMenuIndex] = useState(null); // Para controlar qué menú está abierto
+  const [openMenus, setOpenMenus] = useState([]); // Para almacenar los menús abiertos
 
   const toggleMenu = (index) => {
     // Si el menú ya está abierto, lo cerramos, de lo contrario, lo abrimos
-    setOpenMenuIndex(openMenuIndex === index ? null : index);
+    setOpenMenus(
+      (prev) =>
+        prev.includes(index)
+          ? prev.filter((item) => item !== index) // Si ya está abierto, lo cerramos
+          : [...prev, index] // Si no, lo agregamos al arreglo de menús abiertos
+    );
   };
 
   useEffect(() => {
@@ -58,7 +63,7 @@ const Sidebar = ({ contenido, setContenido }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-6"
+              className="h-6 w-6 md:h-6 md:w-6"
             >
               <path
                 strokeLinecap="round"
@@ -66,28 +71,28 @@ const Sidebar = ({ contenido, setContenido }) => {
                 d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
               />
             </svg>
-            <span className="mx-4 text-md font-medium">Información Básica</span>
+            <span className="mx-4 text-md font-medium sm:text-md">Información Básica</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-5"
+              className="h-5 w-5 md:h-5 md:w-5"
               onClick={() => toggleMenu(1)}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 1
+                  openMenus.includes(1)
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
               />
             </svg>
           </div>
-          {openMenuIndex === 1 && (
+          {openMenus.includes(1) && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
@@ -171,14 +176,14 @@ const Sidebar = ({ contenido, setContenido }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-5 h-5"
+              className="h-5 w-5 md:h-5 md:w-5"
               onClick={() => toggleMenu(2)}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 2
+                  openMenus.includes(2)
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
@@ -186,7 +191,7 @@ const Sidebar = ({ contenido, setContenido }) => {
             </svg>
           </div>
 
-          {openMenuIndex === 2 && (
+          {openMenus.includes(2) && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
@@ -247,14 +252,14 @@ const Sidebar = ({ contenido, setContenido }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 3
+                  openMenus.includes(3)
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
               />
             </svg>
           </div>
-          {openMenuIndex === 3 && (
+          {openMenus.includes(3) && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
@@ -375,14 +380,14 @@ const Sidebar = ({ contenido, setContenido }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 4
+                  openMenus.includes(4)
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
               />
             </svg>
           </div>
-          {openMenuIndex === 4 && (
+          {openMenus.includes(4) && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
@@ -406,7 +411,6 @@ const Sidebar = ({ contenido, setContenido }) => {
                   text={<span className="text-sm">Acerca de nosotros </span>}
                 />
               </li>
-        
             </div>
           )}
         </>
