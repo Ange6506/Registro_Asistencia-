@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AgregarUsuario = () => {
   const [newUser, setNewUser] = useState({
@@ -9,6 +9,31 @@ const AgregarUsuario = () => {
   });
   const [error, setError] = useState(""); // Para manejar errores de validación
   const [success, setSuccess] = useState(""); // Para manejar el mensaje de éxito
+  const [roles, setRoles] = useState([]); // Estado para almacenar los roles
+  const [loading, setLoading] = useState(false); // Estado para manejar la carga de los roles
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      setLoading(true); // Empieza a cargar los roles
+      try {
+        const response = await fetch("http://localhost:5000/getRoles");
+        const data = await response.json();
+        console.log("Roles recibidos:", data);
+        if (response.ok) {
+          setRoles(data);
+        } else {
+          setError("No se pudieron cargar los roles.");
+        }
+      } catch (error) {
+        console.error("Error al cargar los roles:", error);
+        setError("Hubo un error al cargar los roles.");
+      } finally {
+        setLoading(false); // Se ha terminado de cargar
+      }
+    };
+
+    fetchRoles();
+  }, []); // Se ejecuta solo una vez al montar el componente
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,12 +45,7 @@ const AgregarUsuario = () => {
 
   const handleAddUser = async () => {
     try {
-      if (
-        !newUser.username ||
-        !newUser.password ||
-        !newUser.id_rol ||
-        !newUser.estado
-      ) {
+      if (!newUser.username || !newUser.password || !newUser.id_rol || !newUser.estado) {
         setError("Por favor, complete todos los campos.");
         return;
       } else {
@@ -73,12 +93,14 @@ const AgregarUsuario = () => {
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
       <h3 className="text-2xl font-bold text-center mb-6">Registrar Usuario</h3>
 
-      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-      {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+      {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
       <form>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Nombre de Usuario</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Nombre de Usuario
+          </label>
           <input
             type="text"
             name="username"
@@ -90,7 +112,9 @@ const AgregarUsuario = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Contraseña
+          </label>
           <input
             type="password"
             name="password"
@@ -110,9 +134,11 @@ const AgregarUsuario = () => {
             className="w-full mt-2 p-2 border border-gray-300 rounded"
           >
             <option value="">Seleccione un rol</option>
-            <option value="1">Administrador</option>
-            <option value="2">Usuario</option>
-            <option value="3">Invitado</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.descripcion}
+              </option>
+            ))}
           </select>
         </div>
 

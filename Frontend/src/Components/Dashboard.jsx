@@ -8,6 +8,7 @@ import { Programa } from "./UserList/Programa";
 import { FormularioAlumno } from "./DashboardRegister/FormularioAlumno";
 import  AgregarPrograma  from "./DashboardRegister/AgregarPrograma";
 import { ListUsuarios } from "./UserList/ListaUsuarios";
+import About  from "./about us/About";
 import AgregarUser  from "./DashboardRegister/agregarUser";
 import InfoTools  from "./Tools/InfoTools";
 import  imgen  from "../assets/Img/Diseños/Imagen.jpeg"; // Import useNavigate
@@ -63,6 +64,7 @@ export const Dashboard = () => {
               {contenido === "ListUsuarios" && <ListUsuarios />}
               {contenido === "AgregarUser" && <AgregarUser />}
               {contenido === "InfoTools" && <InfoTools />}
+              {contenido === "About" && <About />}
 
               </div>
           </div>
