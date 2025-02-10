@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 export const InfoAlumnos = ({ showModal, onClose, student }) => {
-  const programaMap = {
-    ENFERMERIA: 1,
-    PSICOLOGIA: 2,
-    MEDICINA: 3,
-    "MEDICINA - INTERNOS": 4,
-    "MEDICINA - RESIDENTES": 5,
-    "No Definidoo": 6,
-  };
-
+  const [programas, setProgramas] = useState([]); // Guardamos los programas traídos desde la base de datos
   const [formData, setFormData] = useState({
-    programa: "",
+    programa_nombre: "", // Cambié el nombre de 'programa' a 'programa_nombre'
     semestre_academico: "",
     asignatura: "",
     especialidad: "",
@@ -26,11 +18,23 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // Estado para el mensaje emergente
 
+  // Obtener programas desde la base de datos al montar el componente
   useEffect(() => {
+    // Realizamos la solicitud al servidor para obtener los programas desde la tabla 'programa'
+    fetch("http://localhost:5000/getPrograma") // Cambia esta URL si el endpoint es diferente
+      .then((response) => response.json())
+      .then((data) => {
+        setProgramas(data); // Guardamos los programas en el estado
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los programas:", error);
+      });
+
     if (student) {
       setFormData({
         id_semestre: student.id_semestre || "",
-        programa: student.programa || "",
+        programa_nombre: student.programa || "", // Usamos 'programa_nombre' aquí
         semestre_academico: student.semestre_academico || "",
         asignatura: student.asignatura || "",
         especialidad: student.especialidad || "",
@@ -60,7 +64,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
     e.preventDefault();
 
     if (
-      !formData.programa ||
+      !formData.programa_nombre ||
       !formData.semestre_academico ||
       !formData.asignatura ||
       !formData.especialidad ||
@@ -85,14 +89,7 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       return;
     }
 
-    const idPrograma = programaMap[formData.programa];
-    if (!idPrograma) {
-      setError("Programa no válido.");
-      alert("Error: Programa no válido.");
-      return;
-    }
-
-    const updatedFormData = { ...formData, id_programa: idPrograma };
+    const updatedFormData = { ...formData };
 
     console.log("Enviando datos:", updatedFormData);
     fetch(`http://localhost:5000/updateSemestre/${formData.id_semestre}`, {
@@ -111,20 +108,26 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
       .then(() => {
         // Mostrar el mensaje de éxito solo si la actualización es exitosa
         setSuccessMessage("Información actualizada correctamente.");
-
+    
         // Cerrar el modal
         onClose();
-
+    
         // Ocultar el mensaje después de 3 segundos
         setTimeout(() => {
           setSuccessMessage("");
-        }, 3000);
+        }, 2000);
+    
+        // Recargar la página después de 3 segundos
+        setTimeout(() => {
+          window.location.reload(); // Esto recargará la página
+        }, 2000); // Puedes ajustar el tiempo si lo prefieres
       })
       .catch((error) => {
         console.error("Error en la solicitud:", error);
         alert("Error: " + error.message);
       });
-  };
+    };
+    
 
   if (!student) return null;
 
@@ -209,33 +212,28 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
               {/* Campos del formulario */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-                {/* Programa */}
-                <div className="sm:col-span-1">
+               {/* Programa */}
+               <div className="sm:col-span-1">
                   <label
-                    htmlFor="programa"
+                    htmlFor="programa_nombre" // Cambié 'programa' a 'programa_nombre'
                     className="block text-sm font-medium text-gray-900"
                   >
                     Programa
                   </label>
                   <div className="mt-2">
                     <select
-                      name="programa"
-                      id="programa"
-                      value={formData.programa}
+                      name="programa_nombre" // Cambié 'programa' a 'programa_nombre'
+                      id="programa_nombre" // Cambié 'programa' a 'programa_nombre'
+                      value={formData.programa_nombre} // Cambié 'programa' a 'programa_nombre'
                       onChange={handleChange}
                       className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                     >
                       <option value="">Selecciona un programa</option>
-                      <option value="ENFERMERIA">ENFERMERIA</option>
-                      <option value="PSICOLOGIA">PSICOLOGIA</option>
-                      <option value="MEDICINA">MEDICINA</option>
-                      <option value="MEDICINA - INTERNOS">
-                        MEDICINA - INTERNOS
-                      </option>
-                      <option value="MEDICINA - RESIDENTES">
-                        MEDICINA - RESIDENTES
-                      </option>
-                      <option value="No Definidoo">No Definidoo</option>
+                      {programas.map((programa) => (
+                        <option key={programa.id} value={programa.nombre}>
+                          {programa.programa} {/* Mostramos 'programa' pero enviamos 'programa_nombre' */}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

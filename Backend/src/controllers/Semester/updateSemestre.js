@@ -15,7 +15,7 @@ const updateSemestre = async (req, res) => {
     semanas_de_rotacion,
     numero_horas_semanales,
     semestre_academico,
-    programa // El programa puede ser opcional para no cambiar si no es necesario
+    programa_nombre // Ahora recibimos programa_nombre en lugar de programa
   } = req.body;
 
   try {
@@ -34,22 +34,32 @@ const updateSemestre = async (req, res) => {
         throw new Error('Semestre no encontrado');
       }
 
-      // If the programa changes, get the new id_programa
+      // Agregar un log para verificar el nombre del programa recibido
+      console.log('Programa recibido:', programa_nombre);
+
+      // Si el nombre del programa cambia, buscar el nuevo id_programa
       let id_programa = currentSemestre.rows[0].id_programa; // Default to current program
-      if (programa) {
+      if (programa_nombre) {
+        // Validación para asegurar que el nombre del programa no esté vacío
+        if (!programa_nombre.trim()) {
+          throw new Error('El nombre del programa no puede estar vacío');
+        }
+
+        // Buscar el id_programa correspondiente al nombre del programa recibido
         const programaResult = await client.query(
           'SELECT id_programa FROM public.programa WHERE programa = $1',
-          [programa]
+          [programa_nombre] // Buscamos el id_programa con el nombre del programa recibido
         );
 
+        // Si no se encuentra el programa, lanzar un error
         if (!programaResult.rows.length) {
           throw new Error('Programa no encontrado');
         }
 
-        id_programa = programaResult.rows[0].id_programa; // Update id_programa if new program is provided
+        id_programa = programaResult.rows[0].id_programa; // Actualizamos el id_programa con el nuevo
       }
 
-      // Update the semestre record in the "Semestre Academico" table
+      // Actualizar el semestre en la tabla "Semestre Academico"
       await client.query(`
         UPDATE public."Semestre Academico"
         SET 
@@ -74,7 +84,7 @@ const updateSemestre = async (req, res) => {
         semanas_de_rotacion,
         numero_horas_semanales,
         semestre_academico,
-        id_programa,
+        id_programa, // Ahora usamos el id_programa obtenido
         id_semestre
       ]);
 
@@ -86,6 +96,7 @@ const updateSemestre = async (req, res) => {
 
     } catch (err) {
       await client.query('ROLLBACK');
+      console.error('Error en la transacción:', err);
       throw err;
     } finally {
       client.release();
