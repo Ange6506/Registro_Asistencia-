@@ -55,7 +55,7 @@ export const FormularioAlumno = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     // Validar que todos los campos estén completos
     if (
       !formData.nombre_del_estudiante ||
@@ -75,36 +75,45 @@ export const FormularioAlumno = ({ onClose }) => {
       setError("Todos los campos deben estar llenos.");
       return;
     }
+     // Validar que la fecha de inicio no sea posterior a la fecha de terminación
+  const fechaInicio = new Date(formData.fecha_inicio);
+  const fechaTermino = new Date(formData.fecha_terminacion);
 
-    // Enviar los datos al backend
-    fetch("http://localhost:5000/addEstudiante", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...formData,
-        huella: huellaEstudiante, // Agregar la huella al cuerpo de la solicitud
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al agregar el estudiante.");
-        }
-        return response.json();
-      })
-      .then(() => {
-        alert("Estudiante agregado correctamente.");
-        setTimeout(() => window.location.reload(), 1500); // Recargar después de 1.5 segundos
-      })
-      .catch((error) => {
-        alert("Error: " + error.message);
+  if (fechaInicio > fechaTermino) {
+    alert("La fecha de inicio no puede ser posterior a la fecha de terminación.");
+    return;
+  }
+// Enviar los datos al backend
+fetch("http://localhost:5000/addEstudiante", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    ...formData,
+    huella: huellaEstudiante, // Agregar la huella al cuerpo de la solicitud
+  }),
+})
+  .then((response) => {
+    if (!response.ok) {
+      return response.json().then((errorData) => {
+        throw new Error(errorData.message || "Error desconocido");
       });
-  };
+    }
+    return response.json();
+  })
+  .then(() => {
+    alert("Estudiante agregado correctamente.");
+    setTimeout(() => window.location.reload(), 1000); // Recargar después de 1.5 segundos
+  })
+  .catch((error) => {
+    alert(error.message); // Aquí se muestra el mensaje de error
+  });
+  }
 
   const registerFingerprint = () => {
     // Aquí se debería usar la lógica real para capturar la huella, pero por ahora simulamos.
-    const huella = "4"; // Aquí obtendrías la huella desde el escáner.
+    const huella = "6"; // Aquí obtendrías la huella desde el escáner.
 
     if (!huella) {
       alert("Debe registrar una huella primero.");

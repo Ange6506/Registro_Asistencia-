@@ -30,22 +30,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="p-4 bg-blue border-b border-bg-blue">
+    <nav className="p-4 bg-white border-b border-bg-blue">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-center gap-x-2 sm:items-stretch sm:justify-start">
             {/* Logo */}
-            <div className="flex flex-shrink-0 bg-white rounded-lg items-center">
+            <div className="flex flex-shrink-0  rounded-lg items-center">
               <img src={Logo} alt="Logo" />
             </div>
 
             {/* Title */}
             <div className="flex items-center justify-center">
               <div className="flex flex-col">
-                <p className="text-md font-medium font-serif text-white">
+                <p className="text-md font-medium font-serif text-black">
                   Clínica Nueva
                 </p>
-                <p className="text-lg font-medium font-serif text-white">
+                <p className="text-lg font-medium font-serif text-black">
                   Rafael Uribe Uribe
                 </p>
               </div>
@@ -62,12 +62,12 @@ const Navbar = () => {
                     src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
                     alt="Perfil"
                   />
-                  <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white"></span>
+                  <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-black"></span>
                 </div>
 
                 <div className="px-2 border-x border-gray-300">
-                  <h1 className="text-base text-white capitalize">
-                    Hola, <span className="text-white">{username}</span>
+                  <h1 className="text-base text-black capitalize">
+                    Hola, <span className="text-black">{username}</span>
                   </h1>
                 </div>
 
@@ -78,7 +78,7 @@ const Navbar = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="size-6 text-white"
+                    className="size-6 text-black"
                   >
                     <path
                       strokeLinecap="round"
