@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export const FormularioAlumno = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -17,16 +17,41 @@ export const FormularioAlumno = ({ onClose }) => {
   });
 
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [huellaEstudiante, setHuellaEstudiante] = useState(""); // Para almacenar la huella
-
+  const [programas, setProgramas] = useState([]); // Para almacenar los programas obtenidos del servidor
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
+    // No aplicar trim() a los campos donde los espacios internos son importantes, como:
+    // - nombre_del_estudiante
+    // - asignatura
+    // - especialidad
+    // - semestre_academico
+    const fieldsWithoutTrim = [
+      "nombre_del_estudiante",
+      "asignatura",
+      "especialidad",
+      "semestre_academico"
+    ];
+  
     setFormData((prev) => ({
       ...prev,
-      [name]: value.trim(),
+      [name]: fieldsWithoutTrim.includes(name) ? value : value.trim(),
     }));
   };
+  
+  useEffect(() => {
+    // Realizamos la solicitud al servidor para obtener los programas desde la tabla 'programa'
+    fetch("http://localhost:5000/getPrograma") // Cambia esta URL si el endpoint es diferente
+      .then((response) => response.json())
+      .then((data) => {
+        setProgramas(data); // Guardamos los programas en el estado
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los programas:", error);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,18 +94,17 @@ export const FormularioAlumno = ({ onClose }) => {
         return response.json();
       })
       .then(() => {
-        setSuccessMessage("Estudiante agregado correctamente.");
-        onClose(); // Cerrar el formulario después de agregar
-        window.location.reload(); // Recargar la página al instante
+        alert("Estudiante agregado correctamente.");
+        setTimeout(() => window.location.reload(), 1500); // Recargar después de 1.5 segundos
       })
       .catch((error) => {
-        setError("Error: " + error.message);
+        alert("Error: " + error.message);
       });
   };
 
   const registerFingerprint = () => {
     // Aquí se debería usar la lógica real para capturar la huella, pero por ahora simulamos.
-    const huella = "2"; // Aquí obtendrías la huella desde el escáner.
+    const huella = "4"; // Aquí obtendrías la huella desde el escáner.
 
     if (!huella) {
       alert("Debe registrar una huella primero.");
@@ -93,38 +117,8 @@ export const FormularioAlumno = ({ onClose }) => {
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-xlmx-auto  w-full mx-auto">
-      {/* Mostrar el mensaje de éxito */}
-      {successMessage && (
-        <div
-          className="fixed top-4 right-4 bg-green-500 text-white p-4 shadow-lg rounded-md z-50 flex items-center border-t-4 border-green-700"
-          role="alert"
-        >
-          <p>{successMessage}</p>
-          <button
-            type="button"
-            onClick={() => setSuccessMessage("")}
-            className="ms-auto -mx-1.5 -my-1.5 bg-white text-green-500 rounded-lg p-1.5 hover:bg-green-100 inline-flex items-center justify-center h-8 w-8"
-          >
-            <svg
-              className="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit} className="space-y-6">
+    
         <div className="flex justify-between items-center pb-6">
           <div className="flex flex-col">
             <h2 className="text-xl font-semibold text-gray-800">Agregar Nuevo Estudiante</h2>
@@ -166,22 +160,26 @@ export const FormularioAlumno = ({ onClose }) => {
             />
           </div>
 
-          {/* Programa */}
+       {/* Programa */}
           <div>
             <label htmlFor="programa" className="block text-sm font-medium text-gray-700">
               Programa
             </label>
-            <input
-              type="text"
+            <select
               name="programa"
               id="programa"
               value={formData.programa}
               onChange={handleChange}
               className="mt-2 p-2 w-full rounded-md border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Programa"
-            />
+            >
+              <option value="">Selecciona un programa</option>
+              {programas.map((programa) => (
+                <option key={programa.id} value={programa.nombre}>
+                  {programa.programa} {/* Mostramos el nombre del programa */}
+                </option>
+              ))}
+            </select>
           </div>
-
           {/* Asignatura */}
           <div>
             <label htmlFor="asignatura" className="block text-sm font-medium text-gray-700">
