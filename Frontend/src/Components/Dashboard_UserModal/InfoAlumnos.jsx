@@ -20,17 +20,16 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
 
   // Obtener programas desde la base de datos al montar el componente
   useEffect(() => {
-    // Realizamos la solicitud al servidor para obtener los programas desde la tabla 'programa'
-    fetch("http://localhost:5000/getPrograma") // Cambia esta URL si el endpoint es diferente
+    fetch("http://localhost:5000/getPrograma")
       .then((response) => response.json())
       .then((data) => {
-        setProgramas(data); // Guardamos los programas en el estado
-        console.log(data);
+        console.log("Estructura de programas:", data); // Add this line
+        setProgramas(data);
       })
       .catch((error) => {
         console.error("Error al obtener los programas:", error);
       });
-
+      
     if (student) {
       setFormData({
         id_semestre: student.id_semestre || "",
@@ -221,20 +220,23 @@ export const InfoAlumnos = ({ showModal, onClose, student }) => {
                     Programa
                   </label>
                   <div className="mt-2">
-                    <select
-                      name="programa_nombre" // Cambié 'programa' a 'programa_nombre'
-                      id="programa_nombre" // Cambié 'programa' a 'programa_nombre'
-                      value={formData.programa_nombre} // Cambié 'programa' a 'programa_nombre'
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                    >
-                      <option value="">Selecciona un programa</option>
-                      {programas.map((programa) => (
-                        <option key={programa.id} value={programa.nombre}>
-                          {programa.programa} {/* Mostramos 'programa' pero enviamos 'programa_nombre' */}
-                        </option>
-                      ))}
-                    </select>
+                 <select
+  name="programa_nombre"
+  id="programa_nombre"
+  value={formData.programa_nombre}
+  onChange={handleChange}
+  className="block w-full rounded-md border border-gray-300 bg-transparent py-2 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+>
+  <option value="" key="default-option">Selecciona un programa</option>
+  {programas.map((programa, index) => (
+    <option 
+      key={`programa-${index}-${programa.nombre || programa.id || programa.programa}`}
+      value={programa.nombre || programa.programa}
+    >
+      {programa.programa}
+    </option>
+  ))}
+</select>
                   </div>
                 </div>
 
