@@ -452,14 +452,14 @@ const Sidebar = ({ contenido, setContenido }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 1
+                  openMenus === 1
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
               />
             </svg>
           </div>
-          {openMenuIndex === 1 && (
+          {openMenus.includes(1) && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
@@ -561,14 +561,14 @@ const Sidebar = ({ contenido, setContenido }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 2
+                  openMenus.includes(2) 
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
               />
             </svg>
           </div>
-          {openMenuIndex === 2 && (
+          {openMenus.includes(2)  && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
@@ -630,14 +630,14 @@ const Sidebar = ({ contenido, setContenido }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d={
-                  openMenuIndex === 3
+                  openMenus === 3
                     ? "m4.5 15.75 7.5-7.5 7.5 7.5"
                     : "m19.5 8.25-7.5 7.5-7.5-7.5"
                 }
               />
             </svg>
           </div>
-          {openMenuIndex === 3 && (
+          {openMenus.includes(3) && (
             <div className="mt-2 pl-6 space-y-2">
               <li>
                 <SidebarButton
