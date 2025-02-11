@@ -14,11 +14,11 @@ const AgregarUsuario = () => {
 
   useEffect(() => {
     const fetchRoles = async () => {
-      setLoading(true); // Empieza a cargar los roles
+      setLoading(true);
       try {
         const response = await fetch("http://localhost:5000/getRoles");
         const data = await response.json();
-        console.log("Roles recibidos:", data);
+        console.log("Roles data:", data); // Log the roles array here
         if (response.ok) {
           setRoles(data);
         } else {
@@ -28,12 +28,12 @@ const AgregarUsuario = () => {
         console.error("Error al cargar los roles:", error);
         setError("Hubo un error al cargar los roles.");
       } finally {
-        setLoading(false); // Se ha terminado de cargar
+        setLoading(false);
       }
     };
 
     fetchRoles();
-  }, []); // Se ejecuta solo una vez al montar el componente
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +45,12 @@ const AgregarUsuario = () => {
 
   const handleAddUser = async () => {
     try {
-      if (!newUser.username || !newUser.password || !newUser.id_rol || !newUser.estado) {
+      if (
+        !newUser.username ||
+        !newUser.password ||
+        !newUser.id_rol ||
+        !newUser.estado
+      ) {
         setError("Por favor, complete todos los campos.");
         return;
       } else {
@@ -134,8 +139,8 @@ const AgregarUsuario = () => {
             className="w-full mt-2 p-2 border border-gray-300 rounded"
           >
             <option value="">Seleccione un rol</option>
-            {roles.map((role) => (
-              <option key={role.id} value={role.id}>
+            {roles.map((role, index) => (
+              <option key={`${role.id}-${index}`} value={role.id}>
                 {role.descripcion}
               </option>
             ))}
@@ -143,7 +148,9 @@ const AgregarUsuario = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Estado</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Estado
+          </label>
           <select
             name="estado"
             value={newUser.estado ? "activo" : "inactivo"}

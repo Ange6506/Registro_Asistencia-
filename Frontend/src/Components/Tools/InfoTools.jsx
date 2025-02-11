@@ -39,9 +39,9 @@ const InfoTools = () => {
                     manera intuitiva y eficiente.
                   </p>
                 </div>
-                <div class="relative min-h-[30rem] w-full grow">
-                  <div class="bg-white-900">
-                    <div class="flex bg-white-900 ring-white/5 flex-col items-center">
+                <div className="relative min-h-[30rem] w-full grow">
+                  <div className="bg-white-900">
+                    <div className="flex bg-white-900 ring-white/5 flex-col items-center">
                       <div className="max-w-xs rounded-lg overflow-hidden shadow-lg">
                         <div className="flex items-center p-4">
                           <div className="ml-4 flex-1">
@@ -55,13 +55,13 @@ const InfoTools = () => {
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
-                              stroke-width="1.5"
+                              strokeWidth="1.5"
                               stroke="currentColor"
-                              class="size-6"
+                              className="size-6"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                               />
                             </svg>
@@ -223,23 +223,23 @@ const InfoTools = () => {
             </div>
 
             {/* Huellero Section */}
-            <div class="relative lg:row-span-2">
-              <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
-              <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
-                <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
-                  <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
+            <div className="relative lg:row-span-2">
+              <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
                     Sistema de Huella Dactilar
                   </p>
-                  <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
                     El sistema de huella dactilar permite registrar de manera
                     automática la asistencia de los estudiantes que se presentan
                     en la clínica. Cada estudiante es identificado por su
                     huella, lo que asegura precisión y rapidez en el proceso.
                   </p>
                 </div>
-                <div class="relative min-h-[30rem] w-full grow">
-                  <div class="bg-white-900">
-                    <div class="flex bg-white-900 ring-white/5 flex-col items-center">
+                <div className="relative min-h-[30rem] w-full grow">
+                  <div className="bg-white-900">
+                    <div className="flex bg-white-900 ring-white/5 flex-col items-center">
                       <div className="max-w-xs rounded-lg overflow-hidden shadow-lg">
                         <div className="flex items-center p-4">
                           <div className="ml-4 flex-1">
@@ -255,13 +255,13 @@ const InfoTools = () => {
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
                               viewBox="0 0 24 24"
-                              stroke-width="1.5"
+                              strokeWidth="1.5"
                               stroke="currentColor"
-                              class="size-6"
+                              className="size-6"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                               />
                             </svg>
